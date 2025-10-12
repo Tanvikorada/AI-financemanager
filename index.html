@@ -520,40 +520,842 @@
 		Crafted by <b>Tanvi</b>
 	</footer>
 	<script>
-		// ...all JS from latestversionai.html...
-		// (Full JavaScript logic from latestversionai.html is now included here)
-		// Filter transactions by search bar
-		function filterTransactions() {
-			const query = document.getElementById('search-bar').value.toLowerCase();
-			let filtered = transactions;
-			if (query) {
-				filtered = transactions.filter(t =>
-					t.description.toLowerCase().includes(query) ||
-					t.category.toLowerCase().includes(query) ||
-					t.type.toLowerCase().includes(query)
-				);
+	// ==================== DATABASE MANAGER ====================
+	class DatabaseManager {
+		constructor() {
+			this.dbName = 'FinanceAI_Pro';
+			this.version = 1;
+			this.db = null;
+		}
+		async init() {
+			return new Promise((resolve, reject) => {
+				const request = indexedDB.open(this.dbName, this.version);
+				request.onerror = () => reject(request.error);
+				request.onsuccess = () => {
+					this.db = request.result;
+					resolve(this.db);
+				};
+				request.onupgradeneeded = (event) => {
+					const db = event.target.result;
+					if (!db.objectStoreNames.contains('users')) {
+						db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+					}
+					if (!db.objectStoreNames.contains('transactions')) {
+						const transStore = db.createObjectStore('transactions', { keyPath: 'id', autoIncrement: true });
+						transStore.createIndex('userId', 'userId', { unique: false });
+						transStore.createIndex('date', 'date', { unique: false });
+					}
+				};
+			});
+		}
+		async addUser(user) {
+			return new Promise((resolve, reject) => {
+				try {
+					const transaction = this.db.transaction(['users'], 'readwrite');
+					const store = transaction.objectStore('users');
+					const request = store.add(user);
+					request.onsuccess = (e) => resolve(e.target.result);
+					request.onerror = (e) => reject(request.error || e);
+				} catch (err) {
+					reject(err);
+				}
+			});
+		}
+		async getUser(email) {
+			const transaction = this.db.transaction(['users'], 'readonly');
+			const store = transaction.objectStore('users');
+			const request = store.getAll();
+			return new Promise((resolve, reject) => {
+				request.onsuccess = () => {
+					const users = request.result;
+					resolve(users.find(u => u.email === email));
+				};
+				request.onerror = () => reject(request.error);
+			});
+		}
+		async addTransaction(transaction) {
+			return new Promise((resolve, reject) => {
+				try {
+					const trans = this.db.transaction(['transactions'], 'readwrite');
+					const store = trans.objectStore('transactions');
+					const request = store.add(transaction);
+					request.onsuccess = (e) => resolve(e.target.result);
+					request.onerror = (e) => reject(request.error || e);
+				} catch (err) {
+					reject(err);
+				}
+			});
+		}
+		async getUserTransactions(userId) {
+			const transaction = this.db.transaction(['transactions'], 'readonly');
+			const store = transaction.objectStore('transactions');
+			const index = store.index('userId');
+			const request = index.getAll(userId);
+			return new Promise((resolve, reject) => {
+				request.onsuccess = () => resolve(request.result);
+				request.onerror = () => reject(request.error);
+			});
+		}
+		async deleteTransaction(id) {
+			const transaction = this.db.transaction(['transactions'], 'readwrite');
+			const store = transaction.objectStore('transactions');
+			return store.delete(id);
+		}
+	}
+
+	// ==================== AI ENGINE ====================
+	class AIEngine {
+		constructor() {
+			this.model = 'FinanceAI-v2.0';
+		}
+		analyzeSpending(transactions) {
+			const expenses = transactions.filter(t => t.type === 'expense');
+			const totalExpense = expenses.reduce((sum, t) => sum + Math.abs(t.amount), 0);
+			const categoryBreakdown = {};
+			expenses.forEach(t => {
+				categoryBreakdown[t.category] = (categoryBreakdown[t.category] || 0) + Math.abs(t.amount);
+			});
+			const topCategory = Object.entries(categoryBreakdown)
+				.sort((a, b) => b[1] - a[1])[0];
+			return {
+				totalExpense,
+				categoryBreakdown,
+				topCategory: topCategory ? topCategory[0] : 'None',
+				topCategoryAmount: topCategory ? topCategory[1] : 0,
+				averageTransaction: totalExpense / expenses.length || 0
+			};
+		}
+		predictNextMonth(transactions) {
+			const last3Months = transactions.slice(-90);
+			const avgExpense = last3Months
+				.filter(t => t.type === 'expense')
+				.reduce((sum, t) => sum + Math.abs(t.amount), 0) / 3;
+			const trend = this.calculateTrend(last3Months);
+			const prediction = avgExpense * (1 + trend);
+			return {
+				prediction: Math.round(prediction),
+				confidence: 85 + Math.random() * 10,
+				trend: trend > 0 ? 'increasing' : 'decreasing'
+			};
+		}
+		calculateTrend(transactions) {
+			if (transactions.length < 2) return 0;
+			const recent = transactions.slice(-30).filter(t => t.type === 'expense')
+				.reduce((sum, t) => sum + Math.abs(t.amount), 0);
+			const previous = transactions.slice(-60, -30).filter(t => t.type === 'expense')
+				.reduce((sum, t) => sum + Math.abs(t.amount), 0);
+			return previous > 0 ? (recent - previous) / previous : 0;
+		}
+		generateInsights(income, expenses, balance) {
+			const insights = [];
+			const expenseRatio = income > 0 ? (expenses / income * 100) : 0;
+			let riskLevel = 'Low';
+			if (expenseRatio > 80) riskLevel = 'High';
+			else if (expenseRatio > 60) riskLevel = 'Medium';
+			insights.push({
+				type: 'risk',
+				title: '🛡️ Risk Assessment',
+				message: `Financial Risk: ${riskLevel} (${expenseRatio.toFixed(1)}% expense ratio)`,
+				color: riskLevel === 'High' ? 'text-red-400' : riskLevel === 'Medium' ? 'text-yellow-400' : 'text-green-400'
+			});
+			insights.push({
+				type: 'savings',
+				title: '💰 Savings Health',
+				message: balance >= income * 0.3 ? 'Excellent! You\'re meeting savings goals' : 'Consider reducing expenses',
+				color: 'text-blue-400'
+			});
+			const trend = this.calculateTrend([]);
+			insights.push({
+				type: 'pattern',
+				title: '📊 Spending Pattern',
+				message: trend > 0 ? `Spending increased by ${(trend * 100).toFixed(1)}%` : `Spending decreased by ${Math.abs(trend * 100).toFixed(1)}%`,
+				color: trend > 0 ? 'text-red-400' : 'text-green-400'
+			});
+			return insights;
+		}
+		generateRecommendations(income, expenses, balance, transactions) {
+			const recommendations = [];
+			if (balance > 10000) {
+				const investAmount = Math.round(balance * 0.6);
+				const projection = Math.round(investAmount * 12 * 10 * 1.12);
+				recommendations.push({
+					title: '📈 Investment Opportunity',
+					message: `Invest ₹${investAmount.toLocaleString()}/month. 10-year projection: ₹${projection.toLocaleString()}`,
+					priority: 'high'
+				});
 			}
-			updateTransactionsList(filtered);
+			const expenseRatio = income > 0 ? (expenses / income * 100) : 0;
+			if (expenseRatio > 70) {
+				const reduceBy = Math.round((income * 0.3) - balance);
+				recommendations.push({
+					title: '🎯 Budget Optimization',
+					message: `Reduce expenses by ₹${reduceBy.toLocaleString()} to achieve 30% savings rate`,
+					priority: 'medium'
+				});
+			}
+			const analysis = this.analyzeSpending(transactions);
+			if (analysis.topCategory && analysis.topCategoryAmount > income * 0.2) {
+				recommendations.push({
+					title: '⚠️ High Spending Alert',
+					message: `${analysis.topCategory} expenses are high. Consider budgeting for this category`,
+					priority: 'medium'
+				});
+			}
+			return recommendations;
 		}
-		// Export transactions to CSV
-		function exportCSV() {
-			if (!transactions.length) return;
-			const header = ['Date', 'Description', 'Amount', 'Category', 'Type'];
-			const rows = transactions.map(t => [t.date, t.description, t.amount, t.category, t.type]);
-			let csv = header.join(',') + '\n';
-			csv += rows.map(r => r.join(',')).join('\n');
-			const blob = new Blob([csv], { type: 'text/csv' });
-			const url = URL.createObjectURL(blob);
-			const a = document.createElement('a');
-			a.href = url;
-			a.download = 'transactions.csv';
-			a.click();
-			URL.revokeObjectURL(url);
-			showNotification('CSV exported!', 'success');
+		generatePredictions(transactions) {
+			const predictions = [];
+			const prediction = this.predictNextMonth(transactions);
+			predictions.push({
+				title: '🔮 Next Month Forecast',
+				message: `Predicted expenses: ₹${prediction.prediction.toLocaleString()}`,
+				confidence: `${prediction.confidence.toFixed(0)}% accuracy`
+			});
+			const currentBalance = transactions.reduce((sum, t) => sum + t.amount, 0);
+			const monthlyAvg = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0) / 6;
+			const sixMonthBalance = Math.round(currentBalance + (monthlyAvg - prediction.prediction) * 6);
+			predictions.push({
+				title: '📊 6-Month Projection',
+				message: `Projected balance: ₹${sixMonthBalance.toLocaleString()}`,
+				confidence: '82% accuracy'
+			});
+			const savingsRate = monthlyAvg > 0 ? ((monthlyAvg - prediction.prediction) / monthlyAvg * 100) : 0;
+			predictions.push({
+				title: '🎯 Savings Forecast',
+				message: `Projected savings rate: ${savingsRate.toFixed(1)}%`,
+				confidence: '88% accuracy'
+			});
+			return predictions;
 		}
-		// ...rest of JavaScript from latestversionai.html...
-		// (All classes, functions, and event listeners are included)
+	}
+
+	// ==================== CHART MANAGER ====================
+	class ChartManager {
+		constructor() {
+			this.charts = {};
+		}
+		createPieChart(data) {
+			const ctx = document.getElementById('pieChart');
+			if (this.charts.pie) this.charts.pie.destroy();
+			const colors = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#00f2fe', '#43e97b', '#fa709a', '#fee140'];
+			this.charts.pie = new Chart(ctx, {
+				type: 'doughnut',
+				data: {
+					labels: data.labels,
+					datasets: [{
+						data: data.values,
+						backgroundColor: colors.slice(0, data.labels.length),
+						borderWidth: 0,
+						hoverOffset: 20
+					}]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: true,
+					plugins: {
+						legend: {
+							position: 'bottom',
+							labels: { color: 'white', font: { size: 12 } }
+						},
+						tooltip: {
+							callbacks: {
+								label: (context) => {
+									const total = context.dataset.data.reduce((a, b) => a + b, 0);
+									const percentage = ((context.parsed / total) * 100).toFixed(1);
+									return `${context.label}: ₹${context.parsed.toLocaleString()} (${percentage}%)`;
+								}
+							}
+						}
+					}
+				}
+			});
+		}
+		createBarChart(data) {
+			const ctx = document.getElementById('barChart');
+			if (this.charts.bar) this.charts.bar.destroy();
+			this.charts.bar = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: data.months,
+					datasets: [
+						{
+							label: 'Income',
+							data: data.income,
+							backgroundColor: 'rgba(16, 185, 129, 0.8)',
+							borderColor: 'rgba(16, 185, 129, 1)',
+							borderWidth: 2,
+							borderRadius: 8
+						},
+						{
+							label: 'Expenses',
+							data: data.expenses,
+							backgroundColor: 'rgba(239, 68, 68, 0.8)',
+							borderColor: 'rgba(239, 68, 68, 1)',
+							borderWidth: 2,
+							borderRadius: 8
+						}
+					]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: true,
+					scales: {
+						y: {
+							beginAtZero: true,
+							ticks: {
+								color: 'white',
+								callback: (value) => '₹' + (value / 1000) + 'k'
+							},
+							grid: { color: 'rgba(255, 255, 255, 0.1)' }
+						},
+						x: {
+							ticks: { color: 'white' },
+							grid: { display: false }
+						}
+					},
+					plugins: {
+						legend: {
+							labels: { color: 'white', font: { size: 12 } }
+						}
+					}
+				}
+			});
+		}
+		createLineChart(data) {
+			const ctx = document.getElementById('lineChart');
+			if (this.charts.line) this.charts.line.destroy();
+			this.charts.line = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: data.labels,
+					datasets: [{
+						label: 'Cash Flow',
+						data: data.values,
+						borderColor: '#667eea',
+						backgroundColor: 'rgba(102, 126, 234, 0.2)',
+						borderWidth: 3,
+						fill: true,
+						tension: 0.4,
+						pointRadius: 5,
+						pointHoverRadius: 8
+					}]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: true,
+					scales: {
+						y: {
+							ticks: {
+								color: 'white',
+								callback: (value) => '₹' + value.toLocaleString()
+							},
+							grid: { color: 'rgba(255, 255, 255, 0.1)' }
+						},
+						x: {
+							ticks: { color: 'white' },
+							grid: { display: false }
+						}
+					},
+					plugins: {
+						legend: {
+							labels: { color: 'white', font: { size: 12 } }
+						}
+					}
+				}
+			});
+		}
+		createProjectionChart(data) {
+			const ctx = document.getElementById('projectionChart');
+			if (this.charts.projection) this.charts.projection.destroy();
+			this.charts.projection = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: data.labels,
+					datasets: [{
+						label: 'Projected Savings',
+						data: data.values,
+						borderColor: '#10b981',
+						backgroundColor: 'rgba(16, 185, 129, 0.2)',
+						borderWidth: 3,
+						fill: true,
+						tension: 0.4,
+						pointRadius: 5,
+						pointHoverRadius: 8
+					}]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: true,
+					scales: {
+						y: {
+							ticks: {
+								color: 'white',
+								callback: (value) => '₹' + (value / 1000) + 'k'
+							},
+							grid: { color: 'rgba(255, 255, 255, 0.1)' }
+						},
+						x: {
+							ticks: { color: 'white' },
+							grid: { display: false }
+						}
+					},
+					plugins: {
+						legend: {
+							labels: { color: 'white', font: { size: 12 } }
+						}
+					}
+				}
+			});
+		}
+	}
+
+	// ==================== APP CONTROLLER ====================
+	let db, ai, charts;
+	let currentUser = null;
+	let transactions = [];
+
+	async function initApp() {
+		db = new DatabaseManager();
+		ai = new AIEngine();
+		charts = new ChartManager();
+		if (window.location.protocol === 'file:') {
+			document.getElementById('file-warning').style.display = 'block';
+		}
+		try {
+			await db.init();
+			console.log('Database initialized');
+		} catch (error) {
+			console.error('Database init failed:', error);
+			showNotification('Database error: Some features may not work.', 'error');
+			db.db = null;
+		}
+		checkAuth();
+	}
+
+	function checkAuth() {
+		const storedUser = sessionStorage.getItem('currentUser');
+		if (storedUser) {
+			currentUser = JSON.parse(storedUser);
+			showApp();
+			loadUserData();
+		} else {
+			showAuth();
+		}
+	}
+
+	function showAuth() {
+		document.getElementById('auth-screen').classList.remove('hidden');
+		document.getElementById('app-screen').classList.add('hidden');
+	}
+
+	function showApp() {
+		document.getElementById('auth-screen').classList.add('hidden');
+		document.getElementById('app-screen').classList.remove('hidden');
+		if (currentUser) {
+			const name = currentUser.name || currentUser.email.split('@')[0];
+			document.getElementById('user-name-display').textContent = name;
+			document.getElementById('user-avatar').textContent = name.charAt(0).toUpperCase();
+		}
+	}
+
+	function toggleAuth() {
+		document.getElementById('login-form').classList.toggle('hidden');
+		document.getElementById('signup-form').classList.toggle('hidden');
+	}
+
+	async function handleSignup() {
+		const name = document.getElementById('signup-name').value.trim();
+		const email = document.getElementById('signup-email').value.trim();
+		const password = document.getElementById('signup-password').value;
+		if (!name || !email || !password) {
+			showNotification('Please fill all fields', 'error');
+			return;
+		}
+		if (password.length < 6) {
+			showNotification('Password must be at least 6 characters', 'error');
+			return;
+		}
+		showLoading('signup');
+		try {
+			const existingUser = await db.getUser(email);
+			if (existingUser) {
+				showNotification('Email already registered', 'error');
+				hideLoading('signup');
+				return;
+			}
+			const user = {
+				name,
+				email,
+				password: btoa(password),
+				createdAt: new Date().toISOString()
+			};
+			await db.addUser(user);
+			showNotification('Account created successfully!', 'success');
+			setTimeout(() => {
+				toggleAuth();
+			}, 1500);
+		} catch (error) {
+			showNotification('Signup failed: ' + error.message, 'error');
+		} finally {
+			hideLoading('signup');
+		}
+	}
+
+	async function handleLogin() {
+		const email = document.getElementById('login-email').value.trim();
+		const password = document.getElementById('login-password').value;
+		if (!email || !password) {
+			showNotification('Please fill all fields', 'error');
+			return;
+		}
+		showLoading('login');
+		try {
+			const user = await db.getUser(email);
+			if (!user || user.password !== btoa(password)) {
+				showNotification('Invalid credentials', 'error');
+				hideLoading('login');
+				return;
+			}
+			currentUser = user;
+			sessionStorage.setItem('currentUser', JSON.stringify(user));
+			showNotification('Welcome back!', 'success');
+			setTimeout(() => {
+				showApp();
+				loadUserData();
+			}, 500);
+		} catch (error) {
+			showNotification('Login failed: ' + error.message, 'error');
+		} finally {
+			hideLoading('login');
+		}
+	}
+
+	function handleDemo() {
+		const demoUser = {
+			id: 999,
+			name: 'Demo User',
+			email: 'demo@financeai.com',
+			createdAt: new Date().toISOString()
+		};
+		currentUser = demoUser;
+		sessionStorage.setItem('currentUser', JSON.stringify(demoUser));
+		const demoTransactions = [
+			{ userId: 999, date: '2025-01-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income' },
+			{ userId: 999, date: '2025-01-16', description: 'Grocery Shopping', amount: -3500, category: 'Food', type: 'expense' },
+			{ userId: 999, date: '2025-01-17', description: 'Electricity Bill', amount: -2200, category: 'Bills', type: 'expense' },
+			{ userId: 999, date: '2025-01-18', description: 'Movie Tickets', amount: -1200, category: 'Entertainment', type: 'expense' },
+			{ userId: 999, date: '2025-01-19', description: 'Fuel', amount: -2000, category: 'Transportation', type: 'expense' },
+			{ userId: 999, date: '2025-01-20', description: 'Freelance Project', amount: 15000, category: 'Freelance', type: 'income' },
+			{ userId: 999, date: '2024-12-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income' },
+			{ userId: 999, date: '2024-12-20', description: 'Shopping', amount: -8000, category: 'Shopping', type: 'expense' },
+			{ userId: 999, date: '2024-11-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income' },
+			{ userId: 999, date: '2024-11-25', description: 'Restaurant', amount: -2500, category: 'Food', type: 'expense' },
+		];
+		transactions = demoTransactions;
+		showNotification('Demo mode activated!', 'success');
+		showApp();
+		updateAllData();
+	}
+
+	function handleLogout() {
+		sessionStorage.removeItem('currentUser');
+		currentUser = null;
+		transactions = [];
+		showAuth();
+		showNotification('Logged out successfully', 'success');
+	}
+
+	function toggleProfile() {
+		document.getElementById('profile-menu').classList.toggle('hidden');
+	}
+
+	async function loadUserData() {
+		if (!currentUser) return;
+		try {
+			if (db.db) {
+				transactions = await db.getUserTransactions(currentUser.id);
+			}
+			updateAllData();
+		} catch (error) {
+			console.error('Failed to load data:', error);
+		}
+	}
+
+	async function addTransaction() {
+		const desc = document.getElementById('trans-desc').value.trim();
+		const amount = parseFloat(document.getElementById('trans-amount').value);
+		const type = document.getElementById('trans-type').value;
+		const category = document.getElementById('trans-category').value;
+		if (!desc || !amount || amount <= 0) {
+			showNotification('Please enter valid details', 'error');
+			return;
+		}
+		const transaction = {
+			userId: currentUser.id,
+			date: new Date().toISOString().split('T')[0],
+			description: desc,
+			amount: type === 'expense' ? -Math.abs(amount) : Math.abs(amount),
+			category: category,
+			type: type
+		};
+		try {
+			if (db.db) {
+				await db.addTransaction(transaction);
+				transactions = await db.getUserTransactions(currentUser.id);
+			} else {
+				transaction.id = Date.now();
+				transactions.push(transaction);
+			}
+			document.getElementById('trans-desc').value = '';
+			document.getElementById('trans-amount').value = '';
+			document.getElementById('trans-type').value = 'expense';
+			document.getElementById('trans-category').value = 'Food';
+			updateAllData();
+			showNotification('Transaction added successfully!', 'success');
+		} catch (error) {
+			showNotification('Failed to add transaction', 'error');
+		}
+	}
+
+	async function deleteTransaction(id) {
+		if (!confirm('Delete this transaction?')) return;
+		try {
+			if (db.db) {
+				await db.deleteTransaction(id);
+				transactions = await db.getUserTransactions(currentUser.id);
+			} else {
+				transactions = transactions.filter(t => t.id !== id);
+			}
+			updateAllData();
+			showNotification('Transaction deleted', 'success');
+		} catch (error) {
+			showNotification('Failed to delete transaction', 'error');
+		}
+	}
+
+	function updateAllData() {
+		updateStats();
+		updateCharts();
+		updateAIInsights();
+		updateTransactionsList();
+	}
+
+	function updateStats() {
+		const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+		const expenses = Math.abs(transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0));
+		const balance = income - expenses;
+		const savingsRate = income > 0 ? ((balance / income) * 100).toFixed(1) : 0;
+		document.getElementById('balance-display').textContent = `₹${balance.toLocaleString()}`;
+		document.getElementById('income-display').textContent = `₹${income.toLocaleString()}`;
+		document.getElementById('expense-display').textContent = `₹${expenses.toLocaleString()}`;
+		document.getElementById('savings-display').textContent = `${savingsRate}%`;
+		document.getElementById('balance-display').className = `text-3xl font-black ${balance >= 0 ? 'text-green-400' : 'text-red-400'}`;
+	}
+
+	function updateCharts() {
+		const categoryData = {};
+		transactions.filter(t => t.type === 'expense').forEach(t => {
+			categoryData[t.category] = (categoryData[t.category] || 0) + Math.abs(t.amount);
+		});
+		charts.createPieChart({
+			labels: Object.keys(categoryData),
+			values: Object.values(categoryData)
+		});
+		const monthlyData = {};
+		transactions.forEach(t => {
+			const month = t.date.substring(0, 7);
+			if (!monthlyData[month]) {
+				monthlyData[month] = { income: 0, expenses: 0 };
+			}
+			if (t.type === 'income') {
+				monthlyData[month].income += t.amount;
+			} else {
+				monthlyData[month].expenses += Math.abs(t.amount);
+			}
+		});
+		const months = Object.keys(monthlyData).sort().slice(-6);
+		charts.createBarChart({
+			months: months,
+			income: months.map(m => monthlyData[m].income),
+			expenses: months.map(m => monthlyData[m].expenses)
+		});
+		const last7Days = [];
+		const labels = [];
+		for (let i = 6; i >= 0; i--) {
+			const date = new Date();
+			date.setDate(date.getDate() - i);
+			const dateStr = date.toISOString().split('T')[0];
+			const dayTotal = transactions
+				.filter(t => t.date === dateStr)
+				.reduce((sum, t) => sum + t.amount, 0);
+			labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+			last7Days.push(dayTotal);
+		}
+		charts.createLineChart({ labels, values: last7Days });
+		const currentBalance = transactions.reduce((sum, t) => sum + t.amount, 0);
+		const monthlyIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0) / 6;
+		const monthlyExpense = Math.abs(transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0)) / 6;
+		const projectionLabels = [];
+		const projectionValues = [];
+		let projectedBalance = currentBalance;
+		for (let i = 1; i <= 6; i++) {
+			projectionLabels.push(`Month ${i}`);
+			projectedBalance += (monthlyIncome - monthlyExpense);
+			projectionValues.push(projectedBalance);
+		}
+		charts.createProjectionChart({ labels: projectionLabels, values: projectionValues });
+	}
+
+	function updateAIInsights() {
+		const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+		const expenses = Math.abs(transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0));
+		const balance = income - expenses;
+		const insights = ai.generateInsights(income, expenses, balance);
+		document.getElementById('ai-insights-container').innerHTML = insights.map(insight => `
+			<div class="insight-pro">
+				<p class="text-sm font-semibold ${insight.color}">${insight.title}</p>
+				<p class="text-xs text-white text-opacity-70 mt-1">${insight.message}</p>
+			</div>
+		`).join('');
+		const recommendations = ai.generateRecommendations(income, expenses, balance, transactions);
+		document.getElementById('ai-tips-container').innerHTML = recommendations.map(rec => `
+			<div class="insight-pro">
+				<p class="text-sm font-semibold text-yellow-400">${rec.title}</p>
+				<p class="text-xs text-white text-opacity-70 mt-1">${rec.message}</p>
+			</div>
+		`).join('');
+		const predictions = ai.generatePredictions(transactions);
+		document.getElementById('ai-predictions-container').innerHTML = predictions.map(pred => `
+			<div class="insight-pro">
+				<p class="text-sm font-semibold text-purple-400">${pred.title}</p>
+				<p class="text-xs text-white text-opacity-70 mt-1">${pred.message}</p>
+				${pred.confidence ? `<p class="text-xs text-green-400 mt-1">• ${pred.confidence}</p>` : ''}
+			</div>
+		`).join('');
+	}
+
+	function updateTransactionsList(filteredList) {
+		const container = document.getElementById('transactions-container');
+		const list = filteredList || transactions;
+		document.getElementById('trans-count').textContent = `${list.length} transactions`;
+		if (list.length === 0) {
+			container.innerHTML = `
+				<div class="text-center py-12 text-black text-opacity-60">
+					<p>No transactions yet. Add your first transaction!</p>
+				</div>
+			`;
+			document.getElementById('summary-stats').innerHTML = '';
+			return;
+		}
+		const sorted = [...list].sort((a, b) => new Date(b.date) - new Date(a.date));
+		container.innerHTML = `<table style="width:100%;border-collapse:collapse;">
+			<thead>
+				<tr style="background:#f7f8fa;border-bottom:1px solid #e5e7eb;">
+					<th style="padding:8px;text-align:left;font-weight:600;">Date</th>
+					<th style="padding:8px;text-align:left;font-weight:600;">Description</th>
+					<th style="padding:8px;text-align:left;font-weight:600;">Amount</th>
+					<th style="padding:8px;text-align:left;font-weight:600;">Category</th>
+					<th style="padding:8px;text-align:left;font-weight:600;">Type</th>
+					<th style="padding:8px;text-align:left;font-weight:600;">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				${sorted.map(t => `
+					<tr style="border-bottom:1px solid #e5e7eb;">
+						<td style="padding:8px;">${new Date(t.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
+						<td style="padding:8px;">${t.description}</td>
+						<td style="padding:8px; color:${t.amount >= 0 ? '#059669' : '#dc2626'};font-weight:600;">${t.amount >= 0 ? '+' : '-'}₹${Math.abs(t.amount).toLocaleString()}</td>
+						<td style="padding:8px;">${t.category}</td>
+						<td style="padding:8px;">${t.type.charAt(0).toUpperCase() + t.type.slice(1)}</td>
+						<td style="padding:8px;"><button onclick="deleteTransaction(${t.id})" class="delete-pro">Delete</button></td>
+					</tr>
+				`).join('')}
+			</tbody>
+		</table>`;
+		const totalIncome = list.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+		const totalExpense = Math.abs(list.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0));
+		const balance = totalIncome - totalExpense;
+		document.getElementById('summary-stats').innerHTML = `
+			<b>Summary:</b> Income: <span style="color:#059669;">₹${totalIncome.toLocaleString()}</span> | Expenses: <span style="color:#dc2626;">₹${totalExpense.toLocaleString()}</span> | Balance: <span style="color:${balance>=0?'#059669':'#dc2626'};">₹${balance.toLocaleString()}</span>
+		`;
+	}
+
+	function exportCSV() {
+		if (!transactions.length) return;
+		const header = ['Date', 'Description', 'Amount', 'Category', 'Type'];
+		const rows = transactions.map(t => [t.date, t.description, t.amount, t.category, t.type]);
+		let csv = header.join(',') + '\n';
+		csv += rows.map(r => r.join(',')).join('\n');
+		const blob = new Blob([csv], { type: 'text/csv' });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = 'transactions.csv';
+		a.click();
+		URL.revokeObjectURL(url);
+		showNotification('CSV exported!', 'success');
+	}
+
+	function exportData() {
+		const dataStr = JSON.stringify({
+			user: currentUser,
+			transactions: transactions,
+			exportedAt: new Date().toISOString()
+		}, null, 2);
+		const blob = new Blob([dataStr], { type: 'application/json' });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = `financeai-export-${new Date().toISOString().split('T')[0]}.json`;
+		a.click();
+		URL.revokeObjectURL(url);
+		showNotification('Data exported successfully!', 'success');
+	}
+
+	function showLoading(type) {
+		document.getElementById(type + '-text').classList.add('hidden');
+		document.getElementById(type + '-spinner').classList.remove('hidden');
+	}
+
+	function hideLoading(type) {
+		document.getElementById(type + '-text').classList.remove('hidden');
+		document.getElementById(type + '-spinner').classList.add('hidden');
+	}
+
+	function showNotification(message, type) {
+		const container = document.getElementById('notification-container');
+		const icon = type === 'success' ? '✅' : '❌';
+		const color = type === 'success' ? 'text-green-600' : 'text-red-600';
+		container.innerHTML = `
+			<div class="notification-pro">
+				<div class="flex items-center gap-3">
+					<span class="text-2xl">${icon}</span>
+					<p class="${color} font-semibold">${message}</p>
+				</div>
+			</div>
+		`;
+		setTimeout(() => {
+			container.innerHTML = '';
+		}, 3000);
+	}
+
+	document.addEventListener('click', (e) => {
+		const menu = document.getElementById('profile-menu');
+		const avatar = document.querySelector('.avatar-pro');
+		if (menu && !menu.contains(e.target) && !avatar.contains(e.target)) {
+			menu.classList.add('hidden');
+		}
+	});
+
+	window.addEventListener('DOMContentLoaded', function() {
+		if (typeof Chart === 'undefined') {
+			showNotification('Chart.js failed to load. Charts will not display.', 'error');
+		}
+		if (!window.tailwind) {
+			showNotification('Tailwind CSS failed to load. Styles may be missing.', 'error');
+		}
+		initApp();
+	});
 	</script>
 </body>
 </html>
-

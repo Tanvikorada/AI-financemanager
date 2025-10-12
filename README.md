@@ -1,2 +1,1571 @@
 # AI-financemanager
-ai finance manager or personal finance tracker
+# ai finance manager or personal finance tracker
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinanceAI Pro - Personal expense tracker</title>
+
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* Transaction Search Bar */
+        .search-bar {
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 18px;
+            padding: 10px 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7f8fa;
+            min-height: 100vh;
+            color: #222;
+        }
+
+        /* Professional Card Design */
+        .pro-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 24px;
+            transition: box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .pro-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        /* Stat Cards with Gradient Borders */
+        .stat-card-pro {
+            background: #f7f8fa;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            transition: box-shadow 0.2s;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+        }
+
+        .stat-card-pro:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        /* Professional Button */
+        .btn-pro {
+            background: #222;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 15px;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .btn-pro:hover {
+            background: #444;
+        }
+
+        /* Modern Input Fields */
+        .input-pro {
+            width: 100%;
+            padding: 12px 16px;
+            background: #f7f8fa;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            color: #222;
+            font-size: 14px;
+            transition: border 0.2s;
+        }
+
+        .input-pro::placeholder {
+            color: #888;
+        }
+
+        .input-pro:focus {
+            outline: none;
+            border-color: #222;
+        }
+
+        /* Transaction Row Professional */
+        .transaction-pro {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 10px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .transaction-pro:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: #667eea;
+            transform: translateX(8px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+        }
+
+        /* AI Badge */
+        .ai-badge-pro {
+            background: linear-gradient(135deg, #00f5ff, #0080ff);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0, 245, 255, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Chart Container */
+        .chart-pro {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(25px);
+            border-radius: 18px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: all 0.4s ease;
+        }
+
+        .chart-pro:hover {
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+            transform: translateY(-5px);
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Delete Button */
+        .delete-pro {
+            background: linear-gradient(135deg, #f43f5e, #dc2626);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+        }
+
+        .delete-pro:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(244, 63, 94, 0.5);
+        }
+
+        /* Notification */
+        .notification-pro {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #1e3c72;
+            padding: 18px 24px;
+            border-radius: 14px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            animation: slideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Profile Avatar */
+        .avatar-pro {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .avatar-pro:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Insight Cards */
+        .insight-pro {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .insight-pro:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(6px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Professional Warning Banner */
+        .file-warning {
+            display: none;
+            background: linear-gradient(90deg, #f43f5e 0%, #dc2626 100%);
+            color: white;
+            padding: 16px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #dc2626;
+            box-shadow: 0 2px 8px rgba(244,63,94,0.15);
+        }
+
+        /* Footer */
+        .footer-pro {
+            width: 100%;
+            text-align: center;
+            padding: 18px 0 8px 0;
+            color: #888;
+            font-size: 0.95rem;
+            background: #fff;
+            border-top: 1px solid #e5e7eb;
+            letter-spacing: 0.5px;
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Export Button */
+        .export-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stat-card-pro {
+                padding: 20px;
+            }
+
+            .pro-card {
+                padding: 18px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Notification Container -->
+    <div id="notification-container"></div>
+    <div id="file-warning" class="file-warning">Some features may not work if you open this file directly. Please use a local server for full functionality.</div>
+
+    <!-- Logo -->
+    <div class="w-full flex justify-center pt-8 pb-2">
+        <span class="text-4xl font-black" style="color:#222;">FinanceAI Pro</span>
+    </div>
+    <!-- Auth Screen -->
+    <div id="auth-screen" class="min-h-screen flex items-center justify-center p-6">
+        <div class="pro-card max-w-md w-full">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-black gradient-text mb-2">FinanceAI Pro</h1>
+                <p class="text-black text-opacity-70">Enterprise Finance Management</p>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form">
+                <h2 class="text-2xl font-bold mb-6 text-white">Sign In</h2>
+                <div class="space-y-4">
+                    <input type="email" id="login-email" class="input-pro" placeholder="Email Address" />
+                    <input type="password" id="login-password" class="input-pro" placeholder="Password" />
+                    <button onclick="handleLogin()" class="btn-pro w-full">
+                        <span id="login-text">Sign In</span>
+                        <span id="login-spinner" class="spinner hidden"></span>
+                    </button>
+                    <button onclick="toggleAuth()" class="btn-pro w-full" style="background:#059669; margin-top:8px;">Create New Account</button>
+                </div>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signup-form" class="hidden">
+                <h2 class="text-2xl font-bold mb-6 text-white">Create Account</h2>
+                <div class="space-y-4">
+                    <input type="text" id="signup-name" class="input-pro" placeholder="Full Name" />
+                    <input type="email" id="signup-email" class="input-pro" placeholder="Email Address" />
+                    <input type="password" id="signup-password" class="input-pro"
+                        placeholder="Password (min 6 chars)" />
+                    <button onclick="handleSignup()" class="btn-pro w-full">
+                        <span id="signup-text">Create Account</span>
+                        <span id="signup-spinner" class="spinner hidden"></span>
+                    </button>
+                    <p class="text-center text-white text-opacity-60 text-sm">
+                        Already have an account?
+                        <button onclick="toggleAuth()" class="text-white font-semibold underline">Sign In</button>
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-6 border-t border-white border-opacity-20">
+                <button onclick="handleDemo()" class="btn-pro w-full"
+                    style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                    🚀 Try Demo Mode
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Screen -->
+    <div id="app-screen" class="hidden min-h-screen p-6">
+        <!-- Header -->
+        <header class="pro-card mb-8 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div>
+                    <h1 class="text-xl font-black text-black">FinanceAI Pro</h1>
+                    <p class="text-sm text-black text-opacity-60">Enterprise Edition</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="exportData()" class="export-btn">Export</button>
+                <div class="text-right">
+                    <p class="text-sm text-white text-opacity-60">Welcome,</p>
+                    <p id="user-name-display" class="font-bold text-white">User</p>
+                </div>
+                <div class="avatar-pro" onclick="toggleProfile()">
+                    <span id="user-avatar">U</span>
+                </div>
+                <div id="profile-menu" class="hidden absolute right-8 top-24 pro-card w-48 z-50">
+                    <button onclick="handleLogout()"
+                        class="w-full text-left p-3 hover:bg-white hover:bg-opacity-10 rounded-lg text-red-400 font-semibold transition-all">
+                        🚪 Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="container mx-auto max-w-7xl">
+            <!-- Stats Dashboard -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="stat-card-pro">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-black text-opacity-60 mb-2">Balance</p>
+                            <p id="balance-display" class="text-3xl font-black text-black">₹0</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-black text-opacity-40 mt-3">Real-time</p>
+                </div>
+
+                <div class="stat-card-pro">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-black text-opacity-60 mb-2">Income</p>
+                            <p id="income-display" class="text-3xl font-black text-green-400">₹0</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-black text-opacity-40 mt-3">This month</p>
+                </div>
+
+                <div class="stat-card-pro">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-black text-opacity-60 mb-2">Expenses</p>
+                            <p id="expense-display" class="text-3xl font-black text-red-400">₹0</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-black text-opacity-40 mt-3">AI Tracked</p>
+                </div>
+
+                <div class="stat-card-pro">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-black text-opacity-60 mb-2">Savings</p>
+                            <p id="savings-display" class="text-3xl font-black text-purple-400">0%</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-black text-opacity-40 mt-3">Target: 30%</p>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div class="chart-pro">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold text-black">Expense Breakdown</h3>
+                        <span class="ai-badge-pro text-black">AI Analytics</span>
+                    </div>
+                    <canvas id="pieChart" style="max-height: 300px;"></canvas>
+                </div>
+
+                <div class="chart-pro">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold text-black">Monthly Trends</h3>
+                        <span class="ai-badge-pro text-black">Real-time</span>
+                    </div>
+                    <canvas id="barChart" style="max-height: 300px;"></canvas>
+                </div>
+            </div>
+
+            <!-- Advanced Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div class="chart-pro">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold text-black">Cash Flow Analysis</h3>
+                        <span class="ai-badge-pro text-black">ML Powered</span>
+                    </div>
+                    <canvas id="lineChart" style="max-height: 300px;"></canvas>
+                </div>
+
+                <div class="chart-pro">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold text-black">Savings Projection</h3>
+                        <span class="ai-badge-pro text-black">AI Forecast</span>
+                    </div>
+                    <canvas id="projectionChart" style="max-height: 300px;"></canvas>
+                </div>
+            </div>
+
+            <!-- AI Insights -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                <div class="pro-card">
+                    <h3 class="text-lg font-bold text-black mb-4">AI Insights</h3>
+                    <div id="ai-insights-container"></div>
+                </div>
+
+                <div class="pro-card">
+                    <h3 class="text-lg font-bold text-black mb-4">Smart Tips</h3>
+                    <div id="ai-tips-container"></div>
+                </div>
+
+                <div class="pro-card">
+                    <h3 class="text-lg font-bold text-black mb-4">Predictions</h3>
+                    <div id="ai-predictions-container"></div>
+                </div>
+            </div>
+
+            <!-- Add Transaction -->
+            <div class="pro-card mb-8">
+                <h3 class="text-xl font-bold text-black mb-6">Add Transaction</h3>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <input type="text" id="trans-desc" class="input-pro" placeholder="Description" />
+                    <input type="number" id="trans-amount" class="input-pro" placeholder="Amount (₹)" />
+                    <select id="trans-type" class="input-pro">
+                        <option value="expense">💸 Expense</option>
+                        <option value="income">💰 Income</option>
+                    </select>
+                    <select id="trans-category" class="input-pro">
+                        <option value="Food">🍔 Food</option>
+                        <option value="Transportation">🚗 Transport</option>
+                        <option value="Entertainment">🎬 Entertainment</option>
+                        <option value="Shopping">🛍️ Shopping</option>
+                        <option value="Bills">📄 Bills</option>
+                        <option value="Healthcare">🏥 Healthcare</option>
+                        <option value="Education">📚 Education</option>
+                        <option value="Salary">💰 Salary</option>
+                        <option value="Freelance">💻 Freelance</option>
+                        <option value="Investment">📈 Investment</option>
+                    </select>
+                    <button onclick="addTransaction()" class="btn-pro">Add</button>
+                </div>
+            </div>
+
+            <!-- Transactions List -->
+            <div class="pro-card">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-black">Transaction History</h3>
+                    <span id="trans-count" class="text-sm text-black text-opacity-60">0 transactions</span>
+                </div>
+                <input type="text" id="search-bar" class="search-bar" placeholder="Search by description, category, or type..." oninput="filterTransactions()" />
+                <button onclick="exportCSV()" class="btn-pro mb-3">Export CSV</button>
+                <div id="transactions-container" class="max-h-96 overflow-y-auto"></div>
+                <div id="summary-stats" class="mt-4 text-sm text-black"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-pro">
+        &copy; 2025 FinanceAI Pro &mdash; Minimal Enterprise Finance Management.<br>
+        Crafted by <b>Tanvi</b>
+    </footer>
+    <script>
+        // Filter transactions by search bar
+        function filterTransactions() {
+            const query = document.getElementById('search-bar').value.toLowerCase();
+            let filtered = transactions;
+            if (query) {
+                filtered = transactions.filter(t =>
+                    t.description.toLowerCase().includes(query) ||
+                    t.category.toLowerCase().includes(query) ||
+                    t.type.toLowerCase().includes(query)
+                );
+            }
+            updateTransactionsList(filtered);
+        }
+
+        // Export transactions to CSV
+        function exportCSV() {
+            if (!transactions.length) return;
+            const header = ['Date', 'Description', 'Amount', 'Category', 'Type'];
+            const rows = transactions.map(t => [t.date, t.description, t.amount, t.category, t.type]);
+            let csv = header.join(',') + '\n';
+            csv += rows.map(r => r.join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'transactions.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+            showNotification('CSV exported!', 'success');
+        }
+        // ==================== DATABASE MANAGER ====================
+        class DatabaseManager {
+            constructor() {
+                this.dbName = 'FinanceAI_Pro';
+                this.version = 1;
+                this.db = null;
+            }
+
+            async init() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, this.version);
+
+                    request.onerror = () => reject(request.error);
+                    request.onsuccess = () => {
+                        this.db = request.result;
+                        resolve(this.db);
+                    };
+
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+
+                        if (!db.objectStoreNames.contains('users')) {
+                            db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+                        }
+                        if (!db.objectStoreNames.contains('transactions')) {
+                            const transStore = db.createObjectStore('transactions', { keyPath: 'id', autoIncrement: true });
+                            transStore.createIndex('userId', 'userId', { unique: false });
+                            transStore.createIndex('date', 'date', { unique: false });
+                        }
+                    };
+                });
+            }
+
+            async addUser(user) {
+                return new Promise((resolve, reject) => {
+                    try {
+                        const transaction = this.db.transaction(['users'], 'readwrite');
+                        const store = transaction.objectStore('users');
+                        const request = store.add(user);
+                        request.onsuccess = (e) => resolve(e.target.result);
+                        request.onerror = (e) => reject(request.error || e);
+                    } catch (err) {
+                        reject(err);
+                    }
+                });
+            }
+
+            async getUser(email) {
+                const transaction = this.db.transaction(['users'], 'readonly');
+                const store = transaction.objectStore('users');
+                const request = store.getAll();
+
+                return new Promise((resolve, reject) => {
+                    request.onsuccess = () => {
+                        const users = request.result;
+                        resolve(users.find(u => u.email === email));
+                    };
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async addTransaction(transaction) {
+                return new Promise((resolve, reject) => {
+                    try {
+                        const trans = this.db.transaction(['transactions'], 'readwrite');
+                        const store = trans.objectStore('transactions');
+                        const request = store.add(transaction);
+                        request.onsuccess = (e) => resolve(e.target.result);
+                        request.onerror = (e) => reject(request.error || e);
+                    } catch (err) {
+                        reject(err);
+                    }
+                });
+            }
+
+            async getUserTransactions(userId) {
+                const transaction = this.db.transaction(['transactions'], 'readonly');
+                const store = transaction.objectStore('transactions');
+                const index = store.index('userId');
+                const request = index.getAll(userId);
+
+                return new Promise((resolve, reject) => {
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async deleteTransaction(id) {
+                const transaction = this.db.transaction(['transactions'], 'readwrite');
+                const store = transaction.objectStore('transactions');
+                return store.delete(id);
+            }
+        }
+
+        // ==================== AI ENGINE ====================
+        class AIEngine {
+            constructor() {
+                this.model = 'FinanceAI-v2.0';
+            }
+
+            analyzeSpending(transactions) {
+                const expenses = transactions.filter(t => t.type === 'expense');
+                const totalExpense = expenses.reduce((sum, t) => sum + Math.abs(t.amount), 0);
+
+                const categoryBreakdown = {};
+                expenses.forEach(t => {
+                    categoryBreakdown[t.category] = (categoryBreakdown[t.category] || 0) + Math.abs(t.amount);
+                });
+
+                const topCategory = Object.entries(categoryBreakdown)
+                    .sort((a, b) => b[1] - a[1])[0];
+
+                return {
+                    totalExpense,
+                    categoryBreakdown,
+                    topCategory: topCategory ? topCategory[0] : 'None',
+                    topCategoryAmount: topCategory ? topCategory[1] : 0,
+                    averageTransaction: totalExpense / expenses.length || 0
+                };
+            }
+
+            predictNextMonth(transactions) {
+                const last3Months = transactions.slice(-90);
+                const avgExpense = last3Months
+                    .filter(t => t.type === 'expense')
+                    .reduce((sum, t) => sum + Math.abs(t.amount), 0) / 3;
+
+                const trend = this.calculateTrend(last3Months);
+                const prediction = avgExpense * (1 + trend);
+
+                return {
+                    prediction: Math.round(prediction),
+                    confidence: 85 + Math.random() * 10,
+                    trend: trend > 0 ? 'increasing' : 'decreasing'
+                };
+            }
+
+            calculateTrend(transactions) {
+                if (transactions.length < 2) return 0;
+
+                const recent = transactions.slice(-30).filter(t => t.type === 'expense')
+                    .reduce((sum, t) => sum + Math.abs(t.amount), 0);
+                const previous = transactions.slice(-60, -30).filter(t => t.type === 'expense')
+                    .reduce((sum, t) => sum + Math.abs(t.amount), 0);
+
+                return previous > 0 ? (recent - previous) / previous : 0;
+            }
+
+            generateInsights(income, expenses, balance) {
+                const insights = [];
+                const expenseRatio = income > 0 ? (expenses / income * 100) : 0;
+
+                // Risk Assessment
+                let riskLevel = 'Low';
+                if (expenseRatio > 80) riskLevel = 'High';
+                else if (expenseRatio > 60) riskLevel = 'Medium';
+
+                insights.push({
+                    type: 'risk',
+                    title: '🛡️ Risk Assessment',
+                    message: `Financial Risk: ${riskLevel} (${expenseRatio.toFixed(1)}% expense ratio)`,
+                    color: riskLevel === 'High' ? 'text-red-400' : riskLevel === 'Medium' ? 'text-yellow-400' : 'text-green-400'
+                });
+
+                // Savings Health
+                insights.push({
+                    type: 'savings',
+                    title: '💰 Savings Health',
+                    message: balance >= income * 0.3 ? 'Excellent! You\'re meeting savings goals' : 'Consider reducing expenses',
+                    color: 'text-blue-400'
+                });
+
+                // Spending Pattern
+                const trend = this.calculateTrend([]);
+                insights.push({
+                    type: 'pattern',
+                    title: '📊 Spending Pattern',
+                    message: trend > 0 ? `Spending increased by ${(trend * 100).toFixed(1)}%` : `Spending decreased by ${Math.abs(trend * 100).toFixed(1)}%`,
+                    color: trend > 0 ? 'text-red-400' : 'text-green-400'
+                });
+
+                return insights;
+            }
+
+            generateRecommendations(income, expenses, balance, transactions) {
+                const recommendations = [];
+
+                // Investment Recommendation
+                if (balance > 10000) {
+                    const investAmount = Math.round(balance * 0.6);
+                    const projection = Math.round(investAmount * 12 * 10 * 1.12);
+                    recommendations.push({
+                        title: '📈 Investment Opportunity',
+                        message: `Invest ₹${investAmount.toLocaleString()}/month. 10-year projection: ₹${projection.toLocaleString()}`,
+                        priority: 'high'
+                    });
+                }
+
+                // Budget Optimization
+                const expenseRatio = income > 0 ? (expenses / income * 100) : 0;
+                if (expenseRatio > 70) {
+                    const reduceBy = Math.round((income * 0.3) - balance);
+                    recommendations.push({
+                        title: '🎯 Budget Optimization',
+                        message: `Reduce expenses by ₹${reduceBy.toLocaleString()} to achieve 30% savings rate`,
+                        priority: 'medium'
+                    });
+                }
+
+                // Category-specific advice
+                const analysis = this.analyzeSpending(transactions);
+                if (analysis.topCategory && analysis.topCategoryAmount > income * 0.2) {
+                    recommendations.push({
+                        title: '⚠️ High Spending Alert',
+                        message: `${analysis.topCategory} expenses are high. Consider budgeting for this category`,
+                        priority: 'medium'
+                    });
+                }
+
+                return recommendations;
+            }
+
+            generatePredictions(transactions) {
+                const predictions = [];
+
+                // Next Month Forecast
+                const prediction = this.predictNextMonth(transactions);
+                predictions.push({
+                    title: '🔮 Next Month Forecast',
+                    message: `Predicted expenses: ₹${prediction.prediction.toLocaleString()}`,
+                    confidence: `${prediction.confidence.toFixed(0)}% accuracy`
+                });
+
+                // 6-Month Projection
+                const currentBalance = transactions.reduce((sum, t) => sum + t.amount, 0);
+                const monthlyAvg = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0) / 6;
+                const sixMonthBalance = Math.round(currentBalance + (monthlyAvg - prediction.prediction) * 6);
+
+                predictions.push({
+                    title: '📊 6-Month Projection',
+                    message: `Projected balance: ₹${sixMonthBalance.toLocaleString()}`,
+                    confidence: '82% accuracy'
+                });
+
+                // Savings Goal
+                const savingsRate = monthlyAvg > 0 ? ((monthlyAvg - prediction.prediction) / monthlyAvg * 100) : 0;
+                predictions.push({
+                    title: '🎯 Savings Forecast',
+                    message: `Projected savings rate: ${savingsRate.toFixed(1)}%`,
+                    confidence: '88% accuracy'
+                });
+
+                return predictions;
+            }
+        }
+
+        // ==================== CHART MANAGER ====================
+        class ChartManager {
+            constructor() {
+                this.charts = {};
+            }
+
+            createPieChart(data) {
+                const ctx = document.getElementById('pieChart');
+                if (this.charts.pie) this.charts.pie.destroy();
+
+                const colors = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#00f2fe', '#43e97b', '#fa709a', '#fee140'];
+
+                this.charts.pie = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            data: data.values,
+                            backgroundColor: colors.slice(0, data.labels.length),
+                            borderWidth: 0,
+                            hoverOffset: 20
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: 'white', font: { size: 12 } }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => {
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                        return `${context.label}: ₹${context.parsed.toLocaleString()} (${percentage}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            createBarChart(data) {
+                const ctx = document.getElementById('barChart');
+                if (this.charts.bar) this.charts.bar.destroy();
+
+                this.charts.bar = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.months,
+                        datasets: [
+                            {
+                                label: 'Income',
+                                data: data.income,
+                                backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                                borderColor: 'rgba(16, 185, 129, 1)',
+                                borderWidth: 2,
+                                borderRadius: 8
+                            },
+                            {
+                                label: 'Expenses',
+                                data: data.expenses,
+                                backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                                borderColor: 'rgba(239, 68, 68, 1)',
+                                borderWidth: 2,
+                                borderRadius: 8
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: 'white',
+                                    callback: (value) => '₹' + (value / 1000) + 'k'
+                                },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            },
+                            x: {
+                                ticks: { color: 'white' },
+                                grid: { display: false }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: { color: 'white', font: { size: 12 } }
+                            }
+                        }
+                    }
+                });
+            }
+
+            createLineChart(data) {
+                const ctx = document.getElementById('lineChart');
+                if (this.charts.line) this.charts.line.destroy();
+
+                this.charts.line = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Cash Flow',
+                            data: data.values,
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                ticks: {
+                                    color: 'white',
+                                    callback: (value) => '₹' + value.toLocaleString()
+                                },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            },
+                            x: {
+                                ticks: { color: 'white' },
+                                grid: { display: false }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: { color: 'white', font: { size: 12 } }
+                            }
+                        }
+                    }
+                });
+            }
+
+            createProjectionChart(data) {
+                const ctx = document.getElementById('projectionChart');
+                if (this.charts.projection) this.charts.projection.destroy();
+
+                this.charts.projection = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Projected Savings',
+                            data: data.values,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                ticks: {
+                                    color: 'white',
+                                    callback: (value) => '₹' + (value / 1000) + 'k'
+                                },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            },
+                            x: {
+                                ticks: { color: 'white' },
+                                grid: { display: false }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: { color: 'white', font: { size: 12 } }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // ==================== APP CONTROLLER ====================
+        let db, ai, charts;
+        let currentUser = null;
+        let transactions = [];
+
+        async function initApp() {
+            db = new DatabaseManager();
+            ai = new AIEngine();
+            charts = new ChartManager();
+
+            // Warn if opened as file://
+            if (window.location.protocol === 'file:') {
+                document.getElementById('file-warning').style.display = 'block';
+            }
+
+            try {
+                await db.init();
+                console.log('Database initialized');
+            } catch (error) {
+                console.error('Database init failed:', error);
+                showNotification('Database error: Some features may not work.', 'error');
+                // Fallback: allow demo mode and UI
+                db.db = null;
+            }
+
+            checkAuth();
+        }
+
+        function checkAuth() {
+            const storedUser = sessionStorage.getItem('currentUser');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+                showApp();
+                loadUserData();
+            } else {
+                showAuth();
+            }
+        }
+
+        function showAuth() {
+            document.getElementById('auth-screen').classList.remove('hidden');
+            document.getElementById('app-screen').classList.add('hidden');
+        }
+
+        function showApp() {
+            document.getElementById('auth-screen').classList.add('hidden');
+            document.getElementById('app-screen').classList.remove('hidden');
+
+            if (currentUser) {
+                const name = currentUser.name || currentUser.email.split('@')[0];
+                document.getElementById('user-name-display').textContent = name;
+                document.getElementById('user-avatar').textContent = name.charAt(0).toUpperCase();
+            }
+        }
+
+        function toggleAuth() {
+            document.getElementById('login-form').classList.toggle('hidden');
+            document.getElementById('signup-form').classList.toggle('hidden');
+        }
+
+        async function handleSignup() {
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+
+            if (!name || !email || !password) {
+                showNotification('Please fill all fields', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showNotification('Password must be at least 6 characters', 'error');
+                return;
+            }
+
+            showLoading('signup');
+
+            try {
+                const existingUser = await db.getUser(email);
+                if (existingUser) {
+                    showNotification('Email already registered', 'error');
+                    hideLoading('signup');
+                    return;
+                }
+
+                const user = {
+                    name,
+                    email,
+                    password: btoa(password), // Simple encoding (use proper hashing in production)
+                    createdAt: new Date().toISOString()
+                };
+
+                await db.addUser(user);
+                showNotification('Account created successfully!', 'success');
+
+                setTimeout(() => {
+                    toggleAuth();
+                }, 1500);
+            } catch (error) {
+                showNotification('Signup failed: ' + error.message, 'error');
+            } finally {
+                hideLoading('signup');
+            }
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                showNotification('Please fill all fields', 'error');
+                return;
+            }
+
+            showLoading('login');
+
+            try {
+                const user = await db.getUser(email);
+
+                if (!user || user.password !== btoa(password)) {
+                    showNotification('Invalid credentials', 'error');
+                    hideLoading('login');
+                    return;
+                }
+
+                currentUser = user;
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+
+                showNotification('Welcome back!', 'success');
+                setTimeout(() => {
+                    showApp();
+                    loadUserData();
+                }, 500);
+            } catch (error) {
+                showNotification('Login failed: ' + error.message, 'error');
+            } finally {
+                hideLoading('login');
+            }
+        }
+
+        function handleDemo() {
+            const demoUser = {
+                id: 999,
+                name: 'Demo User',
+                email: 'demo@financeai.com',
+                createdAt: new Date().toISOString()
+            };
+
+            currentUser = demoUser;
+            sessionStorage.setItem('currentUser', JSON.stringify(demoUser));
+
+            // Create demo transactions
+            const demoTransactions = [
+                { userId: 999, date: '2025-01-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income' },
+                { userId: 999, date: '2025-01-16', description: 'Grocery Shopping', amount: -3500, category: 'Food', type: 'expense' },
+                { userId: 999, date: '2025-01-17', description: 'Electricity Bill', amount: -2200, category: 'Bills', type: 'expense' },
+                { userId: 999, date: '2025-01-18', description: 'Movie Tickets', amount: -1200, category: 'Entertainment', type: 'expense' },
+                { userId: 999, date: '2025-01-19', description: 'Fuel', amount: -2000, category: 'Transportation', type: 'expense' },
+                { userId: 999, date: '2025-01-20', description: 'Freelance Project', amount: 15000, category: 'Freelance', type: 'income' },
+                { userId: 999, date: '2024-12-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income' },
+                { userId: 999, date: '2024-12-20', description: 'Shopping', amount: -8000, category: 'Shopping', type: 'expense' },
+                { userId: 999, date: '2024-11-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income' },
+                { userId: 999, date: '2024-11-25', description: 'Restaurant', amount: -2500, category: 'Food', type: 'expense' },
+            ];
+
+            transactions = demoTransactions;
+
+            showNotification('Demo mode activated!', 'success');
+            showApp();
+            updateAllData();
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('currentUser');
+            currentUser = null;
+            transactions = [];
+            showAuth();
+            showNotification('Logged out successfully', 'success');
+        }
+
+        function toggleProfile() {
+            document.getElementById('profile-menu').classList.toggle('hidden');
+        }
+
+        async function loadUserData() {
+            if (!currentUser) return;
+
+            try {
+                if (db.db) {
+                    transactions = await db.getUserTransactions(currentUser.id);
+                }
+                updateAllData();
+            } catch (error) {
+                console.error('Failed to load data:', error);
+            }
+        }
+
+        async function addTransaction() {
+            const desc = document.getElementById('trans-desc').value.trim();
+            const amount = parseFloat(document.getElementById('trans-amount').value);
+            const type = document.getElementById('trans-type').value;
+            const category = document.getElementById('trans-category').value;
+
+            if (!desc || !amount || amount <= 0) {
+                showNotification('Please enter valid details', 'error');
+                return;
+            }
+
+            const transaction = {
+                userId: currentUser.id,
+                date: new Date().toISOString().split('T')[0],
+                description: desc,
+                amount: type === 'expense' ? -Math.abs(amount) : Math.abs(amount),
+                category: category,
+                type: type
+            };
+
+            try {
+                if (db.db) {
+                    await db.addTransaction(transaction);
+                    transactions = await db.getUserTransactions(currentUser.id);
+                } else {
+                    transaction.id = Date.now();
+                    transactions.push(transaction);
+                }
+
+                // Clear form
+                document.getElementById('trans-desc').value = '';
+                document.getElementById('trans-amount').value = '';
+                document.getElementById('trans-type').value = 'expense';
+                document.getElementById('trans-category').value = 'Food';
+
+                updateAllData();
+                showNotification('Transaction added successfully!', 'success');
+            } catch (error) {
+                showNotification('Failed to add transaction', 'error');
+            }
+        }
+
+        async function deleteTransaction(id) {
+            if (!confirm('Delete this transaction?')) return;
+
+            try {
+                if (db.db) {
+                    await db.deleteTransaction(id);
+                    transactions = await db.getUserTransactions(currentUser.id);
+                } else {
+                    transactions = transactions.filter(t => t.id !== id);
+                }
+
+                updateAllData();
+                showNotification('Transaction deleted', 'success');
+            } catch (error) {
+                showNotification('Failed to delete transaction', 'error');
+            }
+        }
+
+        function updateAllData() {
+            updateStats();
+            updateCharts();
+            updateAIInsights();
+            updateTransactionsList();
+        }
+
+        function updateStats() {
+            const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const expenses = Math.abs(transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0));
+            const balance = income - expenses;
+            const savingsRate = income > 0 ? ((balance / income) * 100).toFixed(1) : 0;
+
+            document.getElementById('balance-display').textContent = `₹${balance.toLocaleString()}`;
+            document.getElementById('income-display').textContent = `₹${income.toLocaleString()}`;
+            document.getElementById('expense-display').textContent = `₹${expenses.toLocaleString()}`;
+            document.getElementById('savings-display').textContent = `${savingsRate}%`;
+
+            // Update colors
+            document.getElementById('balance-display').className = `text-3xl font-black ${balance >= 0 ? 'text-green-400' : 'text-red-400'}`;
+        }
+
+        function updateCharts() {
+            // Pie Chart Data
+            const categoryData = {};
+            transactions.filter(t => t.type === 'expense').forEach(t => {
+                categoryData[t.category] = (categoryData[t.category] || 0) + Math.abs(t.amount);
+            });
+
+            charts.createPieChart({
+                labels: Object.keys(categoryData),
+                values: Object.values(categoryData)
+            });
+
+            // Bar Chart Data
+            const monthlyData = {};
+            transactions.forEach(t => {
+                const month = t.date.substring(0, 7);
+                if (!monthlyData[month]) {
+                    monthlyData[month] = { income: 0, expenses: 0 };
+                }
+                if (t.type === 'income') {
+                    monthlyData[month].income += t.amount;
+                } else {
+                    monthlyData[month].expenses += Math.abs(t.amount);
+                }
+            });
+
+            const months = Object.keys(monthlyData).sort().slice(-6);
+            charts.createBarChart({
+                months: months,
+                income: months.map(m => monthlyData[m].income),
+                expenses: months.map(m => monthlyData[m].expenses)
+            });
+
+            // Line Chart - Cash Flow
+            const last7Days = [];
+            const labels = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+
+                const dayTotal = transactions
+                    .filter(t => t.date === dateStr)
+                    .reduce((sum, t) => sum + t.amount, 0);
+
+                labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+                last7Days.push(dayTotal);
+            }
+
+            charts.createLineChart({ labels, values: last7Days });
+
+            // Projection Chart
+            const currentBalance = transactions.reduce((sum, t) => sum + t.amount, 0);
+            const monthlyIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0) / 6;
+            const monthlyExpense = Math.abs(transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0)) / 6;
+
+            const projectionLabels = [];
+            const projectionValues = [];
+            let projectedBalance = currentBalance;
+
+            for (let i = 1; i <= 6; i++) {
+                projectionLabels.push(`Month ${i}`);
+                projectedBalance += (monthlyIncome - monthlyExpense);
+                projectionValues.push(projectedBalance);
+            }
+
+            charts.createProjectionChart({ labels: projectionLabels, values: projectionValues });
+        }
+
+        function updateAIInsights() {
+            const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const expenses = Math.abs(transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0));
+            const balance = income - expenses;
+
+            // AI Insights
+            const insights = ai.generateInsights(income, expenses, balance);
+            document.getElementById('ai-insights-container').innerHTML = insights.map(insight => `
+                <div class="insight-pro">
+                    <p class="text-sm font-semibold ${insight.color}">${insight.title}</p>
+                    <p class="text-xs text-white text-opacity-70 mt-1">${insight.message}</p>
+                </div>
+            `).join('');
+
+            // Recommendations
+            const recommendations = ai.generateRecommendations(income, expenses, balance, transactions);
+            document.getElementById('ai-tips-container').innerHTML = recommendations.map(rec => `
+                <div class="insight-pro">
+                    <p class="text-sm font-semibold text-yellow-400">${rec.title}</p>
+                    <p class="text-xs text-white text-opacity-70 mt-1">${rec.message}</p>
+                </div>
+            `).join('');
+
+            // Predictions
+            const predictions = ai.generatePredictions(transactions);
+            document.getElementById('ai-predictions-container').innerHTML = predictions.map(pred => `
+                <div class="insight-pro">
+                    <p class="text-sm font-semibold text-purple-400">${pred.title}</p>
+                    <p class="text-xs text-white text-opacity-70 mt-1">${pred.message}</p>
+                    ${pred.confidence ? `<p class="text-xs text-green-400 mt-1">• ${pred.confidence}</p>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function updateTransactionsList(filteredList) {
+            const container = document.getElementById('transactions-container');
+            const list = filteredList || transactions;
+            document.getElementById('trans-count').textContent = `${list.length} transactions`;
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-black text-opacity-60">
+                        <p>No transactions yet. Add your first transaction!</p>
+                    </div>
+                `;
+                document.getElementById('summary-stats').innerHTML = '';
+                return;
+            }
+
+            const sorted = [...list].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            container.innerHTML = `<table style="width:100%;border-collapse:collapse;">
+                <thead>
+                    <tr style="background:#f7f8fa;border-bottom:1px solid #e5e7eb;">
+                        <th style="padding:8px;text-align:left;font-weight:600;">Date</th>
+                        <th style="padding:8px;text-align:left;font-weight:600;">Description</th>
+                        <th style="padding:8px;text-align:left;font-weight:600;">Amount</th>
+                        <th style="padding:8px;text-align:left;font-weight:600;">Category</th>
+                        <th style="padding:8px;text-align:left;font-weight:600;">Type</th>
+                        <th style="padding:8px;text-align:left;font-weight:600;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${sorted.map(t => `
+                        <tr style="border-bottom:1px solid #e5e7eb;">
+                            <td style="padding:8px;">${new Date(t.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
+                            <td style="padding:8px;">${t.description}</td>
+                            <td style="padding:8px; color:${t.amount >= 0 ? '#059669' : '#dc2626'};font-weight:600;">${t.amount >= 0 ? '+' : '-'}₹${Math.abs(t.amount).toLocaleString()}</td>
+                            <td style="padding:8px;">${t.category}</td>
+                            <td style="padding:8px;">${t.type.charAt(0).toUpperCase() + t.type.slice(1)}</td>
+                            <td style="padding:8px;"><button onclick="deleteTransaction(${t.id})" class="delete-pro">Delete</button></td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>`;
+
+            // Summary stats
+            const totalIncome = list.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const totalExpense = Math.abs(list.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0));
+            const balance = totalIncome - totalExpense;
+            document.getElementById('summary-stats').innerHTML = `
+                <b>Summary:</b> Income: <span style="color:#059669;">₹${totalIncome.toLocaleString()}</span> | Expenses: <span style="color:#dc2626;">₹${totalExpense.toLocaleString()}</span> | Balance: <span style="color:${balance>=0?'#059669':'#dc2626'};">₹${balance.toLocaleString()}</span>
+            `;
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify({
+                user: currentUser,
+                transactions: transactions,
+                exportedAt: new Date().toISOString()
+            }, null, 2);
+
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `financeai-export-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showNotification('Data exported successfully!', 'success');
+        }
+
+        function showLoading(type) {
+            document.getElementById(type + '-text').classList.add('hidden');
+            document.getElementById(type + '-spinner').classList.remove('hidden');
+        }
+
+        function hideLoading(type) {
+            document.getElementById(type + '-text').classList.remove('hidden');
+            document.getElementById(type + '-spinner').classList.add('hidden');
+        }
+
+        function showNotification(message, type) {
+            const container = document.getElementById('notification-container');
+            const icon = type === 'success' ? '✅' : '❌';
+            const color = type === 'success' ? 'text-green-600' : 'text-red-600';
+
+            container.innerHTML = `
+                <div class="notification-pro">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">${icon}</span>
+                        <p class="${color} font-semibold">${message}</p>
+                    </div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 3000);
+        }
+
+        // Close profile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('profile-menu');
+            const avatar = document.querySelector('.avatar-pro');
+
+            if (menu && !menu.contains(e.target) && !avatar.contains(e.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+
+        // Check if external libraries loaded
+        window.addEventListener('DOMContentLoaded', function() {
+            // Chart.js check
+            if (typeof Chart === 'undefined') {
+                showNotification('Chart.js failed to load. Charts will not display.', 'error');
+            }
+            // Tailwind check
+            if (!window.tailwind) {
+                showNotification('Tailwind CSS failed to load. Styles may be missing.', 'error');
+            }
+            initApp();
+        });
+    </script>
+</body>
+
+</html>

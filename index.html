@@ -10,10 +10,93 @@
 	<script src="https://cdn.tailwindcss.com"></script>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 	<style>
-		/* ...all CSS from latestversionai.html... */
+		/* Transaction Search Bar */
+		.search-bar {
+			width: 100%;
+			max-width: 400px;
+			margin-bottom: 18px;
+			padding: 10px 16px;
+			border: 1px solid #e5e7eb;
+			border-radius: 8px;
+			font-size: 15px;
+		}
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		body {
+			font-family: 'Inter', sans-serif;
+			background: #f7f8fa;
+			min-height: 100vh;
+			color: #222;
+		}
+		/* ...rest of CSS from latestversionai.html... */
 	</style>
 </head>
 <body>
-	<!-- ...all HTML and JS from latestversionai.html... -->
+	<!-- Notification Container -->
+	<div id="notification-container"></div>
+	<div id="file-warning" class="file-warning">Some features may not work if you open this file directly. Please use a local server for full functionality.</div>
+	<!-- Logo -->
+	<div class="w-full flex justify-center pt-8 pb-2">
+		<span class="text-4xl font-black" style="color:#222;">FinanceAI Pro</span>
+	</div>
+	<!-- Auth Screen -->
+	<div id="auth-screen" class="min-h-screen flex items-center justify-center p-6">
+		<div class="pro-card max-w-md w-full">
+			<div class="text-center mb-8">
+				<h1 class="text-4xl font-black gradient-text mb-2">FinanceAI Pro</h1>
+				<p class="text-black text-opacity-70">Enterprise Finance Management</p>
+			</div>
+			<!-- Login Form -->
+			<div id="login-form">
+				<h2 class="text-2xl font-bold mb-6 text-white">Sign In</h2>
+				<div class="space-y-4">
+					<input type="email" id="login-email" class="input-pro" placeholder="Email Address" />
+					<input type="password" id="login-password" class="input-pro" placeholder="Password" />
+					<button onclick="handleLogin()" class="btn-pro w-full">
+						<span id="login-text">Sign In</span>
+						<span id="login-spinner" class="spinner hidden"></span>
+					</button>
+					<button onclick="toggleAuth()" class="btn-pro w-full" style="background:#059669; margin-top:8px;">Create New Account</button>
+				</div>
+			</div>
+			<!-- Signup Form -->
+			<div id="signup-form" class="hidden">
+				<h2 class="text-2xl font-bold mb-6 text-white">Create Account</h2>
+				<div class="space-y-4">
+					<input type="text" id="signup-name" class="input-pro" placeholder="Full Name" />
+					<input type="email" id="signup-email" class="input-pro" placeholder="Email Address" />
+					<input type="password" id="signup-password" class="input-pro" placeholder="Password (min 6 chars)" />
+					<button onclick="handleSignup()" class="btn-pro w-full">
+						<span id="signup-text">Create Account</span>
+						<span id="signup-spinner" class="spinner hidden"></span>
+					</button>
+					<p class="text-center text-white text-opacity-60 text-sm">
+						Already have an account?
+						<button onclick="toggleAuth()" class="text-white font-semibold underline">Sign In</button>
+					</p>
+				</div>
+			</div>
+			<div class="mt-6 pt-6 border-t border-white border-opacity-20">
+				<button onclick="handleDemo()" class="btn-pro w-full" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+					🚀 Try Demo Mode
+				</button>
+			</div>
+		</div>
+	</div>
+	<!-- Main App Screen -->
+	<div id="app-screen" class="hidden min-h-screen p-6">
+		<!-- ...rest of HTML and JS from latestversionai.html... -->
+	</div>
+	<!-- Footer -->
+	<footer class="footer-pro">
+		&copy; 2025 FinanceAI Pro &mdash; Minimal Enterprise Finance Management.<br>
+		Crafted by <b>Tanvi</b>
+	</footer>
+	<script>
+		// ...all JS from latestversionai.html...
+	</script>
 </body>
 </html>

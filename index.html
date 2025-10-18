@@ -4,24 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinanceAI Pro - Enterprise Edition</title>
+    <title>FinanceAI Pro - Behavioral Edition</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <style>
-        /* ==================== Enterprise Coder Palette ==================== */
+        /* ==================== Deep Blue and Tranquil Green Palette ==================== */
         :root {
-            --bg-dark: #101729;
-            /* Darkest Blue-Gray for a professional look */
-            --bg-light: #1f2937;
-            /* Dark Blue-Gray for cards */
-            --accent-neon: #00bcd4;
-            /* Professional Cyan/Aqua */
-            --accent-secondary: #ff9800;
-            /* Amber/Gold for contrast */
-            --text-light: #e5e7eb;
-            --border-color: #374151;
+            --bg-primary: #0D1B2A;
+            /* Deep Navy Blue (Trust, Security) */
+            --bg-light: #1B263B;
+            /* Card Surface */
+            --accent-primary: #6FFFE9;
+            /* Tranquil Seafoam Green (Growth, Focus) */
+            --accent-secondary: #FFCA3A;
+            /* Muted Gold/Yellow (Alerts, Savings) */
+            --text-light: #E0E1DD;
+            /* Off-White Text */
+            --border-color: #415A77;
         }
 
         /* Base Styles */
@@ -33,7 +34,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--bg-dark);
+            background: var(--bg-primary);
             min-height: 100vh;
             color: var(--text-light);
         }
@@ -78,13 +79,13 @@
 
         /* AI Section Card */
         .ai-section-card {
-            background: #1e293b !important;
-            border: 1px solid #475569 !important;
+            background: #283747 !important;
+            border: 1px solid #415A77 !important;
         }
 
         /* Insight Cards */
         .ai-section-card .insight-pro {
-            background: var(--bg-dark) !important;
+            background: var(--bg-primary) !important;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 12px;
@@ -94,7 +95,7 @@
         /* Stat Cards */
         .stat-card-pro {
             color: var(--text-light);
-            background: var(--bg-dark);
+            background: var(--bg-primary);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 20px;
@@ -102,28 +103,28 @@
 
         /* Primary Button (Accent Neon) */
         .btn-pro {
-            background: linear-gradient(135deg, #00bcd4, #008394);
-            color: var(--bg-dark);
+            background: linear-gradient(135deg, var(--accent-primary), #00A389);
+            color: var(--bg-surface);
             padding: 12px 24px;
             border-radius: 8px;
             font-weight: 700;
             transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(0, 188, 212, 0.4);
+            box-shadow: 0 4px 15px rgba(111, 255, 233, 0.4);
         }
 
         .btn-pro:hover {
-            background: linear-gradient(135deg, #008394, #00bcd4);
-            box-shadow: 0 6px 20px rgba(0, 188, 212, 0.6);
+            background: linear-gradient(135deg, #00A389, var(--accent-primary));
+            box-shadow: 0 6px 20px rgba(111, 255, 233, 0.6);
             transform: translateY(-1px);
         }
 
         /* Secondary Accent Button/Badge (Amber/Gold) */
         .export-btn,
         .ai-badge-pro {
-            background: linear-gradient(135deg, var(--accent-secondary), #ffc107);
-            color: var(--bg-dark);
+            background: linear-gradient(135deg, var(--accent-secondary), #FFCA3A);
+            color: var(--bg-surface);
             font-weight: 700;
-            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+            box-shadow: 0 4px 15px rgba(255, 202, 58, 0.4);
             transition: all 0.2s;
         }
 
@@ -137,7 +138,7 @@
 
         /* Gradient Text */
         .gradient-text {
-            background: linear-gradient(135deg, #00bcd4, #008394);
+            background: linear-gradient(135deg, var(--accent-primary), #00A389);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -145,16 +146,16 @@
 
         /* Footer */
         .footer-pro {
-            background: var(--bg-dark);
+            background: var(--bg-primary);
             border-top: 1px solid var(--border-color);
-            color: #6b7280;
+            color: #9DA8AE;
             padding: 24px 0;
             text-align: center;
         }
 
         .crafted-by {
-            color: var(--accent-neon);
-            text-shadow: 0 0 5px rgba(0, 188, 212, 0.5);
+            color: var(--accent-primary);
+            text-shadow: 0 0 5px rgba(111, 255, 233, 0.5);
             font-weight: 500;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -163,8 +164,8 @@
 
         /* Utility Classes for Icons/Navigation */
         .nav-icon-btn {
-            background: var(--bg-dark);
-            color: var(--accent-neon);
+            background: var(--bg-primary);
+            color: var(--accent-primary);
             border: 1px solid var(--border-color);
             padding: 8px;
             border-radius: 8px;
@@ -173,32 +174,31 @@
 
         .nav-icon-btn:hover {
             background: #374151;
-            border-color: var(--accent-neon);
+            border-color: var(--accent-primary);
         }
 
         /* Chart Colors */
         .text-green-400 {
-            color: #4ade80;
+            color: #4ADE80;
         }
 
         .text-red-400 {
-            color: #f87171;
+            color: #F87171;
         }
 
         .text-cyan-400 {
-            color: #22d3ee;
+            color: var(--accent-primary);
         }
 
         .text-yellow-400 {
-            color: #facc15;
+            color: var(--accent-secondary);
         }
     </style>
 </head>
 
 <body>
     <div id="notification-container"></div>
-    <div id="file-warning" class="file-warning">Some features may not work if you open this file directly. Please use a
-        local server for full functionality.</div>
+
     <div class="w-full flex justify-center pt-8 pb-2 items-center">
         <div
             class="logo-container flex items-center gap-3 py-2 px-4 rounded-2xl bg-gradient-to-r from-gray-700 to-gray-800">
@@ -206,8 +206,8 @@
                 <svg viewBox="0 0 100 100" class="w-full h-full filter drop-shadow-lg">
                     <defs>
                         <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#00bcd4" />
-                            <stop offset="100%" style="stop-color:#008394" />
+                            <stop offset="0%" style="stop-color:var(--accent-primary)" />
+                            <stop offset="100%" style="stop-color:#00A389" />
                         </linearGradient>
                         <filter id="softShadow">
                             <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
@@ -223,12 +223,12 @@
                     </defs>
                     <rect x="5" y="5" width="90" height="90" rx="15" fill="url(#logoGradient)"
                         filter="url(#softShadow)" />
-                    <path d="M25 75 L45 50 L65 55 L85 25" stroke="#101729" stroke-width="4" fill="none"
+                    <path d="M25 75 L45 50 L65 55 L85 25" stroke="var(--bg-primary)" stroke-width="4" fill="none"
                         stroke-linecap="round" stroke-linejoin="round" />
-                    <circle cx="25" cy="75" r="5" fill="#ff9800" />
-                    <circle cx="85" cy="25" r="5" fill="#ff9800" />
-                    <text x="50" y="55" font-family="Inter, sans-serif" font-size="30" font-weight="900" fill="#101729"
-                        text-anchor="middle" dominant-baseline="middle">$</text>
+                    <circle cx="25" cy="75" r="5" fill="var(--accent-secondary)" />
+                    <circle cx="85" cy="25" r="5" fill="var(--accent-secondary)" />
+                    <text x="50" y="55" font-family="Inter, sans-serif" font-size="30" font-weight="900"
+                        fill="var(--bg-primary)" text-anchor="middle" dominant-baseline="middle">$</text>
                 </svg>
             </div>
             <div class="logo-text">
@@ -278,7 +278,7 @@
             left: 0;
             width: 100%;
             height: 2px;
-            background: linear-gradient(90deg, #00bcd4, #008394);
+            background: linear-gradient(90deg, var(--accent-primary), #00A389);
             transform: scaleX(0);
             transition: transform 0.3s ease;
             transform-origin: left;
@@ -354,7 +354,7 @@
                 </button>
 
                 <button onclick="setActiveScreen('contact')" class="nav-icon-btn hidden sm:block"
-                    title="Contact Support">
+                    title="AI Coach Support">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -383,7 +383,7 @@
                     </button>
                     <button onclick="setActiveScreen('contact')"
                         class="w-full text-left p-2 block hover:bg-gray-700 rounded-lg text-cyan-400 font-semibold transition-all mb-1 sm:hidden">
-                        Contact Support
+                        AI Coach Support
                     </button>
                     <div class="h-px bg-gray-600 my-2"></div>
                     <button onclick="handleLogout()"
@@ -432,7 +432,40 @@
                         <p id="budget-status" class="text-xs text-gray-600 mt-3">Healthy Range</p>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="pro-card ai-section-card col-span-1">
+                        <h3 class="text-lg font-bold text-white mb-4">🧠 Behavioral Intelligence</h3>
+                        <div id="emotion-intelligence">
+                            <div class="insight-pro">
+                                <p class="text-sm font-semibold text-red-400">Stress Spending Alert</p>
+                                <p class="text-xs text-gray-400 mt-1">Pattern detected: 3 impulse purchases after 9 PM
+                                    this week. Total: ₹2,100.</p>
+                            </div>
+                            <div class="insight-pro">
+                                <p class="text-sm font-semibold text-cyan-400">Habit Nudge</p>
+                                <p class="text-xs text-gray-400 mt-1">Shall I set a 'Mindful Treat' budget of ₹1,000 for
+                                    Fridays to counter impulse buys?</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pro-card ai-section-card col-span-2">
+                        <h3 class="text-lg font-bold text-white mb-4">🔮 Dynamic Foresight Simulator</h3>
+                        <div class="space-y-4">
+                            <input type="text" id="what-if-input" class="input-pro"
+                                placeholder="Example: What if I start investing ₹10,000 every month?" />
+                            <button onclick="simulateWhatIf()" class="btn-pro w-full">Simulate Scenario</button>
+                            <div id="what-if-results"
+                                class="text-sm text-gray-400 mt-2 p-3 border border-dashed border-gray-600 rounded-md bg-gray-900">
+                                <p>Simulated results appear here after running a scenario.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                     <div class="chart-pro">
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="text-lg font-bold text-white">Expense Breakdown</h3>
@@ -479,6 +512,7 @@
                         <div id="ai-predictions-container"></div>
                     </div>
                 </div>
+
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                     <div class="pro-card">
                         <h3 class="text-xl font-bold text-white mb-4">Budget Settings</h3>
@@ -495,16 +529,28 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="pro-card">
-                        <h3 class="text-xl font-bold text-white mb-4">Recurring Transactions</h3>
-                        <div id="recurring-list" class="max-h-32 overflow-y-auto space-y-2 text-sm text-gray-400">
+                        <h3 class="text-xl font-bold text-white mb-4">Financial Goal Tracker</h3>
+                        <div class="space-y-3">
+                            <input type="text" id="goal-name" class="input-pro"
+                                placeholder="Goal Name (e.g., Japan Trip)" />
+                            <div class="flex gap-4">
+                                <input type="number" id="goal-target" class="input-pro" placeholder="Target Amount (₹)"
+                                    value="150000" />
+                                <button onclick="setGoal()" class="btn-pro flex-shrink-0">Set Target</button>
+                            </div>
+                            <div id="goal-progress" class="text-sm text-gray-400 p-2 bg-gray-900 rounded">
+                                <p>Current Goal: <span class="text-cyan-400">None Set</span></p>
+                                <p>Progress: <span class="text-yellow-400">0%</span></p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="pro-card mb-8">
                     <h3 class="text-xl font-bold text-white mb-6">Add Transaction</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
                         <input type="text" id="trans-desc" class="input-pro col-span-2" placeholder="Description" />
                         <input type="number" id="trans-amount" class="input-pro" placeholder="Amount (₹)" />
                         <select id="trans-type" class="input-pro">
@@ -525,7 +571,18 @@
                         </select>
                         <input type="text" id="trans-recurring" class="input-pro"
                             placeholder="Recurring (e.g., Monthly)" />
-                        <button onclick="addTransaction()" class="btn-pro">Add</button>
+                        <input type="text" id="trans-lifestyle-tag" class="input-pro"
+                            placeholder="Lifestyle Tag (e.g., #Family)" />
+
+                        <div class="col-span-3 flex items-center space-x-4 pt-2">
+                            <input type="checkbox" id="micro-invest"
+                                class="h-4 w-4 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
+                            <label for="micro-invest" class="text-sm text-gray-400">Round up purchase to invest spare
+                                change</label>
+                        </div>
+                        <div class="col-span-3 flex justify-end pt-2">
+                            <button onclick="addTransaction()" class="btn-pro">Add Transaction</button>
+                        </div>
                     </div>
                 </div>
                 <div class="pro-card">
@@ -593,8 +650,8 @@
 
             <div id="contact-screen" class="hidden">
                 <div class="pro-card max-w-lg mx-auto">
-                    <h2 class="text-3xl font-bold gradient-text mb-8">Contact Support</h2>
-                    <p class="text-gray-400 mb-6">If you have any queries or require enterprise support, please use the
+                    <h2 class="text-3xl font-bold gradient-text mb-8">AI Coach Support</h2>
+                    <p class="text-gray-400 mb-6">For detailed support or to ask the AI Coach a complex query, use the
                         secure form below. We will respond via email.</p>
 
                     <form id="contact-form" action="https://formspree.io/f/myznoqyr" method="POST" class="space-y-4">
@@ -625,6 +682,37 @@
                     </p>
                 </div>
             </div>
+
+            <!-- Scheduled Transactions Section -->
+            <div class="pro-card mb-8">
+                <h3 class="text-xl font-bold text-white mb-6">Schedule Transaction</h3>
+                <div class="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
+                    <input type="date" id="schedule-date" class="input-pro col-span-1" />
+                    <input type="text" id="schedule-desc" class="input-pro col-span-2" placeholder="Description" />
+                    <input type="number" id="schedule-amount" class="input-pro" placeholder="Amount (₹)" />
+                    <select id="schedule-type" class="input-pro">
+                        <option value="expense">Expense</option>
+                        <option value="income">Income</option>
+                    </select>
+                    <select id="schedule-category" class="input-pro">
+                        <option value="Food">Food</option>
+                        <option value="Transportation">Transport</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Bills">Bills</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Education">Education</option>
+                        <option value="Salary">Salary</option>
+                        <option value="Freelance">Freelance</option>
+                        <option value="Investment">Investment</option>
+                    </select>
+                    <button onclick="addScheduledTransaction()" class="btn-pro col-span-1">Schedule</button>
+                </div>
+                <div class="mt-6">
+                    <h4 class="text-lg font-bold text-white mb-2">Scheduled Transactions</h4>
+                    <ul id="scheduled-list" class="space-y-2"></ul>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -639,6 +727,13 @@
         </div>
     </footer>
     <script>
+        // Store Goal state globally (simulated persistent storage)
+        let goalState = {
+            name: "None Set",
+            target: 0,
+            saved: 0
+        };
+
         // ==================== DATABASE MANAGER ====================
         class DatabaseManager {
             constructor() {
@@ -672,7 +767,7 @@
 
                         if (!db.objectStoreNames.contains('transactions')) {
                             const transStore = db.createObjectStore('transactions', { keyPath: 'id', autoIncrement: true });
-                            transStore.createIndex('userId', 'userId', { unique: false });
+                            transStore.createIndex('userId', 'userId', 'userId');
                             transStore.createIndex('date', 'date', { unique: false });
                         } else {
                             const transStore = event.target.transaction.objectStore('transactions');
@@ -764,7 +859,7 @@
         // ==================== AI ENGINE ====================
         class AIEngine {
             constructor() {
-                this.model = 'FinanceAI-v4.0';
+                this.model = 'FinanceAI-v5.0';
             }
             analyzeSpending(transactions) {
                 const expenses = transactions.filter(t => t.type === 'expense');
@@ -916,7 +1011,7 @@
             createPieChart(data) {
                 const ctx = document.getElementById('pieChart');
                 if (this.charts.pie) this.charts.pie.destroy();
-                const colors = ['#00bcd4', '#008394', '#ff9800', '#ffc107', '#4ade80', '#f87171', '#22d3ee', '#facc15'];
+                const colors = ['#6FFFE9', '#00A389', '#FFCA3A', '#FBBF24', '#4ade80', '#f87171', '#22d3ee', '#facc15']; // Updated colors
                 this.charts.pie = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
@@ -973,16 +1068,16 @@
                             {
                                 label: 'Income',
                                 data: data.income,
-                                backgroundColor: 'rgba(16, 185, 129, 1)',
-                                borderColor: 'rgba(16, 185, 129, 1)',
+                                backgroundColor: 'rgba(74, 222, 128, 1)', // Green
+                                borderColor: 'rgba(74, 222, 128, 1)',
                                 borderWidth: 2,
                                 borderRadius: 8
                             },
                             {
                                 label: 'Expenses',
                                 data: data.expenses,
-                                backgroundColor: 'rgba(239, 68, 68, 1)',
-                                borderColor: 'rgba(239, 68, 68, 1)',
+                                backgroundColor: 'rgba(248, 113, 113, 1)', // Red
+                                borderColor: 'rgba(248, 113, 113, 1)',
                                 borderWidth: 2,
                                 borderRadius: 8
                             }
@@ -1032,8 +1127,8 @@
                         labels: data.labels,
                         datasets: [{
                             label: 'Cash Flow',
-                            borderColor: '#00bcd4',
-                            backgroundColor: 'rgba(0, 188, 212, 0.2)',
+                            borderColor: '#6FFFE9',
+                            backgroundColor: 'rgba(111, 255, 233, 0.2)',
                             data: data.values,
                             borderWidth: 3,
                             fill: true,
@@ -1076,8 +1171,8 @@
                         datasets: [{
                             label: 'Projected Savings',
                             data: data.values,
-                            borderColor: '#ff9800',
-                            backgroundColor: 'rgba(255, 152, 0, 0.2)',
+                            borderColor: '#FFCA3A',
+                            backgroundColor: 'rgba(255, 202, 58, 0.2)',
                             borderWidth: 3,
                             fill: true,
                             tension: 0.4,
@@ -1116,14 +1211,13 @@
         let currentUser = null;
         let transactions = [];
         let currentScreen = 'dashboard';
+        let scheduledTransactions = [];
 
         async function initApp() {
             db = new DatabaseManager();
             ai = new AIEngine();
             charts = new ChartManager();
-            if (window.location.protocol === 'file:') {
-                document.getElementById('file-warning').style.display = 'block';
-            }
+
             try {
                 await db.init();
                 console.log('Database initialized');
@@ -1133,6 +1227,53 @@
                 db.db = null;
             }
             checkAuth();
+
+            // Initialize Goal Tracker UI (Since this runs on DOM load)
+            updateGoalTrackerUI();
+        }
+
+        function setGoal() {
+            const name = document.getElementById('goal-name').value.trim();
+            const target = parseFloat(document.getElementById('goal-target').value);
+
+            if (!name || target <= 0 || isNaN(target)) {
+                showNotification('Please enter a valid goal name and amount.', 'error');
+                return;
+            }
+
+            goalState.name = name;
+            goalState.target = target;
+
+            const transactionsTotal = transactions.reduce((sum, t) => sum + (t.type === 'income' ? t.amount : -Math.abs(t.amount)), 0);
+            goalState.saved = Math.max(0, transactionsTotal);
+
+            sessionStorage.setItem('goalState', JSON.stringify(goalState));
+
+            showNotification(`Goal '${name}' set successfully!`, 'success');
+            updateAllData();
+        }
+
+        function loadGoal() {
+            const storedState = sessionStorage.getItem('goalState');
+            if (storedState) {
+                goalState = JSON.parse(storedState);
+            }
+        }
+
+        function updateGoalTrackerUI() {
+            loadGoal();
+            const progress = goalState.target > 0 ? (goalState.saved / goalState.target) * 100 : 0;
+            const remaining = goalState.target - goalState.saved;
+
+            document.getElementById('goal-name').value = goalState.name === "None Set" ? "" : goalState.name;
+            document.getElementById('goal-target').value = goalState.target > 0 ? goalState.target : "";
+
+            document.getElementById('goal-progress').innerHTML = `
+                <p class="text-sm font-semibold">Goal: <span class="text-cyan-400">${goalState.name}</span></p>
+                <p class="text-xs text-gray-400">Target: ₹${goalState.target.toLocaleString()}</p>
+                <p class="text-sm mt-1">Progress: <span class="text-yellow-400">${Math.min(100, progress).toFixed(1)}%</span></p>
+                <p class="text-xs ${remaining > 0 ? 'text-gray-500' : 'text-green-400'}">Remaining: ₹${Math.max(0, remaining).toLocaleString()}</p>
+            `;
         }
 
         function checkAuth() {
@@ -1318,6 +1459,68 @@
             }
         }
 
+        function simulateWhatIf() {
+            const input = document.getElementById('what-if-input').value.toLowerCase();
+            const resultsDiv = document.getElementById('what-if-results');
+            const balance = transactions.reduce((sum, t) => sum + t.amount, 0);
+            const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const expenses = Math.abs(transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0));
+            const monthlyNetFlow = income - expenses;
+
+
+            let output = '';
+
+            // --- SCENARIO 1: INCOME / CAREER ---
+            if (input.includes("raise") || input.includes("10%") || input.includes("freelancing") || input.includes("new job")) {
+                const raiseAmount = input.includes("10%") ? income * 0.10 : 8000;
+                const newIncome = income + raiseAmount;
+                const newNetFlow = monthlyNetFlow + raiseAmount;
+
+                output = `<h4 class="text-lg font-bold text-cyan-400 mb-2">Simulated Result: Income Boost (₹${raiseAmount.toLocaleString()})</h4>
+                        <p class="text-sm text-white">Your new monthly net flow would be <span class="text-green-400">₹${newNetFlow.toLocaleString()}</span>.</p>
+                        <p class="text-sm text-white">Projected 6-month balance increases by: <span class="text-green-400">₹${(raiseAmount * 6).toLocaleString()}</span>.</p>
+                        <p class="text-xs text-gray-400 mt-1">Nudge: Automatically allocate half of this increase to your investment portfolio.</p>`;
+
+                // --- SCENARIO 2: HOUSING / LARGE PURCHASES ---
+            } else if (input.includes("buy a house") || input.includes("apartment") || input.includes("down payment")) {
+                const downPaymentSim = 500000;
+                const downPaymentPercent = (balance > 0 ? (downPaymentSim / balance) : 0) * 100;
+
+                output = `<h4 class="text-lg font-bold text-cyan-400 mb-2">Simulated Result: Home Purchase</h4>
+                        <p class="text-sm text-white">A ₹${downPaymentSim.toLocaleString()} down payment requires <span class="text-red-400">${downPaymentPercent.toFixed(0)}%</span> of your current liquid assets.</p>
+                        <p class="text-sm text-white">Estimated new EMI will reduce discretionary spending by 35%.</p>
+                        <p class="text-xs text-gray-400 mt-1">Nudge: Focus on increasing income sources tagged with #SideHustle to build your down payment faster.</p>`;
+
+                // --- SCENARIO 3: DEBT PAYOFF ---
+            } else if (input.includes("pay off") || input.includes("credit card") || input.includes("loan")) {
+                const extraPayment = Math.min(5000, balance * 0.1);
+
+                output = `<h4 class="text-lg font-bold text-cyan-400 mb-2">Simulated Result: Aggressive Debt Payoff</h4>
+                        <p class="text-sm text-white">Applying an extra ₹${extraPayment.toLocaleString()} monthly to high-interest debt.</p>
+                        <p class="text-sm text-white">Debt payoff accelerated by approximately 4 months, saving ₹${Math.round(extraPayment * 3).toLocaleString()} in interest.</p>
+                        <p class="text-xs text-gray-400 mt-1">Nudge: Use the Micro-Investment feature to round-up purchases and auto-apply change to loan principal.</p>`;
+
+                // --- SCENARIO 4: TRAVEL / LARGE EXPENSE ---
+            } else if (input.includes("travel") || input.includes("trip") || input.includes("car")) {
+                const tripCost = 80000;
+                const monthsToSave = Math.ceil(tripCost / (monthlyNetFlow * 0.5)); // Assuming 50% of net flow goes to savings
+
+                output = `<h4 class="text-lg font-bold text-cyan-400 mb-2">Simulated Result: Large Trip Planning (₹${tripCost.toLocaleString()})</h4>
+                        <p class="text-sm text-white">Based on current savings, you can reach this goal in <span class="text-yellow-400">${monthsToSave} months</span>.</p>
+                        <p class="text-sm text-white">If you reduce Food expenses by 15%, you could shorten the timeline by 2 months.</p>
+                        <p class="text-xs text-gray-400 mt-1">Nudge: Set up a dedicated Goal Tracker for this trip to monitor milestones.</p>`;
+
+                // --- FALLBACK / UNKNOWN INPUT ---
+            } else {
+                output = `<h4 class="text-lg font-bold text-cyan-400 mb-2">AI Coach Response</h4>
+                        <p class="text-sm text-gray-400">This is a complex scenario. To get an accurate forecast, specify the numbers involved (e.g., "What if I invest 10000 more?").</p>
+                        <p class="text-xs text-gray-400 mt-1">Try inputs like: "Buy a house," "Get a 10% raise," or "Pay off my loan."</p>`;
+            }
+
+            resultsDiv.innerHTML = output;
+        }
+
+
         function handleDemo() {
             const demoUser = {
                 id: 999,
@@ -1329,16 +1532,16 @@
             currentUser = demoUser;
             sessionStorage.setItem('currentUser', JSON.stringify(demoUser));
             const demoTransactions = [
-                { id: 1, userId: 999, date: '2025-01-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income', recurring: 'Monthly' },
-                { id: 2, userId: 999, date: '2025-01-16', description: 'Grocery Shopping', amount: -3500, category: 'Food', type: 'expense' },
-                { id: 3, userId: 999, date: '2025-01-17', description: 'Electricity Bill', amount: -2200, category: 'Bills', type: 'expense', recurring: 'Monthly' },
-                { id: 4, userId: 999, date: '2025-01-18', description: 'Movie Tickets', amount: -1200, category: 'Entertainment', type: 'expense' },
-                { id: 5, userId: 999, date: '2025-01-19', description: 'Fuel', amount: -2000, category: 'Transportation', type: 'expense' },
-                { id: 6, userId: 999, date: '2025-01-20', description: 'Freelance Project', amount: 15000, category: 'Freelance', type: 'income' },
-                { id: 7, userId: 999, date: '2024-12-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income', recurring: 'Monthly' },
-                { id: 8, userId: 999, date: '2024-12-20', description: 'Shopping', amount: -8000, category: 'Shopping', type: 'expense' },
-                { id: 9, userId: 999, date: '2024-11-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income', recurring: 'Monthly' },
-                { id: 10, userId: 999, date: '2024-11-25', description: 'Restaurant', amount: -2500, category: 'Food', type: 'expense' },
+                { id: 1, userId: 999, date: '2025-01-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income', recurring: 'Monthly', lifestyle: '#Work' },
+                { id: 2, userId: 999, date: '2025-01-16', description: 'Grocery Shopping', amount: -3500, category: 'Food', type: 'expense', lifestyle: '#Household' },
+                { id: 3, userId: 999, date: '2025-01-17', description: 'Electricity Bill', amount: -2200, category: 'Bills', type: 'expense', recurring: 'Monthly', lifestyle: '#Home' },
+                { id: 4, userId: 999, date: '2025-01-18', description: 'Movie Tickets', amount: -1200, category: 'Entertainment', type: 'expense', lifestyle: '#SelfCare' },
+                { id: 5, userId: 999, date: '2025-01-19', description: 'Fuel', amount: -2000, category: 'Transportation', type: 'expense', lifestyle: '#Commute' },
+                { id: 6, userId: 999, date: '2025-01-20', description: 'Freelance Project', amount: 15000, category: 'Freelance', type: 'income', lifestyle: '#SideHustle' },
+                { id: 7, userId: 999, date: '2024-12-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income', recurring: 'Monthly', lifestyle: '#Work' },
+                { id: 8, userId: 999, date: '2024-12-20', description: 'Shopping', amount: -8000, category: 'Shopping', type: 'expense', lifestyle: '#Luxury' },
+                { id: 9, userId: 999, date: '2024-11-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income', recurring: 'Monthly', lifestyle: '#Work' },
+                { id: 10, userId: 999, date: '2024-11-25', description: 'Restaurant', amount: -2500, category: 'Food', type: 'expense', lifestyle: '#Social' },
             ];
             transactions = demoTransactions;
             showNotification('Demo mode activated!', 'success');
@@ -1369,6 +1572,7 @@
                 if (db.db) {
                     transactions = await db.getUserTransactions(currentUser.id);
                 }
+                loadGoal(); // Load goal state after loading transactions
                 updateAllData();
             } catch (error) {
                 console.error('Failed to load data:', error);
@@ -1381,19 +1585,44 @@
             const type = document.getElementById('trans-type').value;
             const category = document.getElementById('trans-category').value;
             const recurring = document.getElementById('trans-recurring').value.trim();
+            const lifestyle = document.getElementById('trans-lifestyle-tag').value.trim();
+            const roundUp = document.getElementById('micro-invest').checked;
 
             if (!desc || !amount || amount <= 0) {
                 showNotification('Please enter valid details', 'error');
                 return;
             }
+
+            // Micro-investment simulation
+            let finalAmount = amount;
+            if (roundUp && type === 'expense') {
+                const roundAmount = Math.ceil(amount) - amount;
+                if (roundAmount > 0) {
+                    // Simulate investment towards goal
+                    goalState.saved += roundAmount;
+                    sessionStorage.setItem('goalState', JSON.stringify(goalState));
+                    showNotification(`Transaction logged. Micro-invested ₹${roundAmount.toFixed(2)} to your goal!`, 'success');
+                }
+            } else {
+                showNotification('Transaction added successfully!', 'success');
+            }
+
+            // If the transaction is income, add it to the goal saved total
+            if (type === 'income') {
+                goalState.saved += finalAmount;
+                sessionStorage.setItem('goalState', JSON.stringify(goalState));
+            }
+
+
             const transaction = {
                 userId: currentUser.id,
                 date: new Date().toISOString().split('T')[0],
                 description: desc,
-                amount: type === 'expense' ? -Math.abs(amount) : Math.abs(amount),
+                amount: type === 'expense' ? -Math.abs(finalAmount) : Math.abs(finalAmount),
                 category: category,
                 type: type,
                 recurring: recurring,
+                lifestyle: lifestyle,
                 id: Date.now()
             };
             try {
@@ -1404,13 +1633,17 @@
                 } else {
                     transactions.push(transaction);
                 }
+                // Clear fields
                 document.getElementById('trans-desc').value = '';
                 document.getElementById('trans-amount').value = '';
                 document.getElementById('trans-type').value = 'expense';
                 document.getElementById('trans-category').value = 'Food';
                 document.getElementById('trans-recurring').value = '';
+                document.getElementById('trans-lifestyle-tag').value = '';
+                document.getElementById('micro-invest').checked = false;
+
                 updateAllData();
-                showNotification('Transaction added successfully!', 'success');
+
             } catch (error) {
                 showNotification('Failed to add transaction', 'error');
             }
@@ -1419,6 +1652,13 @@
         async function deleteTransaction(id) {
             if (!confirm('Delete this transaction?')) return;
             try {
+                // Adjust goalState if needed (simplified rollback)
+                const transactionToDelete = transactions.find(t => t.id === id);
+                if (transactionToDelete && transactionToDelete.type === 'income') {
+                    goalState.saved -= transactionToDelete.amount;
+                    sessionStorage.setItem('goalState', JSON.stringify(goalState));
+                }
+
                 if (db.db && currentUser.id !== 999) {
                     await db.deleteTransaction(id);
                     transactions = await db.getUserTransactions(currentUser.id);
@@ -1433,11 +1673,11 @@
         }
 
         function updateAllData() {
+            updateGoalTrackerUI(); // Update goal state display before stats
             updateStats();
             updateCharts();
             updateAIInsights();
             updateTransactionsList();
-            updateRecurringList();
         }
 
         function updateStats() {
@@ -1545,15 +1785,8 @@
         }
 
         function updateRecurringList() {
-            const recurringList = transactions.filter(t => t.recurring).map(t => {
-                const amountClass = t.amount >= 0 ? 'text-green-400' : 'text-red-400';
-                const sign = t.amount >= 0 ? '+' : '-';
-                const formattedAmount = `₹${Math.abs(t.amount).toLocaleString()}`;
-
-                return `<p class="${amountClass} text-sm">${t.description}: ${sign}${formattedAmount} (${t.recurring})</p>`;
-            }).join('');
-
-            document.getElementById('recurring-list').innerHTML = recurringList || '<p class="text-gray-500">No recurring transactions recorded.</p>';
+            // Updated to render the Goal Tracker state
+            updateGoalTrackerUI();
         }
 
         function filterTransactions(filterType) {
@@ -1574,7 +1807,8 @@
                     t.description.toLowerCase().includes(searchInput) ||
                     t.category.toLowerCase().includes(searchInput) ||
                     t.type.toLowerCase().includes(searchInput) ||
-                    (t.recurring && t.recurring.toLowerCase().includes(searchInput))
+                    (t.recurring && t.recurring.toLowerCase().includes(searchInput)) ||
+                    (t.lifestyle && t.lifestyle.toLowerCase().includes(searchInput))
                 );
             }
 
@@ -1603,6 +1837,7 @@
                 const amountColor = t.amount >= 0 ? 'text-green-400' : 'text-red-400';
                 const typeBadgeColor = t.type === 'income' ? 'bg-green-700/30 text-green-400' : 'bg-red-700/30 text-red-400';
                 const recurringBadge = t.recurring ? `<span class="hidden lg:inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-cyan-700/30 text-cyan-400 ml-2">${t.recurring}</span>` : '';
+                const lifestyleTag = t.lifestyle ? `<span class="text-xs text-gray-500">${t.lifestyle}</span>` : '';
                 const formattedDate = new Date(t.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
                 const sign = t.amount >= 0 ? '+' : '-';
                 const formattedAmount = `₹${Math.abs(t.amount).toLocaleString()}`;
@@ -1620,7 +1855,7 @@
                             
                             <div class="min-w-0">
                                 <p class="text-sm font-semibold truncate text-white">${t.description} ${recurringBadge}</p>
-                                <p class="text-xs text-gray-400">${formattedDate} &bull; ${t.category}</p>
+                                <p class="text-xs text-gray-400">${formattedDate} &bull; ${t.category} ${t.lifestyle ? '&bull;' : ''} ${lifestyleTag}</p>
                             </div>
                         </div>
 
@@ -1656,8 +1891,8 @@
 
         function exportCSV() {
             if (!transactions.length) return;
-            const header = ['Date', 'Description', 'Amount', 'Category', 'Type', 'Recurring'];
-            const rows = transactions.map(t => [t.date, t.description, t.amount, t.category, t.type, t.recurring || 'N/A']);
+            const header = ['Date', 'Description', 'Amount', 'Category', 'Type', 'Recurring', 'Lifestyle Tag'];
+            const rows = transactions.map(t => [t.date, t.description, t.amount, t.category, t.type, t.recurring || 'N/A', t.lifestyle || 'N/A']);
             let csv = header.join(',') + '\n';
             csv += rows.map(r => r.join(',')).join('\n');
             const blob = new Blob([csv], { type: 'text/csv' });
@@ -1715,13 +1950,6 @@
 
         // Contact form submission handler (uses Formspree endpoint)
         document.getElementById('contact-form').addEventListener('submit', function (e) {
-            // Formspree handles the POST request, so we intercept it only to show a success message
-            // Formspree's default action (POST to action URL) handles the actual email sending.
-
-            // Note: Prevent default submission if you were using AJAX, but since we are relying on
-            // Formspree's native POST behavior, we let the form submit normally.
-
-            // e.preventDefault(); // Do NOT prevent default if relying on Formspree action attribute
 
             // Wait a moment for Formspree to process, then show success message.
             setTimeout(() => {
@@ -1739,7 +1967,7 @@
             const menu = document.getElementById('profile-menu-dropdown');
             const avatar = document.querySelector('.avatar-pro');
             const profileBtn = document.querySelector('.nav-icon-btn[title="User Profile"]');
-            const contactBtn = document.querySelector('.nav-icon-btn[title="Contact Support"]');
+            const contactBtn = document.querySelector('.nav-icon-btn[title="AI Coach Support"]');
 
             // Close dropdown if clicked outside
             if (menu && !menu.classList.contains('hidden')) {
@@ -1758,6 +1986,116 @@
             }
             initApp();
         });
+
+        // --- Scheduling Feature ---
+        function addScheduledTransaction() {
+            const date = document.getElementById('schedule-date').value;
+            const desc = document.getElementById('schedule-desc').value.trim();
+            const amount = parseFloat(document.getElementById('schedule-amount').value);
+            const type = document.getElementById('schedule-type').value;
+            const category = document.getElementById('schedule-category').value;
+            if (!date || !desc || !amount) {
+                showNotification('Please fill all scheduling fields', 'error');
+                return;
+            }
+            scheduledTransactions.push({
+                id: Date.now(),
+                date, desc, amount, type, category
+            });
+            renderScheduledTransactions();
+            document.getElementById('schedule-date').value = '';
+            document.getElementById('schedule-desc').value = '';
+            document.getElementById('schedule-amount').value = '';
+        }
+
+        function renderScheduledTransactions() {
+            const list = document.getElementById('scheduled-list');
+            if (!scheduledTransactions.length) {
+                list.innerHTML = '<li class="text-gray-400">No scheduled transactions.</li>';
+                return;
+            }
+            list.innerHTML = scheduledTransactions.map(t => `
+                <li class="flex items-center justify-between bg-gray-800 rounded p-3">
+                    <div>
+                        <span class="text-sm text-gray-300 font-semibold">${t.date}</span>
+                        <span class="mx-2 text-white">${t.desc}</span>
+                        <span class="text-xs text-gray-400">${t.category}</span>
+                        <span class="ml-2 font-bold ${t.type === 'income' ? 'text-green-400' : 'text-red-400'}">${t.type === 'income' ? '+' : '-'}₹${Math.abs(t.amount)}</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="completeScheduledTransaction(${t.id})" class="btn-pro py-1 px-3 text-xs">Mark as Done</button>
+                        <button onclick="deleteScheduledTransaction(${t.id})" class="delete-pro py-1 px-3 text-xs">Delete</button>
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        function completeScheduledTransaction(id) {
+            const idx = scheduledTransactions.findIndex(t => t.id === id);
+            if (idx !== -1) {
+                const t = scheduledTransactions[idx];
+                // Add to main transactions (simulate addTransaction)
+                addTransactionFromSchedule(t);
+                scheduledTransactions.splice(idx, 1);
+                renderScheduledTransactions();
+                showNotification('Transaction added to main list!', 'success');
+            }
+        }
+
+        function deleteScheduledTransaction(id) {
+            scheduledTransactions = scheduledTransactions.filter(t => t.id !== id);
+            renderScheduledTransactions();
+        }
+
+        function addTransactionFromSchedule(t) {
+            // This function assumes you have a global addTransaction function or similar logic
+            // You may need to adapt this to your actual transaction-adding logic
+            const transaction = {
+                id: Date.now(),
+                date: t.date,
+                description: t.desc,
+                amount: t.type === 'income' ? Math.abs(t.amount) : -Math.abs(t.amount),
+                category: t.category,
+                type: t.type,
+                recurring: '',
+                lifestyle: ''
+            };
+            transactions.push(transaction);
+            updateAllData();
+        }
+
+        // Render scheduled transactions on page load
+        window.addEventListener('DOMContentLoaded', renderScheduledTransactions);
+
+        // --- Scheduling Reminders ---
+        function checkScheduledReminders() {
+            if (!('Notification' in window)) return;
+            const today = new Date().toISOString().split('T')[0];
+            scheduledTransactions.forEach(t => {
+                if (t.date === today && !t.notified) {
+                    // Request permission if not already granted
+                    if (Notification.permission === 'granted') {
+                        new Notification('Scheduled Transaction Reminder', {
+                            body: `${t.desc} for ₹${t.amount} is scheduled for today.`
+                        });
+                        t.notified = true;
+                    } else if (Notification.permission !== 'denied') {
+                        Notification.requestPermission().then(permission => {
+                            if (permission === 'granted') {
+                                new Notification('Scheduled Transaction Reminder', {
+                                    body: `${t.desc} for ₹${t.amount} is scheduled for today.`
+                                });
+                                t.notified = true;
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        // Check reminders every 60 seconds
+        setInterval(checkScheduledReminders, 60000);
+        // Also check on page load
+        window.addEventListener('DOMContentLoaded', checkScheduledReminders);
     </script>
 </body>
 

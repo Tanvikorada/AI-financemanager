@@ -47,14 +47,14 @@
             border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 15px;
-            background: var(--bg-dark);
+            background: var(--bg-primary);
             color: var(--text-light);
         }
 
         .input-pro:focus,
         .search-bar:focus {
             outline: none;
-            border-color: var(--accent-neon);
+            border-color: var(--accent-primary);
         }
 
         .input-pro::placeholder,
@@ -104,7 +104,7 @@
         /* Primary Button (Accent Neon) */
         .btn-pro {
             background: linear-gradient(135deg, var(--accent-primary), #00A389);
-            color: var(--bg-surface);
+            color: var(--bg-primary);
             padding: 12px 24px;
             border-radius: 8px;
             font-weight: 700;
@@ -122,7 +122,7 @@
         .export-btn,
         .ai-badge-pro {
             background: linear-gradient(135deg, var(--accent-secondary), #FFCA3A);
-            color: var(--bg-surface);
+            color: var(--bg-light);
             font-weight: 700;
             box-shadow: 0 4px 15px rgba(255, 202, 58, 0.4);
             transition: all 0.2s;
@@ -369,13 +369,14 @@
                     <p id="user-name-display" class="font-bold text-white">User</p>
                 </div>
                 <div class="avatar-pro" onclick="toggleProfileMenu()">
-                    <span id="user-avatar" style="color: var(--bg-dark);">U</span>
+                    <span id="user-avatar" style="color: var(--bg-primary);">U</span>
                 </div>
 
-                <!-- Scheduling Modal Trigger Icon in Header -->
                 <button id="schedule-toggle-btn" class="nav-icon-btn ml-2" title="Scheduled Transactions">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                 </button>
 
@@ -600,7 +601,7 @@
 
                     <div class="flex flex-wrap gap-3 mb-4">
                         <button onclick="filterTransactions('all')" class="btn-pro text-xs py-2 px-4"
-                            style="background: var(--bg-dark); color: var(--accent-neon); border: 1px solid var(--accent-neon);">All</button>
+                            style="background: var(--bg-light); color: var(--accent-primary); border: 1px solid var(--accent-primary);">All</button>
                         <button onclick="filterTransactions('income')" class="btn-pro text-xs py-2 px-4"
                             style="background: #10b981; color: white;">Income</button>
                         <button onclick="filterTransactions('expense')" class="btn-pro text-xs py-2 px-4"
@@ -613,7 +614,8 @@
                         placeholder="Search by description, category, or type..."
                         oninput="filterTransactions('search')" />
                     <button onclick="exportCSV()" class="export-btn py-2 px-4 rounded-md mb-3"
-                        style="background: linear-gradient(135deg, #10b981, #059669); color: white;">Export CSV</button>
+                        style="background: linear-gradient(135deg, #10b981, #059669); color: white;">Export
+                        CSV</button>
                     <div id="transactions-container" class="max-h-96 overflow-y-auto space-y-2">
                     </div>
                     <div id="summary-stats" class="mt-4 text-sm text-white"></div>
@@ -690,42 +692,6 @@
                 </div>
             </div>
 
-            <!-- Scheduling Feature (moved to icon in header) -->
-            <!-- <div class="pro-card mb-8" id="scheduling-section">
-                <h3 class="text-xl font-bold text-white mb-6">Schedule Transaction</h3>
-                <div class="grid grid-cols-1 md:grid-cols-6 gap-4 items-end mb-4">
-                    <label for="schedule-date" class="sr-only">Date</label>
-                    <input type="date" id="schedule-date" class="input-pro col-span-1" title="Date" />
-                    <label for="schedule-desc" class="sr-only">Description</label>
-                    <input type="text" id="schedule-desc" class="input-pro col-span-2" placeholder="Description" title="Description" />
-                    <label for="schedule-amount" class="sr-only">Amount</label>
-                    <input type="number" id="schedule-amount" class="input-pro" placeholder="Amount (₹)" title="Amount" />
-                    <label for="schedule-type" class="sr-only">Type</label>
-                    <select id="schedule-type" class="input-pro" title="Type">
-                        <option value="expense">Expense</option>
-                        <option value="income">Income</option>
-                    </select>
-                    <label for="schedule-category" class="sr-only">Category</label>
-                    <select id="schedule-category" class="input-pro" title="Category">
-                        <option value="Food">Food</option>
-                        <option value="Transportation">Transport</option>
-                        <option value="Entertainment">Entertainment</option>
-                        <option value="Shopping">Shopping</option>
-                        <option value="Bills">Bills</option>
-                        <option value="Healthcare">Healthcare</option>
-                        <option value="Education">Education</option>
-                        <option value="Salary">Salary</option>
-                        <option value="Freelance">Freelance</option>
-                        <option value="Investment">Investment</option>
-                    </select>
-                    <button onclick="addScheduledTransaction()" class="btn-pro col-span-1">Schedule</button>
-                </div>
-                <div class="mt-6">
-                    <h4 class="text-lg font-bold text-white mb-2">Scheduled Transactions</h4>
-                    <ul id="scheduled-list" class="space-y-2"></ul>
-                </div>
-            </div> -->
-
         </div>
     </div>
 
@@ -755,6 +721,10 @@
                 this.db = null;
             }
             async init() {
+                // Check for IndexedDB support before trying to open
+                if (!('indexedDB' in window)) {
+                    return Promise.reject(new Error("IndexedDB not supported."));
+                }
                 return new Promise((resolve, reject) => {
                     const request = indexedDB.open(this.dbName, this.version);
                     request.onerror = (e) => {
@@ -774,7 +744,7 @@
                         } else {
                             const userStore = event.target.transaction.objectStore('users');
                             if (!userStore.indexNames.contains('email')) {
-                                userStore.createIndex('email', 'email', { unique: true });
+                                userStore.createIndex('email', 'email', { unique: false });
                             }
                         }
 
@@ -1219,14 +1189,44 @@
             }
         }
 
-        // ==================== APP CONTROLLER ====================
+        // ==================== APP CONTROLLER (FIXED LOGIC) ====================
         let db, ai, charts;
-    let currentUser = null;
-    let transactions = [];
-    let monthlyBudget = 30000; // default
-    let useLocalTransactions = false; // fallback when IndexedDB unavailable
-    let lastRuntimeError = null;
+        let currentUser = null;
+        let transactions = [];
+        let monthlyBudget = 30000; // default
+        let useLocalTransactions = false;
         let currentScreen = 'dashboard';
+
+        // NEW: Global array for scheduled transactions
+        let scheduledTransactions = [];
+
+        // Helper to get the correct persistence key
+        function getStorageKey(type) {
+            const userPart = currentUser ? currentUser.id : 'local';
+            return `fa_${type}_${userPart}`;
+        }
+
+        // ==================== SCHEDULING PERSISTENCE FUNCTIONS ====================
+
+        function saveScheduledTransactions() {
+            if (!currentUser) return;
+            try {
+                localStorage.setItem(getStorageKey('scheduled'), JSON.stringify(scheduledTransactions));
+            } catch (e) {
+                console.error('Failed to save scheduled transactions:', e);
+            }
+        }
+
+        function loadScheduledTransactions() {
+            if (!currentUser) return;
+            try {
+                const stored = localStorage.getItem(getStorageKey('scheduled'));
+                scheduledTransactions = stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                console.error('Failed to load scheduled transactions:', e);
+            }
+        }
+
 
         async function initApp() {
             db = new DatabaseManager();
@@ -1235,17 +1235,19 @@
 
             try {
                 await db.init();
-                console.log('Database initialized');
-                useLocalTransactions = !db.db;
+                console.log('Database initialized successfully using IndexedDB.');
+                useLocalTransactions = false;
             } catch (error) {
-                console.error('Database init failed:', error);
-                showNotification('Database error: Some features may not work. Using local storage fallback.', 'error');
+                // This block is the FIX: If IndexedDB fails, set the fallback flag.
+                console.error('Database init failed (IndexedDB unsupported or blocked).', error);
+                showNotification('Database error: IndexedDB failed or is unsupported. Using Local Storage fallback.', 'error');
                 db.db = null;
                 useLocalTransactions = true;
             }
-            // Load budget from storage
-            loadBudget();
+
+            // Load data based on the current auth status (or lack thereof)
             checkAuth();
+            loadBudget(); // Load the global/local budget
         }
 
         function setGoal() {
@@ -1352,6 +1354,10 @@
         }
 
         async function handleSignup() {
+            if (useLocalTransactions) {
+                showNotification('Cannot create a new account in Local Storage mode. Please try Demo Mode.', 'error');
+                return;
+            }
             const name = document.getElementById('signup-name').value.trim();
             const email = document.getElementById('signup-email').value.trim();
             const password = document.getElementById('signup-password').value;
@@ -1371,6 +1377,12 @@
                     password: btoa(password),
                     createdAt: new Date().toISOString()
                 };
+                const userExists = await db.getUser(email);
+                if (userExists) {
+                    showNotification('Email already registered.', 'error');
+                    hideLoading('signup');
+                    return;
+                }
                 const userId = await db.addUser(user);
 
                 currentUser = { ...user, id: userId };
@@ -1383,11 +1395,7 @@
                 }, 500);
 
             } catch (error) {
-                if (error.name === 'ConstraintError') {
-                    showNotification('Email already registered.', 'error');
-                } else {
-                    showNotification('Signup failed: ' + error.message, 'error');
-                }
+                showNotification('Signup failed: ' + (error.message || 'IndexedDB failed or email likely already registered.'), 'error');
             } finally {
                 hideLoading('signup');
             }
@@ -1402,14 +1410,21 @@
             }
             showLoading('login');
             try {
-                const user = await db.getUser(email);
-                if (!user || user.password !== btoa(password)) {
-                    showNotification('Invalid credentials', 'error');
+                if (db.db) {
+                    const user = await db.getUser(email);
+                    if (!user || user.password !== btoa(password)) {
+                        showNotification('Invalid credentials', 'error');
+                        hideLoading('login');
+                        return;
+                    }
+                    currentUser = user;
+                    sessionStorage.setItem('currentUser', JSON.stringify(user));
+                } else {
+                    showNotification('Login failed: Database is unavailable. Please use Demo Mode.', 'error');
                     hideLoading('login');
                     return;
                 }
-                currentUser = user;
-                sessionStorage.setItem('currentUser', JSON.stringify(user));
+
                 showNotification('Welcome back!', 'success');
                 setTimeout(() => {
                     showApp();
@@ -1451,8 +1466,8 @@
                     document.getElementById('profile-password').value = '';
                     updateUserInfoDisplay();
                     statusElement.innerHTML = '<span class="text-green-400">Profile updated successfully!</span>';
-                } else if (currentUser.id === 999) {
-                    statusElement.innerHTML = '<span class="text-yellow-400">Demo mode: Profile changes not saved permanently.</span>';
+                } else if (currentUser.id === 999 || useLocalTransactions) {
+                    statusElement.innerHTML = '<span class="text-yellow-400">Demo mode/Local Storage: Profile changes not saved permanently.</span>';
                     currentUser = updatedUser;
                     updateUserInfoDisplay();
                 } else {
@@ -1479,11 +1494,8 @@
 
         function saveBudget() {
             try {
-                if (currentUser && currentUser.id) {
-                    localStorage.setItem(`fa_budget_${currentUser.id}`, monthlyBudget);
-                } else {
-                    localStorage.setItem('fa_budget_local', monthlyBudget);
-                }
+                const key = getStorageKey('budget');
+                localStorage.setItem(key, monthlyBudget);
             } catch (e) {
                 console.error('Failed to save budget:', e);
             }
@@ -1491,13 +1503,10 @@
 
         function loadBudget() {
             try {
-                if (currentUser && currentUser.id) {
-                    const val = localStorage.getItem(`fa_budget_${currentUser.id}`);
-                    if (val) monthlyBudget = parseFloat(val);
-                } else {
-                    const val = localStorage.getItem('fa_budget_local');
-                    if (val) monthlyBudget = parseFloat(val);
-                }
+                const key = getStorageKey('budget');
+                const val = localStorage.getItem(key);
+                if (val) monthlyBudget = parseFloat(val);
+
                 // set input default
                 const input = document.getElementById('budget-amount');
                 if (input) input.value = monthlyBudget;
@@ -1591,7 +1600,14 @@
                 { id: 10, userId: 999, date: '2024-11-25', description: 'Restaurant', amount: -2500, category: 'Food', type: 'expense', lifestyle: '#Social' },
             ];
             transactions = demoTransactions;
-            showNotification('Demo mode activated!', 'success');
+            // Set demo scheduled transactions
+            scheduledTransactions = [
+                { id: 1000, date: '2025-02-01', desc: 'Rent Payment', amount: 18000, type: 'expense', category: 'Bills', notified: false },
+                { id: 1001, date: '2025-03-10', desc: 'Insurance Premium', amount: 4500, type: 'expense', category: 'Bills', notified: false }
+            ];
+            saveScheduledTransactions();
+
+            showNotification('Demo mode activated! Data is temporary.', 'success');
             showApp();
             updateAllData();
         }
@@ -1600,6 +1616,7 @@
             sessionStorage.removeItem('currentUser');
             currentUser = null;
             transactions = [];
+            scheduledTransactions = []; // Clear scheduled data on logout
             showAuth();
             showNotification('Logged out successfully', 'success');
         }
@@ -1616,23 +1633,26 @@
         async function loadUserData() {
             if (!currentUser) return;
             try {
-                if (db.db) {
+                if (db.db && currentUser.id !== 999) {
                     transactions = await db.getUserTransactions(currentUser.id);
-                    useLocalTransactions = false;
-                } else if (useLocalTransactions) {
-                    // load from localStorage per user
-                    const key = `fa_transactions_${currentUser.id || 'local'}`;
+                } else {
+                    // Load transactions from localStorage (for Demo or Fallback mode)
+                    const key = getStorageKey('transactions');
                     const stored = localStorage.getItem(key);
                     transactions = stored ? JSON.parse(stored) : [];
                 }
+
+                loadScheduledTransactions(); // Load scheduled transactions
                 loadGoal(); // Load goal state after loading transactions
                 updateAllData();
+
             } catch (error) {
-                console.error('Failed to load data:', error);
-                lastRuntimeError = error;
+                console.error('Failed to load data in loadUserData:', error);
+                showNotification('Failed to load user data. Try Demo Mode.', 'error');
             }
         }
 
+        // Modified addTransaction for robust persistence logic
         async function addTransaction() {
             const desc = document.getElementById('trans-desc').value.trim();
             const amount = parseFloat(document.getElementById('trans-amount').value);
@@ -1647,21 +1667,21 @@
                 return;
             }
 
-            // Micro-investment simulation
+            // Micro-investment/Goal logic
             let finalAmount = amount;
             if (roundUp && type === 'expense') {
                 const roundAmount = Math.ceil(amount) - amount;
                 if (roundAmount > 0) {
-                    // Simulate investment towards goal
                     goalState.saved += roundAmount;
                     sessionStorage.setItem('goalState', JSON.stringify(goalState));
                     showNotification(`Transaction logged. Micro-invested ₹${roundAmount.toFixed(2)} to your goal!`, 'success');
+                } else {
+                    showNotification('Transaction added successfully!', 'success');
                 }
             } else {
                 showNotification('Transaction added successfully!', 'success');
             }
 
-            // If the transaction is income, add it to the goal saved total
             if (type === 'income') {
                 goalState.saved += finalAmount;
                 sessionStorage.setItem('goalState', JSON.stringify(goalState));
@@ -1669,7 +1689,7 @@
 
 
             const transaction = {
-                userId: currentUser.id,
+                userId: currentUser ? currentUser.id : 'local', // Use 'local' if no user
                 date: new Date().toISOString().split('T')[0],
                 description: desc,
                 amount: type === 'expense' ? -Math.abs(finalAmount) : Math.abs(finalAmount),
@@ -1680,15 +1700,16 @@
                 id: Date.now()
             };
             try {
-                // Always add to local transactions array
                 transactions.push(transaction);
-                // If using database, also add to IndexedDB
+
                 if (db.db && currentUser.id !== 999) {
+                    // Use IndexedDB
                     await db.addTransaction(transaction);
-                } else if (useLocalTransactions) {
-                    const key = `fa_transactions_${currentUser.id || 'local'}`;
-                    localStorage.setItem(key, JSON.stringify(transactions));
+                } else {
+                    // Use Local Storage (Demo or Fallback)
+                    localStorage.setItem(getStorageKey('transactions'), JSON.stringify(transactions));
                 }
+
                 // Clear fields
                 document.getElementById('trans-desc').value = '';
                 document.getElementById('trans-amount').value = '';
@@ -1698,12 +1719,13 @@
                 document.getElementById('trans-lifestyle-tag').value = '';
                 document.getElementById('micro-invest').checked = false;
                 updateAllData();
-                renderDebugPanel();
             } catch (error) {
-                showNotification('Failed to add transaction', 'error');
+                console.error('Failed to add transaction (DB/LS error):', error);
+                showNotification('Failed to add transaction. Check console for details.', 'error');
             }
         }
 
+        // Modified deleteTransaction for robust persistence logic
         async function deleteTransaction(id) {
             if (!confirm('Delete this transaction?')) return;
             try {
@@ -1714,15 +1736,22 @@
                     sessionStorage.setItem('goalState', JSON.stringify(goalState));
                 }
 
+                // Remove from local array
+                transactions = transactions.filter(t => t.id !== id);
+
                 if (db.db && currentUser.id !== 999) {
+                    // Use IndexedDB
                     await db.deleteTransaction(id);
-                    transactions = await db.getUserTransactions(currentUser.id);
+                    transactions = await db.getUserTransactions(currentUser.id); // Reload
                 } else {
-                    transactions = transactions.filter(t => t.id !== id);
+                    // Use Local Storage (Demo or Fallback)
+                    localStorage.setItem(getStorageKey('transactions'), JSON.stringify(transactions));
                 }
+
                 updateAllData();
                 showNotification('Transaction deleted', 'success');
             } catch (error) {
+                console.error('Delete transaction failed (DB/LS error):', error);
                 showNotification('Failed to delete transaction', 'error');
             }
         }
@@ -1734,9 +1763,10 @@
                 updateCharts();
                 updateAIInsights();
                 updateTransactionsList();
+                renderScheduledTransactions(); // ADDED: Ensure scheduled list updates
             } catch (err) {
                 console.error('updateAllData failed:', err);
-                showNotification('Internal error updating UI. Check console for details.', 'error');
+                // Note: Don't show this error unless critical, as it might spam the user
             }
         }
 
@@ -1772,7 +1802,7 @@
                     const spent = Math.abs(transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0));
                     const remaining = Math.max(0, monthlyBudget - spent);
                     budgetDisplay.innerHTML = `<p class="mt-2 text-green-400">Budget Active: ₹${monthlyBudget.toLocaleString()}.</p>
-                        <p class="mt-1 text-yellow-400">Spent this period: ₹${spent.toLocaleString()} — Remaining: ₹${remaining.toLocaleString()}</p>`;
+                        <p class="mt-1 ${remaining > 0 ? 'text-yellow-400' : 'text-red-400'}">Spent this period: ₹${spent.toLocaleString()} — Remaining: ₹${remaining.toLocaleString()}</p>`;
                 }
             } catch (e) {
                 console.error('Failed to render budget display', e);
@@ -1783,9 +1813,7 @@
         }
 
         function updateCharts() {
-            // If Chart.js failed to load, skip charts to avoid throwing and allow AI updates to run
             if (typeof Chart === 'undefined') {
-                console.warn('Chart.js not loaded — skipping charts.');
                 return;
             }
             const categoryData = {};
@@ -1844,7 +1872,6 @@
         function updateAIInsights() {
             try {
                 if (!ai) {
-                    console.warn('AI engine unavailable — skipping AI insights.');
                     document.getElementById('ai-insights-container').innerHTML = '<p class="text-gray-400">AI engine not available.</p>';
                     document.getElementById('ai-tips-container').innerHTML = '';
                     document.getElementById('ai-predictions-container').innerHTML = '';
@@ -1856,36 +1883,35 @@
                 const insights = ai.generateInsights(income, expenses, balance, transactions);
 
                 document.getElementById('ai-insights-container').innerHTML = insights.map(insight => `
-                <div class="insight-pro">
-                    <p class="text-sm font-semibold ${insight.color}">${insight.title}</p>
-                    <p class="text-xs text-gray-400 mt-1">${insight.message}</p>
-                </div>
-            `).join('');
+                    <div class="insight-pro">
+                        <p class="text-sm font-semibold ${insight.color}">${insight.title}</p>
+                        <p class="text-xs text-gray-400 mt-1">${insight.message}</p>
+                    </div>
+                `).join('');
 
                 const recommendations = ai.generateRecommendations(income, expenses, balance, transactions);
                 document.getElementById('ai-tips-container').innerHTML = recommendations.map(rec => `
-                <div class="insight-pro">
-                    <p class="text-sm font-semibold text-yellow-400">${rec.title}</p>
-                    <p class="text-xs text-gray-400 mt-1">${rec.message}</p>
-                </div>
-            `).join('');
+                    <div class="insight-pro">
+                        <p class="text-sm font-semibold text-yellow-400">${rec.title}</p>
+                        <p class="text-xs text-gray-400 mt-1">${rec.message}</p>
+                    </div>
+                `).join('');
 
                 const predictions = ai.generatePredictions(transactions);
                 document.getElementById('ai-predictions-container').innerHTML = predictions.map(pred => `
-                <div class="insight-pro">
-                    <p class="text-sm font-semibold text-cyan-400">${pred.title}</p>
-                    <p class="text-xs text-gray-400 mt-1">${pred.message}</p>
-                    ${pred.confidence ? `<p class="text-xs text-green-400 mt-1">Confidence: ${pred.confidence.split(': ')[1]}</p>` : ''}
-                </div>
-            `).join('');
+                    <div class="insight-pro">
+                        <p class="text-sm font-semibold text-cyan-400">${pred.title}</p>
+                        <p class="text-xs text-gray-400 mt-1">${pred.message}</p>
+                        ${pred.confidence ? `<p class="text-xs text-green-400 mt-1">Confidence: ${pred.confidence.split(': ')[1]}</p>` : ''}
+                    </div>
+                `).join('');
             } catch (err) {
                 console.error('updateAIInsights failed:', err);
-                showNotification('AI insights failed to update. Check console.', 'error');
+                // showNotification('AI insights failed to update. Check console.', 'error');
             }
         }
 
         function updateRecurringList() {
-            // Updated to render the Goal Tracker state
             updateGoalTrackerUI();
         }
 
@@ -1950,6 +1976,7 @@
                                         flex-shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path d="${t.type === 'income' ? 'M10 2a8 8 0 100 16 8 8 0 000-16zm-5 9a.5.5 0 01.5-.5h8a.5.5 0 010 1h-8a.5.5 0 01-.5-.5z' : 'M10 2a8 8 0 100 16 8 8 0 000-16zm-5 9a.5.5 0 01.5-.5h8a.5.5 0 010 1h-8a.5.5 0 01-.5-.5z'}" />
+                                </svg>
                             </div>
                             
                             <div class="min-w-0">
@@ -1983,8 +2010,8 @@
             const totalExpense = Math.abs(list.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0));
             const balance = totalIncome - totalExpense;
             document.getElementById('summary-stats').innerHTML = `
-            <b>Summary:</b> Income: <span class="text-green-400">₹${totalIncome.toLocaleString()}</span> | Expenses: <span class="text-red-400">₹${totalExpense.toLocaleString()}</span> | Balance: <span class="${balance >= 0 ? 'text-cyan-400' : 'text-red-400'};">₹${balance.toLocaleString()}</span>
-        `;
+                <b>Summary:</b> Income: <span class="text-green-400">₹${totalIncome.toLocaleString()}</span> | Expenses: <span class="text-red-400">₹${totalExpense.toLocaleString()}</span> | Balance: <span class="${balance >= 0 ? 'text-cyan-400' : 'text-red-400'};">₹${balance.toLocaleString()}</span>
+            `;
         }
 
 
@@ -2008,6 +2035,7 @@
             const dataStr = JSON.stringify({
                 user: currentUser,
                 transactions: transactions,
+                scheduledTransactions: scheduledTransactions,
                 exportedAt: new Date().toISOString()
             }, null, 2);
             const blob = new Blob([dataStr], { type: 'application/json' });
@@ -2035,13 +2063,13 @@
             const icon = type === 'success' ? '✅' : '❌';
             const color = type === 'success' ? 'text-green-400' : 'text-red-400';
             container.innerHTML = `
-            <div class="notification-pro">
-                <div class="flex items-center gap-3">
-                    <span class="text-2xl">${icon}</span>
-                    <p class="${color} font-semibold">${message}</p>
+                <div class="notification-pro">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">${icon}</span>
+                        <p class="${color} font-semibold">${message}</p>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
             setTimeout(() => {
                 container.innerHTML = '';
             }, 3000);
@@ -2049,7 +2077,7 @@
 
         // Contact form submission handler (uses Formspree endpoint)
         document.getElementById('contact-form').addEventListener('submit', function (e) {
-
+            e.preventDefault(); // Prevent actual submission to keep data
             // Wait a moment for Formspree to process, then show success message.
             setTimeout(() => {
                 // Clear the form after submission
@@ -2070,7 +2098,7 @@
 
             // Close dropdown if clicked outside
             if (menu && !menu.classList.contains('hidden')) {
-                if (!menu.contains(e.target) && !avatar.contains(e.target) && !profileBtn.contains(e.target) && !contactBtn.contains(e.target)) {
+                if (!menu.contains(e.target) && (!avatar || !avatar.contains(e.target)) && (!profileBtn || !profileBtn.contains(e.target)) && (!contactBtn || !contactBtn.contains(e.target))) {
                     toggleProfileMenu(false);
                 }
             }
@@ -2083,27 +2111,37 @@
             if (!window.tailwind) {
                 showNotification('Tailwind CSS failed to load. Styles may be missing.', 'error');
             }
+
+            // This order is critical for the fallback logic to work correctly
             initApp();
         });
 
-        // --- Scheduling Feature ---
-        let scheduledTransactions = [];
+
+        // --- Scheduling Feature Logic ---
 
         function addScheduledTransaction() {
+            if (!currentUser) {
+                showNotification('Please log in or use Demo Mode to schedule transactions.', 'error');
+                return;
+            }
+
             const date = document.getElementById('schedule-date').value;
             const desc = document.getElementById('schedule-desc').value.trim();
             const amount = parseFloat(document.getElementById('schedule-amount').value);
             const type = document.getElementById('schedule-type').value;
             const category = document.getElementById('schedule-category').value;
-            if (!date || !desc || !amount) {
-                showNotification('Please fill all scheduling fields', 'error');
+            if (!date || !desc || !amount || amount <= 0) {
+                showNotification('Please fill all scheduling fields with valid amounts and dates.', 'error');
                 return;
             }
             scheduledTransactions.push({
                 id: Date.now(),
                 date, desc, amount, type, category, notified: false
             });
+            saveScheduledTransactions();
             renderScheduledTransactions();
+            showNotification('Transaction scheduled!', 'success');
+            // Clear fields
             document.getElementById('schedule-date').value = '';
             document.getElementById('schedule-desc').value = '';
             document.getElementById('schedule-amount').value = '';
@@ -2111,20 +2149,26 @@
 
         function renderScheduledTransactions() {
             const list = document.getElementById('scheduled-list');
+            if (!list) return;
+
             if (!scheduledTransactions.length) {
                 list.innerHTML = '<li class="text-gray-400">No scheduled transactions.</li>';
                 return;
             }
-            list.innerHTML = scheduledTransactions.map(t => `
-                <li class="flex items-center justify-between bg-gray-800 rounded p-3">
-                    <div>
+
+            // Sort by date upcoming
+            const sorted = [...scheduledTransactions].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            list.innerHTML = sorted.map(t => `
+                <li class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-800 rounded p-3 transition-all duration-200 hover:bg-gray-700/50">
+                    <div class="flex-grow min-w-0 mb-2 sm:mb-0">
                         <span class="text-sm text-gray-300 font-semibold">${t.date}</span>
-                        <span class="mx-2 text-white">${t.desc}</span>
-                        <span class="text-xs text-gray-400">${t.category}</span>
-                        <span class="ml-2 font-bold ${t.type === 'income' ? 'text-green-400' : 'text-red-400'}">${t.type === 'income' ? '+' : '-'}₹${Math.abs(t.amount)}</span>
+                        <span class="mx-2 text-white font-medium">${t.desc}</span>
+                        <span class="text-xs text-gray-400">(${t.category})</span>
                     </div>
-                    <div class="flex gap-2">
-                        <button onclick="completeScheduledTransaction(${t.id})" class="btn-pro py-1 px-3 text-xs">Mark as Done</button>
+                    <div class="flex gap-2 items-center flex-shrink-0">
+                        <span class="text-sm font-bold ${t.type === 'income' ? 'text-green-400' : 'text-red-400'}">${t.type === 'income' ? '+' : '-'}₹${Math.abs(t.amount).toLocaleString()}</span>
+                        <button onclick="completeScheduledTransaction(${t.id})" class="btn-pro py-1 px-3 text-xs" style="background: linear-gradient(135deg, #10b981, #059669); color: white;">Mark Done</button>
                         <button onclick="deleteScheduledTransaction(${t.id})" class="delete-pro py-1 px-3 text-xs">Delete</button>
                     </div>
                 </li>
@@ -2135,67 +2179,87 @@
             const idx = scheduledTransactions.findIndex(t => t.id === id);
             if (idx !== -1) {
                 const t = scheduledTransactions[idx];
-                // Add to main transactions (simulate addTransaction)
+                // 1. Add to main transactions (simulate addTransaction)
                 addTransactionFromSchedule(t);
+                // 2. Remove from scheduled list
                 scheduledTransactions.splice(idx, 1);
+                saveScheduledTransactions();
+                // 3. Update UI
                 renderScheduledTransactions();
-                showNotification('Transaction added to main list!', 'success');
+                showNotification('Scheduled transaction marked as complete and added to history!', 'success');
             }
         }
 
         function deleteScheduledTransaction(id) {
             scheduledTransactions = scheduledTransactions.filter(t => t.id !== id);
+            saveScheduledTransactions();
             renderScheduledTransactions();
+            showNotification('Scheduled transaction deleted.', 'success');
         }
 
         function addTransactionFromSchedule(t) {
             const transaction = {
                 id: Date.now(),
+                userId: currentUser.id,
                 date: t.date,
-                description: t.desc,
+                description: t.desc + ' (Scheduled Payment)', // Clarify origin
                 amount: t.type === 'income' ? Math.abs(t.amount) : -Math.abs(t.amount),
                 category: t.category,
                 type: t.type,
                 recurring: '',
                 lifestyle: ''
             };
+            // Update transactions array and save/update IndexedDB/localStorage
             transactions.push(transaction);
-            updateAllData();
+
+            if (db.db && currentUser.id !== 999) {
+                db.addTransaction(transaction).then(() => {
+                    updateAllData();
+                }).catch(e => console.error("DB Save Failed", e));
+            } else {
+                localStorage.setItem(getStorageKey('transactions'), JSON.stringify(transactions));
+                updateAllData();
+            }
         }
 
         // Notification check for scheduled transactions (runs every minute)
         setInterval(() => {
+            if (!currentUser) return;
+            if (!scheduledTransactions.length) return;
+
             const today = new Date().toISOString().split('T')[0];
+            let didNotify = false;
+
             scheduledTransactions.forEach(t => {
                 if (!t.notified && t.date === today) {
-                    showNotification(`Scheduled: ${t.desc} (${t.type === 'income' ? '+' : '-'}₹${Math.abs(t.amount)}) is due today!`, 'success');
+                    showNotification(`⏰ Scheduled: ${t.desc} (${t.type === 'income' ? '+' : '-'}₹${Math.abs(t.amount).toLocaleString()}) is due today!`, 'success');
                     t.notified = true;
+                    didNotify = true;
                 }
             });
+
+            if (didNotify) {
+                saveScheduledTransactions();
+            }
         }, 60000);
 
-        window.addEventListener('DOMContentLoaded', () => {
-            // Remove any duplicate scheduling section outside header/modal
-            const schedulingSection = document.getElementById('scheduling-section');
-            if (schedulingSection) {
-                schedulingSection.remove();
-            }
-            renderScheduledTransactions();
-        });
+
     </script>
 
 
 
-    <!-- Scheduling Modal (hidden by default) -->
-    <div id="scheduling-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
+    <div id="scheduling-modal"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
         <div class="pro-card max-w-2xl w-full relative">
-            <button onclick="toggleSchedulingModal(false)" class="absolute top-2 right-2 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <button onclick="toggleSchedulingModal(false)"
+                class="absolute top-2 right-2 text-gray-400 hover:text-white text-2xl">&times;</button>
             <h3 class="text-xl font-bold text-white mb-6">Schedule Transaction</h3>
             <div class="grid grid-cols-1 md:grid-cols-6 gap-4 items-end mb-4">
                 <label for="schedule-date" class="sr-only">Date</label>
                 <input type="date" id="schedule-date" class="input-pro col-span-1" title="Date" />
                 <label for="schedule-desc" class="sr-only">Description</label>
-                <input type="text" id="schedule-desc" class="input-pro col-span-2" placeholder="Description" title="Description" />
+                <input type="text" id="schedule-desc" class="input-pro col-span-2" placeholder="Description"
+                    title="Description" />
                 <label for="schedule-amount" class="sr-only">Amount</label>
                 <input type="number" id="schedule-amount" class="input-pro" placeholder="Amount (₹)" title="Amount" />
                 <label for="schedule-type" class="sr-only">Type</label>
@@ -2226,58 +2290,37 @@
     </div>
 
     <script>
-    // --- Scheduling Modal Logic ---
-    function toggleSchedulingModal(show) {
-        const modal = document.getElementById('scheduling-modal');
-        if (show === undefined) {
-            modal.classList.toggle('hidden');
-        } else if (show) {
-            modal.classList.remove('hidden');
-        } else {
-            modal.classList.add('hidden');
+        // --- Scheduling Modal Logic ---
+        function toggleSchedulingModal(show) {
+            const modal = document.getElementById('scheduling-modal');
+            if (show === undefined) {
+                modal.classList.toggle('hidden');
+            } else if (show) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
         }
-    }
-    document.getElementById('schedule-toggle-btn').addEventListener('click', () => toggleSchedulingModal(true));
-    // Close modal on outside click
-    window.addEventListener('click', function(e) {
-        const modal = document.getElementById('scheduling-modal');
-        if (!modal.classList.contains('hidden') && e.target === modal) {
-            toggleSchedulingModal(false);
-        }
-    });
-    // ESC key closes modal
-    window.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') toggleSchedulingModal(false);
-    });
+        document.getElementById('schedule-toggle-btn').addEventListener('click', () => toggleSchedulingModal(true));
+        // Close modal on outside click
+        window.addEventListener('click', function (e) {
+            const modal = document.getElementById('scheduling-modal');
+            if (!modal.classList.contains('hidden') && e.target === modal) {
+                toggleSchedulingModal(false);
+            }
+        });
+        // ESC key closes modal
+        window.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') toggleSchedulingModal(false);
+        });
     </script>
 
     <style>
-    #scheduling-modal .pro-card { max-height: 90vh; overflow-y: auto; }
-    </style>
-    <!-- Debug panel for runtime state (visible for testing) -->
-    <div id="debug-panel" style="position:fixed;right:12px;bottom:12px;z-index:60;max-width:320px;">
-        <div class="pro-card" style="background:#111;opacity:0.95;color:#ddd;padding:12px;font-size:12px;">
-            <strong>Debug</strong>
-            <div id="debug-content" style="margin-top:8px;white-space:pre-wrap;color:#cbd5e1;"></div>
-        </div>
-    </div>
-    <script>
-    function renderDebugPanel() {
-        try {
-            const el = document.getElementById('debug-content');
-            if (!el) return;
-            el.textContent = `currentUser: ${currentUser ? currentUser.id || currentUser.email : 'null'}\n` +
-                `transactions: ${transactions.length}\n` +
-                `useLocalTransactions: ${useLocalTransactions}\n` +
-                `lastRuntimeError: ${lastRuntimeError ? (lastRuntimeError.message || lastRuntimeError) : 'none'}`;
-        } catch (e) {
-            console.error('Failed to render debug panel', e);
+        #scheduling-modal .pro-card {
+            max-height: 90vh;
+            overflow-y: auto;
         }
-    }
-    document.addEventListener('DOMContentLoaded', () => renderDebugPanel());
-    window.addEventListener('error', (e) => { lastRuntimeError = e.error || e.message; renderDebugPanel(); });
-    window.addEventListener('unhandledrejection', (e) => { lastRuntimeError = e.reason || e; renderDebugPanel(); });
-    </script>
+    </style>
 </body>
 
 </html>

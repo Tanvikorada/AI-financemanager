@@ -249,9 +249,7 @@
             padding: 24px;
         }
 
-        .hidden {
-            display: none !important;
-        }
+        /* Note: don't override Tailwind's .hidden utility here — leave responsive utilities intact */
 
         #scheduling-modal .pro-card {
             max-height: 90vh;
@@ -332,6 +330,7 @@
         </div>
     </div>
 
+    <!-- Authentication Screen -->
     <div id="auth-screen" class="min-h-screen flex items-center justify-center p-6">
         <div class="pro-card max-w-md w-full">
             <div class="text-center mb-8">
@@ -431,6 +430,7 @@
         </div>
     </div>
 
+    <!-- Application Screen -->
     <div id="app-screen" class="hidden min-h-screen p-6">
         <header class="pro-card mb-8 flex items-center justify-between">
             <div class="flex items-center gap-4">
@@ -485,28 +485,23 @@
                 </button>
                 <div id="profile-menu-dropdown" class="hidden absolute right-8 top-20 pro-card w-48 z-50 p-2">
                     <button onclick="setActiveScreen('dashboard')"
-                        class="w-full text-left p-2 block hover:bg-gray-700 rounded-lg text-white font-semibold transition-all mb-1 sm:hidden">
-                        Dashboard
-                    </button>
+                        class="w-full text-left p-2 block hover:bg-gray-700 rounded-lg text-white font-semibold transition-all mb-1 sm:hidden">Dashboard</button>
                     <button onclick="setActiveScreen('profile')"
-                        class="w-full text-left p-2 block hover:bg-gray-700 rounded-lg text-cyan-400 font-semibold transition-all mb-1 sm:hidden">
-                        Profile
-                    </button>
+                        class="w-full text-left p-2 block hover:bg-gray-700 rounded-lg text-cyan-400 font-semibold transition-all mb-1 sm:hidden">Profile</button>
                     <button onclick="setActiveScreen('contact')"
-                        class="w-full text-left p-2 block hover:bg-gray-700 rounded-lg text-cyan-400 font-semibold transition-all mb-1 sm:hidden">
-                        AI Coach Support
-                    </button>
+                        class="w-full text-left p-2 block hover:bg-gray-700 rounded-lg text-cyan-400 font-semibold transition-all mb-1 sm:hidden">AI
+                        Coach Support</button>
                     <div class="h-px bg-gray-600 my-2"></div>
                     <button onclick="handleLogout()"
-                        class="w-full text-left p-2 block hover:bg-gray-700 rounded-lg text-red-400 font-semibold transition-all">
-                        Logout
-                    </button>
+                        class="w-full text-left p-2 block hover:bg-gray-700 rounded-lg text-red-400 font-semibold transition-all">Logout</button>
                 </div>
             </div>
         </header>
 
         <div class="container mx-auto max-w-7xl">
+            <!-- Dashboard Screen -->
             <div id="dashboard-screen">
+                <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
                     <div class="stat-card-pro">
                         <div>
@@ -545,6 +540,7 @@
                     </div>
                 </div>
 
+                <!-- Behavioral Intelligence & Foresight -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                     <div class="pro-card ai-section-card col-span-1">
                         <h3 class="text-lg font-bold text-white mb-4">🧠 Behavioral Intelligence</h3>
@@ -576,16 +572,43 @@
                     </div>
                 </div>
 
+                <!-- Charts Row 1 -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                     <div class="chart-pro">
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="text-lg font-bold text-white">Expense Breakdown</h3>
-                            <span class="ai-badge-pro py-1 px-3 rounded-full">AI Forecast</span>
+                            <span class="ai-badge-pro py-1 px-3 rounded-full text-sm">AI Analytics</span>
+                        </div>
+                        <canvas id="pieChart" style="max-height: 300px;"></canvas>
+                    </div>
+                    <div class="chart-pro">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-bold text-white">Monthly Trends</h3>
+                            <span class="ai-badge-pro py-1 px-3 rounded-full text-sm">Real-time</span>
+                        </div>
+                        <canvas id="barChart" style="max-height: 300px;"></canvas>
+                    </div>
+                </div>
+
+                <!-- Charts Row 2 -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div class="chart-pro">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-bold text-white">Cash Flow Analysis</h3>
+                            <span class="ai-badge-pro py-1 px-3 rounded-full text-sm">ML Powered</span>
+                        </div>
+                        <canvas id="lineChart" style="max-height: 300px;"></canvas>
+                    </div>
+                    <div class="chart-pro">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-bold text-white">Savings Projection</h3>
+                            <span class="ai-badge-pro py-1 px-3 rounded-full text-sm">AI Forecast</span>
                         </div>
                         <canvas id="projectionChart" style="max-height: 300px;"></canvas>
                     </div>
                 </div>
 
+                <!-- AI Insights Row -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
                     <div class="pro-card ai-section-card">
                         <h3 class="text-lg font-bold text-white mb-4">AI Insights</h3>
@@ -601,6 +624,7 @@
                     </div>
                 </div>
 
+                <!-- Budget & Goals -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                     <div class="pro-card">
                         <h3 class="text-xl font-bold text-white mb-4">Budget Settings</h3>
@@ -636,6 +660,7 @@
                     </div>
                 </div>
 
+                <!-- Add Transaction -->
                 <div class="pro-card mb-8">
                     <h3 class="text-xl font-bold text-white mb-6">Add Transaction</h3>
                     <div class="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
@@ -673,6 +698,7 @@
                     </div>
                 </div>
 
+                <!-- Transaction History -->
                 <div class="pro-card">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-xl font-bold text-white">Transaction History</h3>
@@ -698,6 +724,7 @@
                 </div>
             </div>
 
+            <!-- Profile Screen -->
             <div id="profile-screen" class="hidden">
                 <div class="pro-card max-w-lg mx-auto">
                     <h2 class="text-3xl font-bold gradient-text mb-8">User Profile</h2>
@@ -729,6 +756,7 @@
                 </div>
             </div>
 
+            <!-- Contact Screen -->
             <div id="contact-screen" class="hidden">
                 <div class="pro-card max-w-lg mx-auto">
                     <h2 class="text-3xl font-bold gradient-text mb-8">AI Coach Support</h2>
@@ -762,6 +790,7 @@
         </div>
     </div>
 
+    <!-- Scheduling Modal -->
     <div id="scheduling-modal"
         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
         <div class="pro-card max-w-2xl w-full relative">
@@ -808,26 +837,30 @@
         'use strict';
 
         // Firebase Configuration - REPLACE WITH YOUR OWN CONFIG
-       const firebaseConfig = {
-            apiKey: "AIzaSyDMhGK6-Z1QtAA7KanzFFjIaccHyg54f9o",
-            authDomain: "aifinancepro-9b801.firebaseapp.com",
-            projectId: "aifinancepro-9b801",
-            storageBucket: "aifinancepro-9b801.firebasestorage.app",
-            messagingSenderId: "265552616833",
-            appId: "1:265552616833:web:714fae18f3ee0070915c80",
-            measurementId: "G-JYEYE29HB6"
-        };
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+            const firebaseConfig = {
+                apiKey: "AIzaSyDMhGK6-Z1QtAA7KanzFFjIaccHyg54f9o",
+                authDomain: "aifinancepro-9b801.firebaseapp.com",
+                projectId: "aifinancepro-9b801",
+                storageBucket: "aifinancepro-9b801.firebasestorage.app",
+                messagingSenderId: "265552616833",
+                appId: "1:265552616833:web:714fae18f3ee0070915c80",
+                measurementId: "G-JYEYE29HB6"
+            };
 
         // Initialize Firebase
         let firebaseApp, auth, db;
         try {
-            firebaseApp = firebase.initializeApp(firebaseConfig);
-            auth = firebase.auth();
-            db = firebase.firestore();
-            console.log('Firebase initialized successfully');
+            if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
+                firebaseApp = firebase.initializeApp(firebaseConfig);
+                auth = firebase.auth();
+                db = firebase.firestore();
+                console.log('✅ Firebase initialized successfully');
+            } else {
+                console.warn('⚠️ Firebase not configured - Demo mode only');
+            }
         } catch (error) {
-            console.error('Firebase initialization failed:', error);
-            showNotification('⚠️ Using demo mode - Firebase not configured', 'error');
+            console.error('❌ Firebase initialization failed:', error);
         }
 
         // Global state
@@ -836,15 +869,10 @@
         let scheduledTransactions = [];
         let monthlyBudget = 30000;
         let currentScreen = 'dashboard';
-        let goalState = {
-            name: "None Set",
-            target: 0,
-            saved: 0
-        };
-        let charts;
-        let ai;
+        let goalState = { name: "None Set", target: 0, saved: 0 };
+        let charts, ai;
 
-        // AI Engine
+        // AI Engine Class
         class AIEngine {
             constructor() {
                 this.model = 'FinanceAI-v5.0';
@@ -984,7 +1012,7 @@
             }
         }
 
-        // Chart Manager
+        // Chart Manager Class
         class ChartManager {
             constructor() {
                 this.charts = {};
@@ -1077,6 +1105,11 @@
                                     ticks: { color: '#f3f4f6' },
                                     grid: { display: false }
                                 }
+                            },
+                            plugins: {
+                                legend: {
+                                    labels: { color: '#f3f4f6' }
+                                }
                             }
                         }
                     });
@@ -1122,6 +1155,11 @@
                                 x: {
                                     ticks: { color: '#f3f4f6' },
                                     grid: { display: false }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    labels: { color: '#f3f4f6' }
                                 }
                             }
                         }
@@ -1169,6 +1207,11 @@
                                     ticks: { color: '#f3f4f6' },
                                     grid: { display: false }
                                 }
+                            },
+                            plugins: {
+                                legend: {
+                                    labels: { color: '#f3f4f6' }
+                                }
                             }
                         }
                     });
@@ -1202,17 +1245,12 @@
             showLoading('signup');
 
             try {
-                // Create user account
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
 
-                // Update profile with display name
                 await user.updateProfile({ displayName: name });
-
-                // Send verification email
                 await user.sendEmailVerification();
 
-                // Store user data in Firestore
                 await db.collection('users').doc(user.uid).set({
                     name: name,
                     email: email,
@@ -1222,7 +1260,6 @@
 
                 showNotification('✅ Account created! Please check your email for verification.', 'success');
 
-                // Show verification notice
                 document.getElementById('login-form').classList.add('hidden');
                 document.getElementById('signup-form').classList.add('hidden');
                 document.getElementById('verification-notice').classList.remove('hidden');
@@ -1273,12 +1310,13 @@
                     return;
                 }
 
-                showNotification('✅ Welcome back!', 'success');
-                hideLoading('login');
+                // Don't manually hide loading or show notification here
+                // Let the auth state observer handle the transition
+
             } catch (error) {
                 console.error('Login error:', error);
                 let message = 'Login failed. ';
-                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
                     message += 'Invalid credentials.';
                 } else if (error.code === 'auth/invalid-email') {
                     message += 'Invalid email address.';
@@ -1363,7 +1401,6 @@
             transactions = [];
             scheduledTransactions = [];
 
-            // Hide app screen and show auth screen
             document.getElementById('app-screen').classList.add('hidden');
             document.getElementById('auth-screen').classList.remove('hidden');
             document.getElementById('verification-notice').classList.add('hidden');
@@ -1375,13 +1412,26 @@
         // Firebase Auth State Observer
         if (auth) {
             auth.onAuthStateChanged(async (user) => {
+                console.log('Auth state changed:', user ? 'User logged in' : 'User logged out');
+
                 if (user) {
-                    // User is signed in
+                    console.log('User email verified:', user.emailVerified);
+
                     if (user.emailVerified) {
-                        // Get user data from Firestore
                         try {
-                            const userDoc = await db.collection('users').doc(user.uid).get();
-                            const userData = userDoc.data();
+                            // Hide loading spinner
+                            hideLoading('login');
+
+                            // Get user data from Firestore
+                            let userData = null;
+                            try {
+                                const userDoc = await db.collection('users').doc(user.uid).get();
+                                userData = userDoc.data();
+                                console.log('User data from Firestore:', userData);
+                            } catch (firestoreError) {
+                                console.warn('Firestore read error (continuing with auth data):', firestoreError);
+                                // Continue with just auth data if Firestore fails
+                            }
 
                             currentUser = {
                                 uid: user.uid,
@@ -1390,28 +1440,48 @@
                                 emailVerified: user.emailVerified
                             };
 
-                            // Show app
+                            console.log('Current user set:', currentUser);
+
+                            // Hide auth screen and show app
                             document.getElementById('auth-screen').classList.add('hidden');
                             document.getElementById('verification-notice').classList.add('hidden');
                             document.getElementById('app-screen').classList.remove('hidden');
 
+                            showNotification('✅ Welcome back, ' + currentUser.name + '!', 'success');
+
                             updateUserInfoDisplay();
                             await loadUserData();
                         } catch (error) {
-                            console.error('Error loading user data:', error);
-                            showNotification('Error loading user data', 'error');
+                            console.error('Error in auth state handler:', error);
+                            // Still try to show the app with basic user info
+                            currentUser = {
+                                uid: user.uid,
+                                email: user.email,
+                                name: user.displayName || user.email.split('@')[0],
+                                emailVerified: user.emailVerified
+                            };
+
+                            document.getElementById('auth-screen').classList.add('hidden');
+                            document.getElementById('app-screen').classList.remove('hidden');
+                            showNotification('⚠️ Logged in with limited data. Some features may not work.', 'error');
+                            updateUserInfoDisplay();
+                            hideLoading('login');
                         }
                     } else {
                         // Email not verified
+                        console.log('Email not verified, showing notice');
+                        hideLoading('login');
                         document.getElementById('login-form').classList.add('hidden');
                         document.getElementById('signup-form').classList.add('hidden');
                         document.getElementById('verification-notice').classList.remove('hidden');
                     }
                 } else {
                     // User is signed out
+                    console.log('No user signed in');
                     currentUser = null;
                     document.getElementById('auth-screen').classList.remove('hidden');
                     document.getElementById('app-screen').classList.add('hidden');
+                    hideLoading('login');
                 }
             });
         }
@@ -1428,25 +1498,25 @@
             currentUser = demoUser;
 
             const demoTransactions = [
-                { id: 1, userId: 'demo-999', date: '2025-01-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income', recurring: 'Monthly', lifestyle: '#Work' },
-                { id: 2, userId: 'demo-999', date: '2025-01-16', description: 'Grocery Shopping', amount: -3500, category: 'Food', type: 'expense', lifestyle: '#Household' },
-                { id: 3, userId: 'demo-999', date: '2025-01-17', description: 'Electricity Bill', amount: -2200, category: 'Bills', type: 'expense', recurring: 'Monthly', lifestyle: '#Home' },
-                { id: 4, userId: 'demo-999', date: '2025-01-18', description: 'Movie Tickets', amount: -1200, category: 'Entertainment', type: 'expense', lifestyle: '#SelfCare' },
-                { id: 5, userId: 'demo-999', date: '2025-01-19', description: 'Fuel', amount: -2000, category: 'Transportation', type: 'expense', lifestyle: '#Commute' },
-                { id: 6, userId: 'demo-999', date: '2025-01-20', description: 'Freelance Project', amount: 15000, category: 'Freelance', type: 'income', lifestyle: '#SideHustle' },
-                { id: 7, userId: 'demo-999', date: '2024-12-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income', recurring: 'Monthly', lifestyle: '#Work' },
-                { id: 8, userId: 'demo-999', date: '2024-12-20', description: 'Shopping', amount: -8000, category: 'Shopping', type: 'expense', lifestyle: '#Luxury' },
-                { id: 9, userId: 'demo-999', date: '2024-11-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income', recurring: 'Monthly', lifestyle: '#Work' },
-                { id: 10, userId: 'demo-999', date: '2024-11-25', description: 'Restaurant', amount: -2500, category: 'Food', type: 'expense', lifestyle: '#Social' }
+                { id: 'dt1', userId: 'demo-999', date: '2025-01-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income', recurring: 'Monthly', lifestyle: '#Work' },
+                { id: 'dt2', userId: 'demo-999', date: '2025-01-16', description: 'Grocery Shopping', amount: -3500, category: 'Food', type: 'expense', lifestyle: '#Household' },
+                { id: 'dt3', userId: 'demo-999', date: '2025-01-17', description: 'Electricity Bill', amount: -2200, category: 'Bills', type: 'expense', recurring: 'Monthly', lifestyle: '#Home' },
+                { id: 'dt4', userId: 'demo-999', date: '2025-01-18', description: 'Movie Tickets', amount: -1200, category: 'Entertainment', type: 'expense', lifestyle: '#SelfCare' },
+                { id: 'dt5', userId: 'demo-999', date: '2025-01-19', description: 'Fuel', amount: -2000, category: 'Transportation', type: 'expense', lifestyle: '#Commute' },
+                { id: 'dt6', userId: 'demo-999', date: '2025-01-20', description: 'Freelance Project', amount: 15000, category: 'Freelance', type: 'income', lifestyle: '#SideHustle' },
+                { id: 'dt7', userId: 'demo-999', date: '2024-12-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income', recurring: 'Monthly', lifestyle: '#Work' },
+                { id: 'dt8', userId: 'demo-999', date: '2024-12-20', description: 'Shopping', amount: -8000, category: 'Shopping', type: 'expense', lifestyle: '#Luxury' },
+                { id: 'dt9', userId: 'demo-999', date: '2024-11-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income', recurring: 'Monthly', lifestyle: '#Work' },
+                { id: 'dt10', userId: 'demo-999', date: '2024-11-25', description: 'Restaurant', amount: -2500, category: 'Food', type: 'expense', lifestyle: '#Social' }
             ];
 
             transactions = demoTransactions;
             scheduledTransactions = [
-                { id: 1000, date: '2025-02-01', desc: 'Rent Payment', amount: 18000, type: 'expense', category: 'Bills', notified: false },
-                { id: 1001, date: '2025-03-10', desc: 'Insurance Premium', amount: 4500, type: 'expense', category: 'Bills', notified: false }
+                { id: 'ds1', userId: 'demo-999', date: '2025-02-01', desc: 'Rent Payment', amount: 18000, type: 'expense', category: 'Bills', notified: false },
+                { id: 'ds2', userId: 'demo-999', date: '2025-03-10', desc: 'Insurance Premium', amount: 4500, type: 'expense', category: 'Bills', notified: false }
             ];
 
-            showNotification('Demo mode activated! (Data not saved)', 'success');
+            showNotification('Demo mode activated! (Data not saved permanently)', 'success');
 
             document.getElementById('auth-screen').classList.add('hidden');
             document.getElementById('app-screen').classList.remove('hidden');
@@ -1460,17 +1530,21 @@
             if (!currentUser || !db) return;
 
             if (currentUser.isDemo) {
-                // Demo mode - load from local storage
                 transactions = JSON.parse(localStorage.getItem('demo_transactions') || '[]');
                 scheduledTransactions = JSON.parse(localStorage.getItem('demo_scheduled') || '[]');
                 goalState = JSON.parse(localStorage.getItem('demo_goal') || JSON.stringify({ name: "None Set", target: 0, saved: 0 }));
                 monthlyBudget = parseFloat(localStorage.getItem('demo_budget') || '30000');
+
+                if (transactions.length === 0) {
+                    handleDemo(); // Reload demo data if empty
+                    return;
+                }
+
                 updateAllData();
                 return;
             }
 
             try {
-                // Load transactions from Firestore
                 const transSnapshot = await db.collection('transactions')
                     .where('userId', '==', currentUser.uid)
                     .orderBy('date', 'desc')
@@ -1481,7 +1555,6 @@
                     ...doc.data()
                 }));
 
-                // Load scheduled transactions
                 const schedSnapshot = await db.collection('scheduledTransactions')
                     .where('userId', '==', currentUser.uid)
                     .orderBy('date', 'asc')
@@ -1492,7 +1565,6 @@
                     ...doc.data()
                 }));
 
-                // Load user settings
                 const settingsDoc = await db.collection('userSettings').doc(currentUser.uid).get();
                 if (settingsDoc.exists) {
                     const settings = settingsDoc.data();
@@ -1509,7 +1581,6 @@
 
         async function saveUserSettings() {
             if (!currentUser || !db || currentUser.isDemo) {
-                // Demo mode - save to local storage
                 if (currentUser?.isDemo) {
                     localStorage.setItem('demo_budget', monthlyBudget.toString());
                     localStorage.setItem('demo_goal', JSON.stringify(goalState));
@@ -1530,6 +1601,11 @@
 
         // Transaction Functions
         async function addTransaction() {
+            if (!currentUser) {
+                showNotification('Please login first', 'error');
+                return;
+            }
+
             const desc = document.getElementById('trans-desc').value.trim();
             const amount = parseFloat(document.getElementById('trans-amount').value);
             const type = document.getElementById('trans-type').value;
@@ -1568,24 +1644,21 @@
                 category: category,
                 type: type,
                 recurring: recurring,
-                lifestyle: lifestyle,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                lifestyle: lifestyle
             };
 
             try {
                 if (currentUser.isDemo) {
-                    // Demo mode
-                    transaction.id = Date.now();
+                    transaction.id = 'dt' + Date.now();
                     transactions.push(transaction);
                     localStorage.setItem('demo_transactions', JSON.stringify(transactions));
                 } else if (db) {
-                    // Save to Firestore
+                    transaction.createdAt = firebase.firestore.FieldValue.serverTimestamp();
                     const docRef = await db.collection('transactions').add(transaction);
                     transaction.id = docRef.id;
                     transactions.push(transaction);
                 }
 
-                // Clear form
                 document.getElementById('trans-desc').value = '';
                 document.getElementById('trans-amount').value = '';
                 document.getElementById('trans-type').value = 'expense';
@@ -1652,16 +1725,16 @@
                 amount,
                 type,
                 category,
-                notified: false,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                notified: false
             };
 
             try {
                 if (currentUser.isDemo) {
-                    scheduled.id = Date.now();
+                    scheduled.id = 'ds' + Date.now();
                     scheduledTransactions.push(scheduled);
                     localStorage.setItem('demo_scheduled', JSON.stringify(scheduledTransactions));
                 } else if (db) {
+                    scheduled.createdAt = firebase.firestore.FieldValue.serverTimestamp();
                     const docRef = await db.collection('scheduledTransactions').add(scheduled);
                     scheduled.id = docRef.id;
                     scheduledTransactions.push(scheduled);
@@ -1702,7 +1775,6 @@
             if (idx !== -1) {
                 const t = scheduledTransactions[idx];
 
-                // Add as regular transaction
                 const transaction = {
                     userId: currentUser.uid,
                     date: t.date,
@@ -1711,22 +1783,21 @@
                     category: t.category,
                     type: t.type,
                     recurring: '',
-                    lifestyle: '',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    lifestyle: ''
                 };
 
                 try {
                     if (currentUser.isDemo) {
-                        transaction.id = Date.now();
+                        transaction.id = 'dt' + Date.now();
                         transactions.push(transaction);
                         localStorage.setItem('demo_transactions', JSON.stringify(transactions));
                     } else if (db) {
+                        transaction.createdAt = firebase.firestore.FieldValue.serverTimestamp();
                         const docRef = await db.collection('transactions').add(transaction);
                         transaction.id = docRef.id;
                         transactions.push(transaction);
                     }
 
-                    // Remove from scheduled
                     await deleteScheduledTransaction(id);
 
                     updateAllData();
@@ -1790,7 +1861,7 @@
             goalState.name = name;
             goalState.target = target;
 
-            const transactionsTotal = transactions.reduce((sum, t) => sum + (t.type === 'income' ? t.amount : -Math.abs(t.amount)), 0);
+            const transactionsTotal = transactions.reduce((sum, t) => sum + t.amount, 0);
             goalState.saved = Math.max(0, transactionsTotal);
 
             await saveUserSettings();
@@ -1839,11 +1910,9 @@
                     return;
                 }
 
-                // Update display name
                 if (auth.currentUser) {
                     await auth.currentUser.updateProfile({ displayName: name });
 
-                    // Update password if provided
                     if (newPassword) {
                         await auth.currentUser.updatePassword(newPassword);
                         document.getElementById('profile-password').value = '';
@@ -1852,7 +1921,6 @@
                         showNotification('Profile updated!', 'success');
                     }
 
-                    // Update Firestore
                     await db.collection('users').doc(currentUser.uid).update({
                         name: name,
                         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -1894,7 +1962,6 @@
                 document.getElementById('user-name-display').textContent = name;
                 document.getElementById('user-avatar').textContent = name.charAt(0).toUpperCase();
 
-                // Show verified badge if email is verified
                 const badge = document.getElementById('email-verified-badge');
                 if (currentUser.emailVerified && badge) {
                     badge.classList.remove('hidden');
@@ -2201,8 +2268,8 @@
 
             let output = '';
 
-            if (input.includes("raise") || input.includes("10%") || input.includes("freelancing") || input.includes("new job")) {
-                const raiseAmount = input.includes("10%") ? income * 0.10 : 8000;
+            if (input.includes("raise") || input.includes("10%") || input.includes("freelancing") || input.includes("new job") || input.includes("invest")) {
+                const raiseAmount = input.includes("10%") ? income * 0.10 : 10000;
                 const newNetFlow = monthlyNetFlow + raiseAmount;
                 output = `<h4 class="text-lg font-bold text-cyan-400 mb-2">Simulated Result: Income Boost (₹${raiseAmount.toLocaleString()})</h4>
                         <p class="text-sm text-white">Your new monthly net flow would be <span class="text-green-400">₹${newNetFlow.toLocaleString()}</span>.</p>
@@ -2218,19 +2285,22 @@
                         <p class="text-sm text-white">Applying an extra ₹${extraPayment.toLocaleString()} monthly saves ₹${Math.round(extraPayment * 3).toLocaleString()} in interest.</p>`;
             } else if (input.includes("travel") || input.includes("trip") || input.includes("car")) {
                 const tripCost = 80000;
-                const monthsToSave = Math.ceil(tripCost / (monthlyNetFlow * 0.5));
+                const monthsToSave = monthlyNetFlow > 0 ? Math.ceil(tripCost / (monthlyNetFlow * 0.5)) : Infinity;
                 output = `<h4 class="text-lg font-bold text-cyan-400 mb-2">Simulated Result: Large Trip (₹${tripCost.toLocaleString()})</h4>
-                        <p class="text-sm text-white">You can reach this goal in <span class="text-yellow-400">${monthsToSave} months</span>.</p>`;
+                        <p class="text-sm text-white">You can reach this goal in <span class="text-yellow-400">${monthsToSave === Infinity ? 'N/A' : monthsToSave + ' months'}</span>.</p>`;
             } else {
                 output = `<h4 class="text-lg font-bold text-cyan-400 mb-2">AI Coach Response</h4>
-                        <p class="text-sm text-gray-400">Try inputs like: "Buy a house," "Get a 10% raise," or "Pay off my loan."</p>`;
+                        <p class="text-sm text-gray-400">Try inputs like: "Buy a house," "Get a 10% raise," "Start investing ₹10,000," or "Pay off my loan."</p>`;
             }
 
             resultsDiv.innerHTML = output;
         }
 
         function exportCSV() {
-            if (!transactions.length) return;
+            if (!transactions.length) {
+                showNotification('No transactions to export', 'error');
+                return;
+            }
 
             const header = ['Date', 'Description', 'Amount', 'Category', 'Type', 'Recurring', 'Lifestyle'];
             const rows = transactions.map(t => [t.date, t.description, t.amount, t.category, t.type, t.recurring || '', t.lifestyle || '']);
@@ -2289,10 +2359,10 @@
             ai = new AIEngine();
             charts = new ChartManager();
 
-            // Check if Firebase is configured
+            console.log('🚀 FinanceAI Pro initialized');
+
             if (!auth) {
-                console.warn('Firebase not configured - only demo mode available');
-                showNotification('⚠️ Firebase not configured. Please use Demo Mode or configure Firebase.', 'error');
+                console.warn('⚠️ Firebase not configured - Demo mode only');
             }
         }
 
@@ -2358,28 +2428,3 @@
 </body>
 
 </html>
-px-3 rounded-full">AI Analytics</span>
-</div>
-<canvas id="pieChart" style="max-height: 300px;"></canvas>
-</div>
-<div class="chart-pro">
-    <div class="flex items-center justify-between mb-6">
-        <h3 class="text-lg font-bold text-white">Monthly Trends</h3>
-        <span class="ai-badge-pro py-1 px-3 rounded-full">Real-time</span>
-    </div>
-    <canvas id="barChart" style="max-height: 300px;"></canvas>
-</div>
-</div>
-
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-    <div class="chart-pro">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-lg font-bold text-white">Cash Flow Analysis</h3>
-            <span class="ai-badge-pro py-1 px-3 rounded-full">ML Powered</span>
-        </div>
-        <canvas id="lineChart" style="max-height: 300px;"></canvas>
-    </div>
-    <div class="chart-pro">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-lg font-bold text-white">Savings Projection</h3>
-            <span class="ai-badge-pro py-1

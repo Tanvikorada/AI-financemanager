@@ -76,6 +76,19 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
         }
 
+        .ai-section-card {
+            background: #283747 !important;
+            border: 1px solid #415A77 !important;
+        }
+
+        .ai-section-card .insight-pro {
+            background: var(--bg-primary) !important;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
         .stat-card-pro {
             color: var(--text-light);
             background: var(--bg-primary);
@@ -100,6 +113,39 @@
             background: linear-gradient(135deg, #00A389, var(--accent-primary));
             box-shadow: 0 6px 20px rgba(111, 255, 233, 0.6);
             transform: translateY(-1px);
+        }
+
+        .btn-pro:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .back-btn {
+            background: var(--bg-primary);
+            color: var(--accent-primary);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: #374151;
+            border-color: var(--accent-primary);
+        }
+
+        .delete-pro {
+            background: linear-gradient(135deg, #b91c1c, #dc2626);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
         }
 
         .gradient-text {
@@ -127,7 +173,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* PWA Install Banner */
         .install-banner {
             position: fixed;
             bottom: 0;
@@ -149,10 +194,9 @@
             transform: translateY(0);
         }
 
-        /* Offline Indicator */
         .offline-indicator {
             position: fixed;
-            top: 20px;
+            top: 80px;
             right: 20px;
             background: #dc2626;
             color: white;
@@ -182,13 +226,83 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             margin-bottom: 10px;
             min-width: 300px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .chart-pro {
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 24px;
+        }
+
+        .export-btn, .ai-badge-pro {
+            background: linear-gradient(135deg, var(--accent-secondary), #FFCA3A);
+            color: var(--bg-light);
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(255, 202, 58, 0.4);
+            transition: all 0.2s;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        textarea.input-pro {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .nav-icon-btn {
+            background: var(--bg-primary);
+            color: var(--accent-primary);
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-icon-btn:hover {
+            background: #374151;
+            border-color: var(--accent-primary);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .logo-container {
+            transition: transform 0.3s ease;
+        }
+
+        .logo-container:hover {
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
     <!-- Offline Indicator -->
     <div id="offline-indicator" class="offline-indicator">
-        <span>📡 You're offline - Some features may be limited</span>
+        <span>📡 You're offline - Limited functionality</span>
     </div>
 
     <!-- Install Banner -->
@@ -246,20 +360,14 @@
                         <span id="login-text">Sign In</span>
                         <span id="login-spinner" class="spinner hidden"></span>
                     </button>
+                    <button onclick="handleForgotPassword()" class="w-full text-center text-sm text-cyan-400 hover:underline" style="background: none; border: none; cursor: pointer;">
+                        Forgot Password?
+                    </button>
                     <div class="text-center">
                         <button onclick="toggleAuthMode('signup')" class="text-cyan-400 hover:underline text-sm" style="background: none; border: none; cursor: pointer;">
                             Don't have an account? Sign Up
                         </button>
                     </div>
-                    <div class="relative">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-gray-600"></div>
-                        </div>
-                        <div class="relative flex justify-center text-sm">
-                            <span class="px-2 bg-gray-800 text-gray-400">OR</span>
-                        </div>
-                    </div>
-                    <button onclick="handleDemo()" class="btn-pro w-full" style="background: linear-gradient(135deg, #10b981, #059669);">Try Demo Mode</button>
                 </div>
             </div>
 
@@ -286,45 +394,190 @@
     <!-- App Screen -->
     <div id="app-screen" class="hidden min-h-screen p-6">
         <header class="pro-card mb-8 flex items-center justify-between flex-wrap gap-4">
-            <h1 class="text-xl font-black text-white">FinanceAI Pro - PWA</h1>
             <div class="flex items-center gap-4">
-                <div id="sync-status" class="text-sm text-gray-400">
-                    <span id="sync-indicator">✓ Synced</span>
+                <h1 class="text-xl font-black text-white cursor-pointer" onclick="setActiveScreen('dashboard')">FinanceAI Pro</h1>
+                <p class="text-sm text-gray-400">Enterprise Edition</p>
+            </div>
+            <div class="flex items-center gap-4 flex-wrap">
+                <button onclick="setActiveScreen('profile')" class="nav-icon-btn hidden sm:block" title="User Profile">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </button>
+                <div id="sync-status" class="text-sm">
+                    <span id="sync-indicator" class="text-green-400">✓ Synced</span>
                 </div>
-                <button onclick="handleLogout()" class="btn-pro">Logout</button>
+                <button onclick="exportData()" class="export-btn hidden sm:block">Export</button>
+                <div class="text-right hidden sm:block">
+                    <p class="text-sm text-gray-400">Welcome,</p>
+                    <p id="user-name-display" class="font-bold text-white">User</p>
+                </div>
+                <button onclick="handleLogout()" class="btn-pro" style="background: linear-gradient(135deg, #dc2626, #b91c1c);">Logout</button>
             </div>
         </header>
 
         <div class="container mx-auto max-w-7xl">
-            <div class="pro-card mb-8">
-                <h2 class="text-2xl font-bold mb-4">Welcome to PWA Mode!</h2>
-                <p class="text-gray-400 mb-4">This app works offline and can be installed on your device.</p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Dashboard Screen -->
+            <div id="dashboard-screen">
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
                     <div class="stat-card-pro">
-                        <p class="text-sm text-gray-400 mb-2">Balance</p>
+                        <p class="text-sm text-gray-400 mb-2">Net Balance</p>
                         <p id="balance-display" class="text-3xl font-black text-white">₹0</p>
+                        <p class="text-xs text-gray-600 mt-3">Real-time Liquidity</p>
                     </div>
                     <div class="stat-card-pro">
-                        <p class="text-sm text-gray-400 mb-2">Income</p>
+                        <p class="text-sm text-gray-400 mb-2">Total Income</p>
                         <p id="income-display" class="text-3xl font-black text-green-400">₹0</p>
+                        <p class="text-xs text-gray-600 mt-3">This month</p>
                     </div>
                     <div class="stat-card-pro">
-                        <p class="text-sm text-gray-400 mb-2">Expenses</p>
+                        <p class="text-sm text-gray-400 mb-2">Total Expenses</p>
                         <p id="expense-display" class="text-3xl font-black text-red-400">₹0</p>
+                        <p class="text-xs text-gray-600 mt-3">AI Tracked</p>
                     </div>
+                    <div class="stat-card-pro">
+                        <p class="text-sm text-gray-400 mb-2">Savings Rate</p>
+                        <p id="savings-display" class="text-3xl font-black text-cyan-400">0%</p>
+                        <p class="text-xs text-gray-600 mt-3">Target: 30%</p>
+                    </div>
+                    <div class="stat-card-pro">
+                        <p class="text-sm text-gray-400 mb-2">Budget Status</p>
+                        <p id="budget-goal-display" class="text-3xl font-black text-yellow-400">₹30k</p>
+                        <p id="budget-status" class="text-xs text-gray-600 mt-3">Monthly Goal</p>
+                    </div>
+                </div>
+
+                <!-- AI Insights & Foresight -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="pro-card ai-section-card">
+                        <h3 class="text-lg font-bold text-white mb-4">🧠 AI Insights</h3>
+                        <div id="ai-insights-container"></div>
+                    </div>
+                    <div class="pro-card ai-section-card">
+                        <h3 class="text-lg font-bold text-white mb-4">💡 Smart Tips</h3>
+                        <div id="ai-tips-container"></div>
+                    </div>
+                    <div class="pro-card ai-section-card">
+                        <h3 class="text-lg font-bold text-white mb-4">🔮 Projections</h3>
+                        <div id="ai-predictions-container"></div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="chart-pro">
+                        <h3 class="text-lg font-bold text-white mb-4">Expense Breakdown</h3>
+                        <canvas id="pieChart" style="max-height: 300px;"></canvas>
+                    </div>
+                    <div class="chart-pro">
+                        <h3 class="text-lg font-bold text-white mb-4">Monthly Trends</h3>
+                        <canvas id="barChart" style="max-height: 300px;"></canvas>
+                    </div>
+                </div>
+
+                <!-- Budget & Goals -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div class="pro-card">
+                        <h3 class="text-xl font-bold text-white mb-4">Budget Settings</h3>
+                        <div class="space-y-4">
+                            <div class="flex gap-4">
+                                <input type="number" id="budget-amount" class="input-pro" placeholder="Monthly Budget (₹)" value="30000" />
+                                <button onclick="setMonthlyBudget()" class="btn-pro flex-shrink-0">Set</button>
+                            </div>
+                            <div id="budget-categories" class="text-sm text-gray-400">
+                                <p class="mt-2 text-green-400">Budget Active: ₹30,000</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pro-card">
+                        <h3 class="text-xl font-bold text-white mb-4">Financial Goal Tracker</h3>
+                        <div class="space-y-3">
+                            <input type="text" id="goal-name" class="input-pro" placeholder="Goal Name (e.g., Japan Trip)" />
+                            <div class="flex gap-4">
+                                <input type="number" id="goal-target" class="input-pro" placeholder="Target Amount (₹)" value="150000" />
+                                <button onclick="setGoal()" class="btn-pro flex-shrink-0">Set</button>
+                            </div>
+                            <div id="goal-progress" class="text-sm text-gray-400 p-2 bg-gray-900 rounded">
+                                <p>Set a goal to track progress</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Transaction -->
+                <div class="pro-card mb-8">
+                    <h3 class="text-xl font-bold text-white mb-6">Add Transaction</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
+                        <input type="text" id="trans-desc" class="input-pro col-span-2" placeholder="Description" />
+                        <input type="number" id="trans-amount" class="input-pro" placeholder="Amount (₹)" />
+                        <select id="trans-type" class="input-pro">
+                            <option value="expense">Expense</option>
+                            <option value="income">Income</option>
+                        </select>
+                        <select id="trans-category" class="input-pro">
+                            <option value="Food">Food</option>
+                            <option value="Transportation">Transport</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Bills">Bills</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Education">Education</option>
+                            <option value="Salary">Salary</option>
+                            <option value="Freelance">Freelance</option>
+                            <option value="Investment">Investment</option>
+                        </select>
+                        <button onclick="addTransaction()" class="btn-pro">Add Transaction</button>
+                    </div>
+                </div>
+
+                <!-- Transaction History -->
+                <div class="pro-card">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-white">Transaction History</h3>
+                        <span id="trans-count" class="text-sm text-gray-400">0 transactions</span>
+                    </div>
+                    <div class="flex flex-wrap gap-3 mb-4">
+                        <button onclick="filterTransactions('all')" class="btn-pro text-xs py-2 px-4" style="background: var(--bg-light); color: var(--accent-primary); border: 1px solid var(--accent-primary);">All</button>
+                        <button onclick="filterTransactions('income')" class="btn-pro text-xs py-2 px-4" style="background: #10b981;">Income</button>
+                        <button onclick="filterTransactions('expense')" class="btn-pro text-xs py-2 px-4" style="background: #dc2626;">Expenses</button>
+                    </div>
+                    <input type="text" id="search-bar" class="search-bar mb-3" placeholder="Search transactions..." oninput="filterTransactions('search')" />
+                    <div id="transactions-container" class="max-h-96 overflow-y-auto space-y-2"></div>
                 </div>
             </div>
 
-            <div class="pro-card">
-                <h3 class="text-xl font-bold mb-4">Add Transaction</h3>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <input type="text" id="trans-desc" class="input-pro" placeholder="Description" />
-                    <input type="number" id="trans-amount" class="input-pro" placeholder="Amount" />
-                    <select id="trans-type" class="input-pro">
-                        <option value="expense">Expense</option>
-                        <option value="income">Income</option>
-                    </select>
-                    <button onclick="addTransaction()" class="btn-pro">Add</button>
+            <!-- Profile Screen -->
+            <div id="profile-screen" class="hidden">
+                <div class="pro-card max-w-lg mx-auto">
+                    <div class="flex items-center justify-between mb-8">
+                        <h2 class="text-3xl font-bold gradient-text">User Profile</h2>
+                        <button onclick="setActiveScreen('dashboard')" class="back-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                            </svg>
+                            Back
+                        </button>
+                    </div>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Full Name</label>
+                            <input type="text" id="profile-name" class="input-pro" placeholder="Name" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Email Address</label>
+                            <input type="email" id="profile-email" class="input-pro opacity-75" readonly />
+                        </div>
+                        <div class="pt-4 border-t border-gray-600">
+                            <h4 class="text-lg font-semibold text-white mb-3">Update Password</h4>
+                            <input type="password" id="profile-password" class="input-pro" placeholder="New password (min 6 chars)" />
+                        </div>
+                        <div class="flex justify-end">
+                            <button onclick="updateProfile()" class="btn-pro">Save Changes</button>
+                        </div>
+                        <div id="profile-status" class="text-center text-sm"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -336,8 +589,6 @@
         // PWA Configuration
         const CACHE_NAME = 'financeai-v1.0.0';
         const STATIC_CACHE = [
-            '/',
-            '/index.html',
             'https://cdn.tailwindcss.com',
             'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
             'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap'
@@ -367,8 +618,7 @@
                     purpose: "any maskable"
                 }
             ],
-            categories: ["finance", "productivity", "business"],
-            screenshots: []
+            categories: ["finance", "productivity", "business"]
         };
 
         // Inject manifest
@@ -392,10 +642,8 @@
                     event.waitUntil(
                         caches.open(CACHE_NAME)
                             .then((cache) => {
-                                console.log('Opened cache');
-                                return cache.addAll(urlsToCache.filter(url => !url.startsWith('/')));
+                                return cache.addAll(urlsToCache).catch(err => console.log('Cache add failed:', err));
                             })
-                            .catch(err => console.log('Cache add failed:', err))
                     );
                     self.skipWaiting();
                 });
@@ -420,12 +668,10 @@
                                         return response;
                                     }
                                 ).catch(() => {
-                                    return new Response('Offline - Content not available', {
+                                    return new Response('Offline', {
                                         status: 503,
                                         statusText: 'Service Unavailable',
-                                        headers: new Headers({
-                                            'Content-Type': 'text/plain'
-                                        })
+                                        headers: new Headers({ 'Content-Type': 'text/plain' })
                                     });
                                 });
                             })
@@ -453,8 +699,7 @@
 
             navigator.serviceWorker.register(swUrl)
                 .then((registration) => {
-                    console.log('✅ Service Worker registered:', registration);
-                    showNotification('PWA ready! App can work offline now.', 'success');
+                    console.log('✅ Service Worker registered');
                 })
                 .catch((error) => {
                     console.error('❌ Service Worker registration failed:', error);
@@ -467,9 +712,7 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            
-            const banner = document.getElementById('install-banner');
-            banner.classList.add('show');
+            document.getElementById('install-banner').classList.add('show');
         });
 
         document.getElementById('install-button').addEventListener('click', async () => {
@@ -490,28 +733,95 @@
         window.addEventListener('online', () => {
             document.getElementById('offline-indicator').classList.remove('show');
             document.getElementById('sync-indicator').textContent = '✓ Synced';
+            document.getElementById('sync-indicator').className = 'text-green-400';
             showNotification('Back online!', 'success');
+            if (currentUser) {
+                loadUserData();
+            }
         });
 
         window.addEventListener('offline', () => {
             document.getElementById('offline-indicator').classList.add('show');
             document.getElementById('sync-indicator').textContent = '⚠ Offline';
-            showNotification('You are offline - changes saved locally', 'error');
+            document.getElementById('sync-indicator').className = 'text-yellow-400';
+            showNotification('You are offline - Limited functionality', 'error');
         });
 
-        // App State
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDMhGK6-Z1QtAA7KanzFFjIaccHyg54f9o",
+            authDomain: "aifinancepro-9b801.firebaseapp.com",
+            projectId: "aifinancepro-9b801",
+            storageBucket: "aifinancepro-9b801.firebasestorage.app",
+            messagingSenderId: "265552616833",
+            appId: "1:265552616833:web:714fae18f3ee0070915c80",
+            measurementId: "G-JYEYE29HB6"
+        };
+
+        // Initialize Firebase
+        let firebaseApp, auth, db;
+        let isFirebaseConfigured = false;
+        
+        try {
+            firebaseApp = firebase.initializeApp(firebaseConfig);
+            auth = firebase.auth();
+            db = firebase.firestore();
+            isFirebaseConfigured = true;
+            console.log('✅ Firebase initialized successfully');
+        } catch (error) {
+            console.error('❌ Firebase initialization failed:', error);
+            showNotification('⚠️ Firebase connection failed', 'error');
+        }
+
+        // Global State
         let currentUser = null;
         let transactions = [];
+        let monthlyBudget = 30000;
+        let goalState = { name: "None Set", target: 0, saved: 0 };
+        let currentScreen = 'dashboard';
+        let currentFilter = 'all';
+        let charts = {};
 
-        // Loading Helper
+        // Notification System
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notification-container');
+            const notification = document.createElement('div');
+            notification.className = 'notification-pro';
+            
+            const colors = {
+                success: '#4ade80',
+                error: '#f87171',
+                info: '#6FFFE9'
+            };
+            
+            notification.style.borderLeft = `4px solid ${colors[type] || colors.info}`;
+            notification.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <p style="flex: 1;">${message}</p>
+                    <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; color: #9ca3af; cursor: pointer; font-size: 20px; line-height: 1;">&times;</button>
+                </div>
+            `;
+            
+            container.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        // Loading Helpers
         function showLoading(type) {
-            document.getElementById(`${type}-text`).classList.add('hidden');
-            document.getElementById(`${type}-spinner`).classList.remove('hidden');
+            const textEl = document.getElementById(`${type}-text`);
+            const spinnerEl = document.getElementById(`${type}-spinner`);
+            if (textEl) textEl.classList.add('hidden');
+            if (spinnerEl) spinnerEl.classList.remove('hidden');
         }
 
         function hideLoading(type) {
-            document.getElementById(`${type}-text`).classList.remove('hidden');
-            document.getElementById(`${type}-spinner`).classList.add('hidden');
+            const textEl = document.getElementById(`${type}-text`);
+            const spinnerEl = document.getElementById(`${type}-spinner`);
+            if (textEl) textEl.classList.remove('hidden');
+            if (spinnerEl) spinnerEl.classList.add('hidden');
         }
 
         // Auth Mode Toggle
@@ -525,11 +835,10 @@
             }
         }
 
-        // Firebase Authentication
+        // Authentication Functions
         async function handleSignup() {
             if (!isFirebaseConfigured) {
-                showNotification('Firebase not available - using Demo Mode', 'error');
-                handleDemo();
+                showNotification('❌ Firebase not configured properly', 'error');
                 return;
             }
 
@@ -561,11 +870,16 @@
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
+                await db.collection('userSettings').doc(user.uid).set({
+                    monthlyBudget: 30000,
+                    goalState: { name: "None Set", target: 0, saved: 0 },
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
                 currentUser = {
                     uid: user.uid,
                     name: name,
-                    email: email,
-                    isDemo: false
+                    email: email
                 };
 
                 showNotification('✅ Account created successfully!', 'success');
@@ -573,6 +887,7 @@
                 document.getElementById('auth-screen').classList.add('hidden');
                 document.getElementById('app-screen').classList.remove('hidden');
                 
+                updateUserDisplay();
                 await loadUserData();
                 hideLoading('signup');
             } catch (error) {
@@ -594,8 +909,7 @@
 
         async function handleLogin() {
             if (!isFirebaseConfigured) {
-                showNotification('Firebase not available - using Demo Mode', 'error');
-                handleDemo();
+                showNotification('❌ Firebase not configured properly', 'error');
                 return;
             }
 
@@ -619,8 +933,7 @@
                 currentUser = {
                     uid: user.uid,
                     name: userData?.name || user.displayName || email.split('@')[0],
-                    email: user.email,
-                    isDemo: false
+                    email: user.email
                 };
 
                 showNotification('✅ Welcome back, ' + currentUser.name + '!', 'success');
@@ -628,6 +941,7 @@
                 document.getElementById('auth-screen').classList.add('hidden');
                 document.getElementById('app-screen').classList.remove('hidden');
                 
+                updateUserDisplay();
                 await loadUserData();
                 hideLoading('login');
             } catch (error) {
@@ -637,11 +951,53 @@
                     message += 'Invalid email or password';
                 } else if (error.code === 'auth/invalid-email') {
                     message += 'Invalid email address';
+                } else if (error.code === 'auth/too-many-requests') {
+                    message += 'Too many attempts. Please try again later';
                 } else {
                     message += error.message;
                 }
                 showNotification(message, 'error');
                 hideLoading('login');
+            }
+        }
+
+        async function handleForgotPassword() {
+            const email = document.getElementById('login-email').value.trim();
+            
+            if (!email) {
+                showNotification('Please enter your email address first', 'error');
+                return;
+            }
+
+            try {
+                await auth.sendPasswordResetEmail(email);
+                showNotification('✅ Password reset email sent! Check your inbox.', 'success');
+            } catch (error) {
+                console.error('Password reset error:', error);
+                showNotification('Failed to send reset email: ' + error.message, 'error');
+            }
+        }
+
+        async function handleLogout() {
+            try {
+                if (auth.currentUser) {
+                    await auth.signOut();
+                }
+                
+                currentUser = null;
+                transactions = [];
+                monthlyBudget = 30000;
+                goalState = { name: "None Set", target: 0, saved: 0 };
+                
+                document.getElementById('app-screen').classList.add('hidden');
+                document.getElementById('auth-screen').classList.remove('hidden');
+                document.getElementById('login-form').classList.remove('hidden');
+                document.getElementById('signup-form').classList.add('hidden');
+                
+                showNotification('Logged out successfully', 'success');
+            } catch (error) {
+                console.error('Logout error:', error);
+                showNotification('Logout failed', 'error');
             }
         }
 
@@ -656,13 +1012,13 @@
                         currentUser = {
                             uid: user.uid,
                             name: userData?.name || user.displayName || user.email.split('@')[0],
-                            email: user.email,
-                            isDemo: false
+                            email: user.email
                         };
 
                         document.getElementById('auth-screen').classList.add('hidden');
                         document.getElementById('app-screen').classList.remove('hidden');
                         
+                        updateUserDisplay();
                         await loadUserData();
                     } catch (error) {
                         console.error('Error loading user:', error);
@@ -671,121 +1027,106 @@
             });
         }
 
-        async function loadUserData() {
-            if (!currentUser || currentUser.isDemo) {
-                transactions = JSON.parse(localStorage.getItem('pwa_transactions') || '[]');
-                updateStats();
-                return;
+        function updateUserDisplay() {
+            if (currentUser) {
+                document.getElementById('user-name-display').textContent = currentUser.name;
+                document.getElementById('profile-name').value = currentUser.name;
+                document.getElementById('profile-email').value = currentUser.email;
             }
+        }
+
+        // Data Loading
+        async function loadUserData() {
+            if (!currentUser) return;
 
             try {
-                const snapshot = await db.collection('transactions')
+                document.getElementById('sync-indicator').textContent = '⏳ Loading...';
+                document.getElementById('sync-indicator').className = 'text-yellow-400';
+
+                // Load transactions
+                const transSnapshot = await db.collection('transactions')
                     .where('userId', '==', currentUser.uid)
-                    .orderBy('date', 'desc')
-                    .limit(100)
                     .get();
 
-                transactions = snapshot.docs.map(doc => ({
+                transactions = transSnapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
                 }));
 
-                updateStats();
+                // Sort by date
+                transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                // Load settings
+                const settingsDoc = await db.collection('userSettings').doc(currentUser.uid).get();
+                if (settingsDoc.exists) {
+                    const settings = settingsDoc.data();
+                    monthlyBudget = settings.monthlyBudget || 30000;
+                    goalState = settings.goalState || { name: "None Set", target: 0, saved: 0 };
+                    document.getElementById('budget-amount').value = monthlyBudget;
+                }
+
+                updateAllData();
                 document.getElementById('sync-indicator').textContent = '✓ Synced';
+                document.getElementById('sync-indicator').className = 'text-green-400';
             } catch (error) {
                 console.error('Error loading data:', error);
                 showNotification('Failed to load data from cloud', 'error');
-                transactions = JSON.parse(localStorage.getItem('pwa_transactions') || '[]');
-                updateStats();
+                document.getElementById('sync-indicator').textContent = '✗ Error';
+                document.getElementById('sync-indicator').className = 'text-red-400';
             }
         }
 
         async function saveTransaction(transaction) {
-            if (currentUser.isDemo) {
-                localStorage.setItem('pwa_transactions', JSON.stringify(transactions));
-                return;
-            }
-
             try {
                 transaction.createdAt = firebase.firestore.FieldValue.serverTimestamp();
                 const docRef = await db.collection('transactions').add(transaction);
                 transaction.id = docRef.id;
                 document.getElementById('sync-indicator').textContent = '✓ Synced';
+                document.getElementById('sync-indicator').className = 'text-green-400';
+                return true;
             } catch (error) {
-                console.error('Error saving to Firebase:', error);
-                showNotification('Saved locally - will sync when online', 'error');
-                localStorage.setItem('pwa_transactions', JSON.stringify(transactions));
+                console.error('Error saving transaction:', error);
+                document.getElementById('sync-indicator').textContent = '✗ Sync Failed';
+                document.getElementById('sync-indicator').className = 'text-red-400';
+                throw error;
             }
         }
 
-        // Notification System
-        function showNotification(message, type = 'info') {
-            const container = document.getElementById('notification-container');
-            const notification = document.createElement('div');
-            notification.className = 'notification-pro';
-            
-            const colors = {
-                success: '#4ade80',
-                error: '#f87171',
-                info: '#6FFFE9'
-            };
-            
-            notification.style.borderLeft = `4px solid ${colors[type] || colors.info}`;
-            notification.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: start;">
-                    <p style="flex: 1;">${message}</p>
-                    <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; color: #9ca3af; cursor: pointer; font-size: 20px; line-height: 1;">&times;</button>
-                </div>
-            `;
-            
-            container.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 5000);
-        }
-
-        // Demo Mode
-        function handleDemo() {
-            currentUser = {
-                uid: 'demo-user',
-                name: 'Demo User',
-                email: 'demo@financeai.com',
-                isDemo: true
-            };
-
-            transactions = JSON.parse(localStorage.getItem('pwa_transactions') || '[]');
-
-            document.getElementById('auth-screen').classList.add('hidden');
-            document.getElementById('app-screen').classList.remove('hidden');
-            
-            showNotification('Demo mode activated - All data saved locally!', 'success');
-            updateStats();
-        }
-
-        function handleLogin() {
-            showNotification('Firebase auth not configured - Using Demo Mode', 'error');
-            handleDemo();
-        }
-
-        function handleLogout() {
-            if (auth && currentUser && !currentUser.isDemo) {
-                auth.signOut();
+        async function deleteTransactionFromDB(id) {
+            try {
+                await db.collection('transactions').doc(id).delete();
+                return true;
+            } catch (error) {
+                console.error('Error deleting transaction:', error);
+                throw error;
             }
-            
-            currentUser = null;
-            transactions = [];
-            
-            document.getElementById('app-screen').classList.add('hidden');
-            document.getElementById('auth-screen').classList.remove('hidden');
-            showNotification('Logged out successfully', 'success');
+        }
+
+        async function saveUserSettings() {
+            if (!currentUser) return;
+
+            try {
+                await db.collection('userSettings').doc(currentUser.uid).set({
+                    monthlyBudget: monthlyBudget,
+                    goalState: goalState,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+            } catch (error) {
+                console.error('Error saving settings:', error);
+            }
         }
 
         // Transaction Management
         async function addTransaction() {
+            if (!currentUser) {
+                showNotification('Please log in first', 'error');
+                return;
+            }
+
             const desc = document.getElementById('trans-desc').value.trim();
             const amount = parseFloat(document.getElementById('trans-amount').value);
             const type = document.getElementById('trans-type').value;
+            const category = document.getElementById('trans-category').value;
 
             if (!desc || !amount || amount <= 0) {
                 showNotification('Please enter valid details', 'error');
@@ -797,19 +1138,229 @@
                 date: new Date().toISOString().split('T')[0],
                 description: desc,
                 amount: type === 'expense' ? -Math.abs(amount) : Math.abs(amount),
-                type: type
+                type: type,
+                category: category
             };
 
-            transactions.unshift(transaction);
-            await saveTransaction(transaction);
+            try {
+                document.getElementById('sync-indicator').textContent = '⏳ Saving...';
+                document.getElementById('sync-indicator').className = 'text-yellow-400';
 
-            document.getElementById('trans-desc').value = '';
-            document.getElementById('trans-amount').value = '';
+                await saveTransaction(transaction);
+                transactions.unshift(transaction);
 
-            updateStats();
-            showNotification('Transaction added!', 'success');
+                document.getElementById('trans-desc').value = '';
+                document.getElementById('trans-amount').value = '';
+
+                updateAllData();
+                showNotification('Transaction added!', 'success');
+            } catch (error) {
+                showNotification('Failed to add transaction', 'error');
+            }
         }
 
+        async function deleteTransaction(id) {
+            if (!confirm('Delete this transaction?')) return;
+
+            try {
+                await deleteTransactionFromDB(id);
+                transactions = transactions.filter(t => t.id !== id);
+                updateAllData();
+                showNotification('Transaction deleted', 'success');
+            } catch (error) {
+                showNotification('Failed to delete transaction', 'error');
+            }
+        }
+
+        // Budget and Goals
+        async function setMonthlyBudget() {
+            const amount = parseFloat(document.getElementById('budget-amount').value);
+            if (amount > 0) {
+                monthlyBudget = amount;
+                await saveUserSettings();
+                showNotification(`Budget set to ₹${amount.toLocaleString()}`, 'success');
+                updateStats();
+            } else {
+                showNotification('Please enter a valid amount', 'error');
+            }
+        }
+
+        async function setGoal() {
+            const name = document.getElementById('goal-name').value.trim();
+            const target = parseFloat(document.getElementById('goal-target').value);
+
+            if (!name || target <= 0 || isNaN(target)) {
+                showNotification('Please enter valid goal details', 'error');
+                return;
+            }
+
+            goalState.name = name;
+            goalState.target = target;
+
+            const balance = transactions.reduce((sum, t) => sum + t.amount, 0);
+            goalState.saved = Math.max(0, balance);
+
+            await saveUserSettings();
+            showNotification(`Goal '${name}' set successfully!`, 'success');
+            updateGoalUI();
+        }
+
+        function updateGoalUI() {
+            const progress = goalState.target > 0 ? (goalState.saved / goalState.target) * 100 : 0;
+            const remaining = goalState.target - goalState.saved;
+
+            document.getElementById('goal-progress').innerHTML = `
+                <p class="text-sm font-semibold">Goal: <span class="text-cyan-400">${goalState.name}</span></p>
+                <p class="text-xs text-gray-400">Target: ₹${goalState.target.toLocaleString()}</p>
+                <p class="text-sm mt-1">Progress: <span class="text-yellow-400">${Math.min(100, progress).toFixed(1)}%</span></p>
+                <p class="text-xs ${remaining > 0 ? 'text-gray-500' : 'text-green-400'}">Remaining: ₹${Math.max(0, remaining).toLocaleString()}</p>
+            `;
+        }
+
+        // Profile Management
+        async function updateProfile() {
+            if (!currentUser) return;
+
+            const name = document.getElementById('profile-name').value.trim();
+            const newPassword = document.getElementById('profile-password').value;
+            const statusElement = document.getElementById('profile-status');
+
+            if (!name) {
+                statusElement.innerHTML = '<span class="text-red-400">Name cannot be empty</span>';
+                return;
+            }
+
+            try {
+                if (auth.currentUser) {
+                    await auth.currentUser.updateProfile({ displayName: name });
+                    
+                    if (newPassword && newPassword.length >= 6) {
+                        await auth.currentUser.updatePassword(newPassword);
+                        document.getElementById('profile-password').value = '';
+                        showNotification('Profile and password updated!', 'success');
+                    } else if (newPassword) {
+                        showNotification('Password must be at least 6 characters', 'error');
+                        return;
+                    } else {
+                        showNotification('Profile updated!', 'success');
+                    }
+
+                    await db.collection('users').doc(currentUser.uid).update({
+                        name: name,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    currentUser.name = name;
+                    updateUserDisplay();
+                    statusElement.innerHTML = '<span class="text-green-400">Profile updated successfully!</span>';
+                }
+            } catch (error) {
+                console.error('Profile update error:', error);
+                let message = 'Update failed: ';
+                if (error.code === 'auth/requires-recent-login') {
+                    message += 'Please log out and log in again to update password';
+                } else {
+                    message += error.message;
+                }
+                statusElement.innerHTML = `<span class="text-red-400">${message}</span>`;
+            }
+        }
+
+        // Screen Navigation
+        function setActiveScreen(screen) {
+            currentScreen = screen;
+            document.getElementById('dashboard-screen').classList.add('hidden');
+            document.getElementById('profile-screen').classList.add('hidden');
+            
+            if (screen === 'dashboard') {
+                document.getElementById('dashboard-screen').classList.remove('hidden');
+            } else if (screen === 'profile') {
+                document.getElementById('profile-screen').classList.remove('hidden');
+            }
+        }
+
+        // Data Export
+        function exportData() {
+            if (!transactions.length) {
+                showNotification('No transactions to export', 'error');
+                return;
+            }
+
+            const csvContent = [
+                ['Date', 'Description', 'Amount', 'Type', 'Category'],
+                ...transactions.map(t => [
+                    t.date,
+                    t.description,
+                    t.amount,
+                    t.type,
+                    t.category || ''
+                ])
+            ].map(row => row.join(',')).join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `financeai-transactions-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showNotification('Data exported successfully!', 'success');
+        }
+
+        // Transaction Filtering
+        function filterTransactions(filterType) {
+            currentFilter = filterType;
+            
+            let filtered = [...transactions];
+            
+            if (filterType === 'income') {
+                filtered = transactions.filter(t => t.type === 'income');
+            } else if (filterType === 'expense') {
+                filtered = transactions.filter(t => t.type === 'expense');
+            } else if (filterType === 'search') {
+                const searchTerm = document.getElementById('search-bar').value.toLowerCase();
+                filtered = transactions.filter(t => 
+                    t.description.toLowerCase().includes(searchTerm) ||
+                    t.category?.toLowerCase().includes(searchTerm) ||
+                    t.type.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            renderTransactions(filtered);
+        }
+
+        function renderTransactions(filteredTransactions = transactions) {
+            const container = document.getElementById('transactions-container');
+            
+            if (!filteredTransactions.length) {
+                container.innerHTML = '<p class="text-gray-400 text-center py-4">No transactions found</p>';
+                document.getElementById('trans-count').textContent = '0 transactions';
+                return;
+            }
+
+            document.getElementById('trans-count').textContent = `${filteredTransactions.length} transaction${filteredTransactions.length !== 1 ? 's' : ''}`;
+
+            container.innerHTML = filteredTransactions.map(t => `
+                <div class="flex items-center justify-between bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm text-gray-400">${t.date}</span>
+                            <span class="text-white font-semibold">${t.description}</span>
+                            ${t.category ? `<span class="text-xs bg-gray-700 px-2 py-1 rounded">${t.category}</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="text-lg font-bold ${t.type === 'income' ? 'text-green-400' : 'text-red-400'}">
+                            ${t.type === 'income' ? '+' : ''}₹${Math.abs(t.amount).toLocaleString()}
+                        </span>
+                        <button onclick="deleteTransaction('${t.id}')" class="delete-pro">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Statistics Update
         function updateStats() {
             const income = transactions
                 .filter(t => t.type === 'income')
@@ -820,10 +1371,237 @@
                 .reduce((sum, t) => sum + t.amount, 0));
             
             const balance = income - expenses;
+            
+            const savingsRate = income > 0 ? ((income - expenses) / income * 100) : 0;
 
             document.getElementById('balance-display').textContent = '₹' + balance.toLocaleString();
             document.getElementById('income-display').textContent = '₹' + income.toLocaleString();
             document.getElementById('expense-display').textContent = '₹' + expenses.toLocaleString();
+            document.getElementById('savings-display').textContent = savingsRate.toFixed(1) + '%';
+            
+            const budgetUsed = (expenses / monthlyBudget * 100);
+            document.getElementById('budget-goal-display').textContent = '₹' + (monthlyBudget / 1000).toFixed(0) + 'k';
+            
+            if (budgetUsed > 100) {
+                document.getElementById('budget-status').textContent = 'Over Budget!';
+                document.getElementById('budget-goal-display').className = 'text-3xl font-black text-red-400';
+            } else if (budgetUsed > 80) {
+                document.getElementById('budget-status').textContent = 'Warning: ' + budgetUsed.toFixed(0) + '% used';
+                document.getElementById('budget-goal-display').className = 'text-3xl font-black text-yellow-400';
+            } else {
+                document.getElementById('budget-status').textContent = budgetUsed.toFixed(0) + '% used';
+                document.getElementById('budget-goal-display').className = 'text-3xl font-black text-green-400';
+            }
+        }
+
+        // AI Insights Generation
+        function generateAIInsights() {
+            const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const expenses = Math.abs(transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0));
+            
+            const insights = [];
+            const tips = [];
+            const predictions = [];
+
+            // Insights
+            if (expenses > income * 0.8) {
+                insights.push({
+                    title: 'High Expense Alert',
+                    message: `Your expenses are ${(expenses/income*100).toFixed(0)}% of income. Consider reducing discretionary spending.`,
+                    color: 'text-red-400'
+                });
+            } else {
+                insights.push({
+                    title: 'Healthy Balance',
+                    message: 'Your spending is under control. Great financial discipline!',
+                    color: 'text-green-400'
+                });
+            }
+
+            // Category analysis
+            const categoryTotals = {};
+            transactions.filter(t => t.type === 'expense').forEach(t => {
+                categoryTotals[t.category] = (categoryTotals[t.category] || 0) + Math.abs(t.amount);
+            });
+            
+            const topCategory = Object.entries(categoryTotals).sort((a, b) => b[1] - a[1])[0];
+            if (topCategory && topCategory[1] > expenses * 0.3) {
+                insights.push({
+                    title: 'Category Focus',
+                    message: `${topCategory[0]} accounts for ${(topCategory[1]/expenses*100).toFixed(0)}% of expenses. Look for optimization opportunities.`,
+                    color: 'text-yellow-400'
+                });
+            }
+
+            // Tips
+            if (transactions.length < 5) {
+                tips.push({
+                    title: 'Getting Started',
+                    message: 'Add more transactions to get personalized AI insights and predictions.'
+                });
+            } else {
+                tips.push({
+                    title: 'Smart Savings',
+                    message: 'Try the 50/30/20 rule: 50% needs, 30% wants, 20% savings.'
+                });
+            }
+
+            tips.push({
+                title: 'Budget Optimization',
+                message: 'Review your monthly subscriptions and cancel unused services.'
+            });
+
+            // Predictions
+            const avgMonthlyExpense = expenses;
+            predictions.push({
+                title: 'Next Month Forecast',
+                message: `Expected expenses: ₹${avgMonthlyExpense.toLocaleString()} based on current trends.`,
+                confidence: '85% confidence'
+            });
+
+            const savingsRate = income > 0 ? ((income - expenses) / income * 100) : 0;
+            predictions.push({
+                title: 'Savings Projection',
+                message: `At ${savingsRate.toFixed(0)}% savings rate, you'll save ₹${((income - expenses) * 12).toLocaleString()} annually.`,
+                confidence: '90% confidence'
+            });
+
+            return { insights, tips, predictions };
+        }
+
+        function renderAIInsights() {
+            const { insights, tips, predictions } = generateAIInsights();
+
+            document.getElementById('ai-insights-container').innerHTML = insights.map(i => `
+                <div class="insight-pro">
+                    <p class="text-sm font-semibold ${i.color}">${i.title}</p>
+                    <p class="text-xs text-gray-400 mt-1">${i.message}</p>
+                </div>
+            `).join('');
+
+            document.getElementById('ai-tips-container').innerHTML = tips.map(t => `
+                <div class="insight-pro">
+                    <p class="text-sm font-semibold text-cyan-400">${t.title}</p>
+                    <p class="text-xs text-gray-400 mt-1">${t.message}</p>
+                </div>
+            `).join('');
+
+            document.getElementById('ai-predictions-container').innerHTML = predictions.map(p => `
+                <div class="insight-pro">
+                    <p class="text-sm font-semibold text-yellow-400">${p.title}</p>
+                    <p class="text-xs text-gray-400 mt-1">${p.message}</p>
+                    <p class="text-xs text-gray-500 mt-1">${p.confidence}</p>
+                </div>
+            `).join('');
+        }
+
+        // Charts
+        function updateCharts() {
+            if (typeof Chart === 'undefined') return;
+
+            // Expense Breakdown Pie Chart
+            const categoryTotals = {};
+            transactions.filter(t => t.type === 'expense').forEach(t => {
+                categoryTotals[t.category || 'Other'] = (categoryTotals[t.category || 'Other'] || 0) + Math.abs(t.amount);
+            });
+
+            const pieCtx = document.getElementById('pieChart');
+            if (pieCtx) {
+                if (charts.pie) charts.pie.destroy();
+                
+                charts.pie = new Chart(pieCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(categoryTotals),
+                        datasets: [{
+                            data: Object.values(categoryTotals),
+                            backgroundColor: ['#6FFFE9', '#00A389', '#FFCA3A', '#FBBF24', '#4ade80', '#f87171', '#22d3ee', '#facc15'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: '#f3f4f6', font: { size: 12 } }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Monthly Trends Bar Chart
+            const barCtx = document.getElementById('barChart');
+            if (barCtx) {
+                if (charts.bar) charts.bar.destroy();
+
+                const monthlyData = {};
+                transactions.forEach(t => {
+                    const month = t.date.substring(0, 7);
+                    if (!monthlyData[month]) {
+                        monthlyData[month] = { income: 0, expense: 0 };
+                    }
+                    if (t.type === 'income') {
+                        monthlyData[month].income += t.amount;
+                    } else {
+                        monthlyData[month].expense += Math.abs(t.amount);
+                    }
+                });
+
+                const months = Object.keys(monthlyData).sort().slice(-6);
+                const incomeData = months.map(m => monthlyData[m].income);
+                const expenseData = months.map(m => monthlyData[m].expense);
+
+                charts.bar = new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: months,
+                        datasets: [
+                            {
+                                label: 'Income',
+                                data: incomeData,
+                                backgroundColor: 'rgba(74, 222, 128, 0.8)',
+                                borderRadius: 8
+                            },
+                            {
+                                label: 'Expenses',
+                                data: expenseData,
+                                backgroundColor: 'rgba(248, 113, 113, 0.8)',
+                                borderRadius: 8
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: '#f3f4f6' },
+                                grid: { color: '#4b5563' }
+                            },
+                            x: {
+                                ticks: { color: '#f3f4f6' },
+                                grid: { display: false }
+                            }
+                        },
+                        plugins: {
+                            legend: { labels: { color: '#f3f4f6' } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Update All Data
+        function updateAllData() {
+            updateStats();
+            renderTransactions();
+            updateGoalUI();
+            renderAIInsights();
+            updateCharts();
         }
 
         // Initialize

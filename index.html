@@ -1243,6 +1243,7 @@
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     currentUser.name = data.name || currentUser.name;
+                    currentUser.initialized = data.initialized || false; // <<< Fetch initialization flag
                 }
             } catch (error) {
                 console.error("Error loading user profile data:", error);
@@ -1270,9 +1271,11 @@
             transactionsListener = onSnapshot(transactionsCol, (snapshot) => {
                 transactions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 
-                // --- NEW USER ONBOARDING FIX ---
-                if (transactions.length === 0 && !snapshot.metadata.fromCache) {
-                    console.log("New user detected (0 transactions). Initializing with demo data to Firestore.");
+                // --- NEW USER ONBOARDING FIX CHECK ---
+                // Only initialize if the user is authenticated (not anonymous/demo) AND 
+                // the transactions list is empty AND the user hasn't been initialized before.
+                if (transactions.length === 0 && !auth.currentUser.isAnonymous && currentUser && !currentUser.initialized) {
+                    console.log("New authenticated user detected (0 transactions). Initializing starter data.");
                     initializeNewUser(transactionsCol);
                     return; // Initialization will trigger the listener again
                 }
@@ -1290,9 +1293,10 @@
             eventsListener = onSnapshot(eventsCol, (snapshot) => {
                 scheduledEvents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 
-                // --- NEW USER ONBOARDING FIX ---
-                if (scheduledEvents.length === 0 && !snapshot.metadata.fromCache) {
-                    console.log("New user detected (0 events). Initializing with demo events.");
+                // --- NEW USER ONBOARDING FIX CHECK ---
+                // Only initialize events if the user is authenticated (not anonymous/demo) AND the events list is empty
+                if (scheduledEvents.length === 0 && !auth.currentUser.isAnonymous && currentUser && !currentUser.initialized) {
+                    console.log("New authenticated user detected (0 events). Initializing starter events.");
                     initializeNewUserEvents(eventsCol);
                     // No return needed, initialization will trigger the listener again
                 }
@@ -1331,8 +1335,15 @@
                 { date: '2025-01-18', description: 'Movie Tickets', amount: -1200, category: 'Entertainment', type: 'expense' },
                 { date: '2025-01-19', description: 'Fuel', amount: -2000, category: 'Transportation', type: 'expense' },
             ];
-
+            
+            // Set Initialization Flag
+            const profileDocRef = doc(firestore, getCollectionPath('profile'), 'details');
+            
             try {
+                // Use setDoc(..., { merge: true }) to safely update or create the profile document and set the flag.
+                await setDoc(profileDocRef, { initialized: true }, { merge: true });
+                currentUser.initialized = true; // Update local state
+                
                 for (const t of starterTransactions) {
                     await addDoc(transactionsCol, t);
                 }
@@ -1366,6 +1377,7 @@
                  email: 'demo@financeai.com',
                  name: 'Demo User',
                  emailVerified: false, 
+                 initialized: true // Demo mode is always 'initialized' locally
              };
              userId = user.uid;
              
@@ -1420,9 +1432,15 @@
                 // 1. Update Firebase Auth Profile (DisplayName)
                 await authUpdateProfile(user, { displayName: name });
                 
-                // 2. Save custom profile data to Firestore
+                // 2. Save custom profile data to Firestore AND set initialized flag
                 const userDocRef = doc(firestore, getCollectionPath('profile'), 'details');
-                await setDoc(userDocRef, { name: name, email: email, createdAt: new Date().toISOString() });
+                await setDoc(userDocRef, { 
+                    name: name, 
+                    email: email, 
+                    createdAt: new Date().toISOString(),
+                    // IMPORTANT: Set initialized to false here, it will be set to true ONLY when starter data is injected by loadDataListeners
+                    initialized: false 
+                });
                 
                 // 3. Send Email Verification (Security Feature)
                 await sendEmailVerification(user);
@@ -2099,7 +2117,7 @@
 
                 output = `<h4 class="text-lg font-bold text-cyan-400 mb-2">Simulated Result: Home Purchase</h4>
                         <p class="text-sm text-white">A ₹${downPaymentSim.toLocaleString()} down payment requires <span class="text-red-400">${downPaymentPercent.toFixed(0)}%</span> of your current liquid assets.</p>
-                        <p class="text-sm text-white">Estimated new EMI will reduce discretionary spending by 35%.</p>
+                        <p class="text-sm text-white">Estimated new EMI will reduce discretionary spending by 35% erosion.</p>
                         <p class="text-xs text-gray-400 mt-1">Nudge: Focus on increasing income sources tagged with #SideHustle to build your down payment faster.</p>`;
 
                 // --- SCENARIO 3: DEBT PAYOFF ---

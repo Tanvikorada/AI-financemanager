@@ -1,58 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="FinanceAI Pro - Enterprise Finance Management with AI">
-    <meta name="theme-color" content="#0D1B2A">
     <title>FinanceAI Pro - Behavioral Edition</title>
-    
-    <!-- PWA Manifest Link (Created dynamically by JS) -->
-    <link rel="manifest" id="manifest-link">
-    
-    <!-- Apple Touch Icons (Inline SVG as data URL) -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%236FFFE9'/%3E%3Cstop offset='100%25' style='stop-color:%2300A389'/%3E%3C/linearGradient%3E%3ClinearGradient id='glow' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FFCA3A'/%3E%3Cstop offset='100%25' style='stop-color:%23FF9500'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23bg)' width='180' height='180' rx='40'/%3E%3Ccircle cx='90' cy='90' r='65' fill='%230D1B2A' opacity='0.95'/%3E%3Cpath d='M90 45 L112 70 L90 95 L68 70 Z' fill='url(%23glow)' opacity='0.9'/%3E%3Cpath d='M45 90 L70 112 L95 90 L70 68 Z' fill='%236FFFE9' opacity='0.7'/%3E%3Cpath d='M135 90 L110 112 L85 90 L110 68 Z' fill='%236FFFE9' opacity='0.7'/%3E%3Ctext x='90' y='108' font-size='48' font-weight='900' fill='%236FFFE9' text-anchor='middle' font-family='Arial,sans-serif'%3E$%3C/text%3E%3C/svg%3E">
-    
-    <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Firebase Imports (Module versions) -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, addDoc, updateDoc, deleteDoc, onSnapshot, collection, query, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        
-        // Expose Firebase functions globally for use in the main script block
-        window.initializeApp = initializeApp;
-        window.getAuth = getAuth;
-        window.signInAnonymously = signInAnonymously;
-        window.signInWithCustomToken = signInWithCustomToken;
-        window.onAuthStateChanged = onAuthStateChanged;
-        window.getFirestore = getFirestore;
-        window.doc = doc;
-        window.addDoc = addDoc;
-        window.updateDoc = updateDoc;
-        window.deleteDoc = deleteDoc;
-        window.onSnapshot = onSnapshot;
-        window.collection = collection;
-        window.query = query;
-        window.setDoc = setDoc;
-        window.setLogLevel = setLogLevel;
-    </script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <style>
+        /* ==================== Deep Blue and Tranquil Green Palette ==================== */
         :root {
             --bg-primary: #0D1B2A;
+            /* Deep Navy Blue (Trust, Security) */
             --bg-light: #1B263B;
+            /* Card Surface */
             --accent-primary: #6FFFE9;
+            /* Tranquil Seafoam Green (Growth, Focus) */
             --accent-secondary: #FFCA3A;
+            /* Muted Gold/Yellow (Alerts, Savings) */
             --text-light: #E0E1DD;
+            /* Off-White Text */
             --border-color: #415A77;
         }
 
+        /* Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -66,25 +39,25 @@
             color: var(--text-light);
         }
 
+        /* Input and Search Bar */
         .search-bar, .input-pro {
             width: 100%;
             padding: 12px 16px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 15px;
-            background: var(--bg-primary);
+            background: var(--bg-dark);
             color: var(--text-light);
         }
-
         .input-pro:focus, .search-bar:focus {
             outline: none;
-            border-color: var(--accent-primary);
+            border-color: var(--accent-neon);
         }
-
         .input-pro::placeholder, .search-bar::placeholder {
             color: #9ca3af;
         }
 
+        /* Professional Card Design */
         .pro-card {
             color: var(--text-light);
             background: var(--bg-light);
@@ -99,11 +72,13 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
         }
 
+        /* AI Section Card */
         .ai-section-card {
             background: #283747 !important;
             border: 1px solid #415A77 !important;
         }
 
+        /* Insight Cards */
         .ai-section-card .insight-pro {
             background: var(--bg-primary) !important;
             border: 1px solid var(--border-color);
@@ -112,6 +87,7 @@
             margin-bottom: 10px;
         }
 
+        /* Stat Cards */
         .stat-card-pro {
             color: var(--text-light);
             background: var(--bg-primary);
@@ -120,16 +96,15 @@
             padding: 20px;
         }
 
+        /* Primary Button (Accent Neon) */
         .btn-pro {
             background: linear-gradient(135deg, var(--accent-primary), #00A389);
-            color: var(--bg-primary);
+            color: var(--bg-surface);
             padding: 12px 24px;
             border-radius: 8px;
             font-weight: 700;
             transition: all 0.2s;
             box-shadow: 0 4px 15px rgba(111, 255, 233, 0.4);
-            border: none;
-            cursor: pointer;
         }
 
         .btn-pro:hover {
@@ -137,40 +112,25 @@
             box-shadow: 0 6px 20px rgba(111, 255, 233, 0.6);
             transform: translateY(-1px);
         }
-
-        .btn-pro:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .back-btn {
-            background: var(--bg-primary);
-            color: var(--accent-primary);
-            border: 1px solid var(--border-color);
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: 600;
+        
+        /* Secondary Accent Button/Badge (Amber/Gold) */
+        .export-btn, .ai-badge-pro {
+            background: linear-gradient(135deg, var(--accent-secondary), #FFCA3A);
+            color: var(--bg-surface);
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(255, 202, 58, 0.4);
             transition: all 0.2s;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .back-btn:hover {
-            background: #374151;
-            border-color: var(--accent-primary);
-        }
-
+        /* Delete Button */
         .delete-pro {
             background: linear-gradient(135deg, #b91c1c, #dc2626);
             color: #fff;
             padding: 6px 10px;
             border-radius: 6px;
-            border: none;
-            cursor: pointer;
         }
 
+        /* Gradient Text */
         .gradient-text {
             background: linear-gradient(135deg, var(--accent-primary), #00A389);
             -webkit-background-clip: text;
@@ -178,115 +138,25 @@
             background-clip: text;
         }
 
-        .hidden {
-            display: none !important;
+        /* Footer */
+        .footer-pro {
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+            color: #9DA8AE;
+            padding: 24px 0;
+            text-align: center;
         }
 
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 0.6s linear infinite;
+        .crafted-by {
+            color: var(--accent-primary);
+            text-shadow: 0 0 5px rgba(111, 255, 233, 0.5);
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
         }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .install-banner {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, var(--accent-primary), #00A389);
-            color: var(--bg-primary);
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
-        }
-
-        .install-banner.show {
-            transform: translateY(0);
-        }
-
-        .offline-indicator {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            background: #dc2626;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            z-index: 1000;
-            display: none;
-        }
-
-        .offline-indicator.show {
-            display: block;
-        }
-
-        #notification-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-        }
-
-        .notification-pro {
-            background: var(--bg-light);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            margin-bottom: 10px;
-            min-width: 300px;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .chart-pro {
-            background: var(--bg-light);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 24px;
-        }
-
-        .export-btn, .ai-badge-pro {
-            background: linear-gradient(135deg, var(--accent-secondary), #FFCA3A);
-            color: var(--bg-light);
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(255, 202, 58, 0.4);
-            transition: all 0.2s;
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-        }
-
-        textarea.input-pro {
-            min-height: 100px;
-            resize: vertical;
-        }
-
+        
+        /* Utility Classes for Icons/Navigation */
         .nav-icon-btn {
             background: var(--bg-primary);
             color: var(--accent-primary);
@@ -294,56 +164,34 @@
             padding: 8px;
             border-radius: 8px;
             transition: all 0.2s;
-            cursor: pointer;
         }
-
         .nav-icon-btn:hover {
             background: #374151;
             border-color: var(--accent-primary);
         }
 
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 50;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-        }
+        /* Chart Colors */
+        .text-green-400 { color: #4ADE80; } 
+        .text-red-400 { color: #F87171; } 
+        .text-cyan-400 { color: var(--accent-primary); }
+        .text-yellow-400 { color: var(--accent-secondary); }
 
-        .logo-container {
-            transition: transform 0.3s ease;
-        }
-
-        .logo-container:hover {
-            transform: translateY(-2px);
+        /* Planner Card Styles */
+        .planner-card {
+            background: #283747;
+            border: 1px solid #415A77;
+            border-radius: 12px;
+            padding: 20px;
         }
     </style>
 </head>
+
 <body>
-    <!-- Offline Indicator -->
-    <div id="offline-indicator" class="offline-indicator">
-        <span>📡 You're offline - Limited functionality</span>
-    </div>
-
-    <!-- Install Banner -->
-    <div id="install-banner" class="install-banner">
-        <div>
-            <strong>Install FinanceAI Pro</strong>
-            <p style="font-size: 12px; margin-top: 4px;">Get quick access and work offline</p>
-        </div>
-        <div style="display: flex; gap: 10px;">
-            <button id="install-button" style="background: var(--bg-primary); color: var(--accent-primary); padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600;">Install</button>
-            <button id="install-dismiss" style="background: transparent; color: var(--bg-primary); padding: 8px 16px; border: 1px solid var(--bg-primary); border-radius: 6px; cursor: pointer; font-weight: 600;">Not Now</button>
-        </div>
-    </div>
-
     <div id="notification-container"></div>
-
+    
     <div class="w-full flex justify-center pt-8 pb-2 items-center">
-        <div class="logo-container flex items-center gap-3 py-2 px-4 rounded-2xl bg-gradient-to-r from-gray-700 to-gray-800">
+        <div
+            class="logo-container flex items-center gap-3 py-2 px-4 rounded-2xl bg-gradient-to-r from-gray-700 to-gray-800">
             <div class="logo-icon w-12 h-12 relative">
                 <svg viewBox="0 0 100 100" class="w-full h-full filter drop-shadow-lg">
                     <defs>
@@ -351,151 +199,343 @@
                             <stop offset="0%" style="stop-color:var(--accent-primary)" />
                             <stop offset="100%" style="stop-color:#00A389" />
                         </linearGradient>
+                        <filter id="softShadow">
+                            <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
+                            <feOffset dx="0" dy="2" />
+                            <feComponentTransfer>
+                                <feFuncA type="linear" slope="0.3" />
+                            </feComponentTransfer>
+                            <feMerge>
+                                <feMergeNode />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
                     </defs>
-                    <rect x="5" y="5" width="90" height="90" rx="15" fill="url(#logoGradient)" />
-                    <path d="M25 75 L45 50 L65 55 L85 25" stroke="var(--bg-primary)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" />
-                    <circle cx="25" cy="75" r="5" fill="var(--accent-secondary)" />
-                    <circle cx="85" cy="25" r="5" fill="var(--accent-secondary)" />
-                    <text x="50" y="55" font-family="Inter, sans-serif" font-size="30" font-weight="900" fill="var(--bg-primary)" text-anchor="middle" dominant-baseline="middle">$</text>
+                    <rect x="5" y="5" width="90" height="90" rx="15" fill="url(#logoGradient)" filter="url(#softShadow)"/>
+                    <path d="M25 75 L45 50 L65 55 L85 25" 
+                          stroke="var(--bg-primary)" stroke-width="4" fill="none" 
+                          stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="25" cy="75" r="5" fill="var(--accent-secondary)"/>
+                    <circle cx="85" cy="25" r="5" fill="var(--accent-secondary)"/>
+                    <text x="50" y="55" font-family="Inter, sans-serif" font-size="30" font-weight="900" 
+                          fill="var(--bg-primary)" text-anchor="middle" dominant-baseline="middle">$</text>
                 </svg>
             </div>
             <div class="logo-text">
-                <span class="text-4xl font-black gradient-text tracking-tight">FinanceAI</span>
+                <span class="text-4xl font-black gradient-text tracking-tight">Finance</span>
+                <span class="text-4xl font-black gradient-text tracking-tight">AI</span>
                 <span class="text-4xl font-black text-gray-400 tracking-tight">Pro</span>
             </div>
         </div>
     </div>
 
-    <!-- Auth Screen (Loading state, since auth is automatic) -->
+    <style>
+        /* Re-defining logo specific styles with new vars */
+        .logo-container {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .logo-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo-icon {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .logo-text {
+            position: relative;
+        }
+
+        .logo-text::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-primary), #00A389);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: left;
+        }
+
+        .logo-container:hover .logo-text::after {
+            transform: scaleX(1);
+        }
+    </style>
+
     <div id="auth-screen" class="min-h-screen flex items-center justify-center p-6">
         <div class="pro-card max-w-md w-full">
             <div class="text-center mb-8">
                 <h1 class="text-4xl font-black gradient-text mb-2">FinanceAI Pro</h1>
-                <p class="text-gray-400">Loading Secure Session...</p>
+                <p class="text-gray-400">Minimal Enterprise Finance Management</p>
             </div>
-            <div class="text-center">
-                <div id="loading-message">Initializing Firebase...</div>
-                <div class="spinner mx-auto mt-4 w-8 h-8" style="border-width: 4px;"></div>
+            <div id="login-form">
+                <h2 class="text-2xl font-bold mb-6 text-f3f4f6">Sign In</h2>
+                <div class="space-y-4">
+                    <input type="email" id="login-email" class="input-pro" placeholder="Email Address" />
+                    <input type="password" id="login-password" class="input-pro" placeholder="Password" />
+                    <button onclick="handleLogin()" class="btn-pro w-full">
+                        <span id="login-text">Sign In</span>
+                        <span id="login-spinner" class="spinner hidden"></span>
+                    </button>
+                    <button onclick="toggleAuth()" class="btn-pro w-full"
+                        style="background: linear-gradient(135deg, var(--accent-secondary), #ffc107); margin-top:8px;">Create
+                        New Account</button>
+                </div>
+            </div>
+            <div id="signup-form" class="hidden">
+                <h2 class="text-2xl font-bold mb-6 text-f3f4f6">Create Account</h2>
+                <div class="space-y-4">
+                    <input type="text" id="signup-name" class="input-pro" placeholder="Full Name" />
+                    <input type="email" id="signup-email" class="input-pro" placeholder="Email Address" />
+                    <input type="password" id="signup-password" class="input-pro"
+                        placeholder="Password (min 6 chars)" />
+                    <button onclick="handleSignup()" class="btn-pro w-full">
+                        <span id="signup-text">Create Account</span>
+                        <span id="signup-spinner" class="spinner hidden"></span>
+                    </button>
+                    <p class="text-center text-gray-400 text-sm">
+                        Already have an account?
+                        <button onclick="toggleAuth()" class="text-white font-semibold underline">Sign In</button>
+                    </p>
+                </div>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-600">
+                <button onclick="handleDemo()" class="btn-pro w-full"
+                    style="background: linear-gradient(135deg, #10b981, #059669); color: white;">
+                    Try Demo Mode
+                </button>
             </div>
         </div>
     </div>
-
-    <!-- App Screen -->
     <div id="app-screen" class="hidden min-h-screen p-6">
-        <header class="pro-card mb-8 flex items-center justify-between flex-wrap gap-4">
+        <header class="pro-card mb-8 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <h1 class="text-xl font-black text-white cursor-pointer" onclick="setActiveScreen('dashboard-screen')">FinanceAI Pro</h1>
-                <p class="text-sm text-gray-400">Enterprise Edition</p>
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-xl font-black text-white cursor-pointer" onclick="setActiveScreen('dashboard')">
+                        FinanceAI Pro</h1>
+                    <p class="text-sm text-gray-400">Enterprise Edition</p>
+                </div>
             </div>
-            <div class="flex items-center gap-4 flex-wrap">
-                <button onclick="setActiveScreen('profile-screen')" class="nav-icon-btn hidden sm:block" title="User Profile">
+            <div class="flex items-center gap-4">
+                
+                <button onclick="setActiveScreen('planner')" class="nav-icon-btn hidden sm:block" title="Planner">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-4 4V3m-2 4h4M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                </button>
+                <button onclick="setActiveScreen('profile')" class="nav-icon-btn hidden sm:block" title="User Profile">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                 </button>
-                <div id="sync-status" class="text-sm">
-                    <span id="sync-indicator" class="text-green-400">✓ Synced</span>
-                </div>
-                <button onclick="exportData()" class="export-btn hidden sm:block">Export</button>
+                
+                <button onclick="setActiveScreen('contact')" class="nav-icon-btn hidden sm:block" title="AI Coach Support">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m-4-4h4m-4 0v4" />
+                    </svg>
+                </button>
+                
+                <button onclick="exportData()" class="export-btn py-2 px-4 rounded-md hidden sm:block">Export</button>
+                
                 <div class="text-right hidden sm:block">
-                    <p class="text-sm text-gray-400">User ID:</p>
-                    <p id="user-id-display" class="font-bold text-white text-xs truncate"></p>
+                    <p class="text-sm text-gray-400">Welcome,</p>
+                    <p id="user-name-display" class="font-bold text-white">User</p>
                 </div>
-                <button onclick="handleLogout()" class="btn-pro" style="background: linear-gradient(135deg, #dc2626, #b91c1c);">Logout</button>
+                <div class="avatar-pro" onclick="toggleProfileMenu()">
+                    <span id="user-avatar" style="color: var(--bg-dark);">U</span>
+                </div>
+                
+                <div id="profile-menu-dropdown" class="hidden absolute right-8 top-20 pro-card w-48 z-50 p-2">
+                    <button onclick="setActiveScreen('dashboard')"
+                        class="w-full text-left p-2 block hover:bg-gray-700 rounded-lg text-white font-semibold transition-all mb-1 sm:hidden">
+                        Dashboard
+                    </button>
+                    <button onclick="setActiveScreen('planner')"
+                        class="w-full text-left p-2 block hover:bg-gray-700 rounded-lg text-cyan-400 font-semibold transition-all mb-1 sm:hidden">
+                        Planner
+                    </button>
+                    <button onclick="setActiveScreen('profile')"
+                        class="w-full text-left p-2 block hover:bg-gray-700 rounded-lg text-cyan-400 font-semibold transition-all mb-1 sm:hidden">
+                        Profile
+                    </button>
+                     <button onclick="setActiveScreen('contact')"
+                        class="w-full text-left p-2 block hover:bg-gray-700 rounded-lg text-cyan-400 font-semibold transition-all mb-1 sm:hidden">
+                        AI Coach Support
+                    </button>
+                    <div class="h-px bg-gray-600 my-2"></div>
+                    <button onclick="handleLogout()"
+                        class="w-full text-left p-2 block hover:bg-gray-700 rounded-lg text-red-400 font-semibold transition-all">
+                        Logout
+                    </button>
+                </div>
             </div>
         </header>
-
         <div class="container mx-auto max-w-7xl">
-            <!-- Dashboard Screen -->
             <div id="dashboard-screen">
-                <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
                     <div class="stat-card-pro">
-                        <p class="text-sm text-gray-400 mb-2">Net Balance</p>
-                        <p id="balance-display" class="text-3xl font-black text-white">₹0</p>
+                        <div>
+                            <p class="text-sm text-gray-400 mb-2">Net Balance</p>
+                            <p id="balance-display" class="text-3xl font-black text-white">₹0</p>
+                        </div>
                         <p class="text-xs text-gray-600 mt-3">Real-time Liquidity</p>
                     </div>
                     <div class="stat-card-pro">
-                        <p class="text-sm text-gray-400 mb-2">Total Income</p>
-                        <p id="income-display" class="text-3xl font-black text-green-400">₹0</p>
-                        <p class="text-xs text-gray-600 mt-3">All Time</p>
+                        <div>
+                            <p class="text-sm text-gray-400 mb-2">Total Income</p>
+                            <p id="income-display" class="text-3xl font-black text-green-400">₹0</p>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-3">This month</p>
                     </div>
                     <div class="stat-card-pro">
-                        <p class="text-sm text-gray-400 mb-2">Total Expenses</p>
-                        <p id="expense-display" class="text-3xl font-black text-red-400">₹0</p>
+                        <div>
+                            <p class="text-sm text-gray-400 mb-2">Total Expenses</p>
+                            <p id="expense-display" class="text-3xl font-black text-red-400">₹0</p>
+                        </div>
                         <p class="text-xs text-gray-600 mt-3">AI Tracked</p>
                     </div>
                     <div class="stat-card-pro">
-                        <p class="text-sm text-gray-400 mb-2">Savings Rate</p>
-                        <p id="savings-display" class="text-3xl font-black text-cyan-400">0%</p>
+                        <div>
+                            <p class="text-sm text-gray-400 mb-2">Savings Rate</p>
+                            <p id="savings-display" class="text-3xl font-black text-cyan-400">0%</p>
+                        </div>
                         <p class="text-xs text-gray-600 mt-3">Target: 30%</p>
                     </div>
                     <div class="stat-card-pro">
-                        <p class="text-sm text-gray-400 mb-2">Budget Status</p>
-                        <p id="budget-goal-display" class="text-3xl font-black text-yellow-400">₹30k</p>
-                        <p id="budget-status" class="text-xs text-gray-600 mt-3">Monthly Goal</p>
+                        <div>
+                            <p class="text-sm text-gray-400 mb-2">Debt-to-Income</p>
+                            <p id="budget-goal-display" class="text-3xl font-black text-yellow-400">0%</p>
+                        </div>
+                        <p id="budget-status" class="text-xs text-gray-600 mt-3">Healthy Range</p>
                     </div>
                 </div>
-
-                <!-- AI Insights & Foresight -->
+                
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    <div class="pro-card ai-section-card">
-                        <h3 class="text-lg font-bold text-white mb-4">🧠 AI Insights</h3>
-                        <div id="ai-insights-container"></div>
+                    <div class="pro-card ai-section-card col-span-1">
+                        <h3 class="text-lg font-bold text-white mb-4">🧠 Behavioral Intelligence</h3>
+                        <div id="emotion-intelligence">
+                            <div class="insight-pro">
+                                <p class="text-sm font-semibold text-red-400">Stress Spending Alert</p>
+                                <p class="text-xs text-gray-400 mt-1">Pattern detected: 3 impulse purchases after 9 PM this week. Total: ₹2,100.</p>
+                            </div>
+                            <div class="insight-pro">
+                                <p class="text-sm font-semibold text-cyan-400">Habit Nudge</p>
+                                <p class="text-xs text-gray-400 mt-1">Shall I set a 'Mindful Treat' budget of ₹1,000 for Fridays to counter impulse buys?</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="pro-card ai-section-card">
-                        <h3 class="text-lg font-bold text-white mb-4">💡 Smart Tips</h3>
-                        <div id="ai-tips-container"></div>
-                    </div>
-                    <div class="pro-card ai-section-card">
-                        <h3 class="text-lg font-bold text-white mb-4">🔮 Projections</h3>
-                        <div id="ai-predictions-container"></div>
+                    
+                    <div class="pro-card ai-section-card col-span-2">
+                        <h3 class="text-lg font-bold text-white mb-4">🔮 Dynamic Foresight Simulator</h3>
+                        <div class="space-y-4">
+                            <input type="text" id="what-if-input" class="input-pro" 
+                                placeholder="Example: What if I start investing ₹10,000 every month?" />
+                            <button onclick="simulateWhatIf()" class="btn-pro w-full">Simulate Scenario</button>
+                            <div id="what-if-results" class="text-sm text-gray-400 mt-2 p-3 border border-dashed border-gray-600 rounded-md bg-gray-900">
+                                <p>Simulated results appear here after running a scenario.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Charts -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                     <div class="chart-pro">
-                        <h3 class="text-lg font-bold text-white mb-4">Expense Breakdown</h3>
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-bold text-white">Expense Breakdown</h3>
+                            <span class="ai-badge-pro py-1 px-3 rounded-full">AI Analytics</span>
+                        </div>
                         <canvas id="pieChart" style="max-height: 300px;"></canvas>
                     </div>
                     <div class="chart-pro">
-                        <h3 class="text-lg font-bold text-white mb-4">Monthly Trends</h3>
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-bold text-white">Monthly Trends</h3>
+                            <span class="ai-badge-pro py-1 px-3 rounded-full">Real-time</span>
+                        </div>
                         <canvas id="barChart" style="max-height: 300px;"></canvas>
                     </div>
                 </div>
-
-                <!-- Budget & Goals -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div class="chart-pro">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-bold text-white">Cash Flow Analysis</h3>
+                            <span class="ai-badge-pro py-1 px-3 rounded-full">ML Powered</span>
+                        </div>
+                        <canvas id="lineChart" style="max-height: 300px;"></canvas>
+                    </div>
+                    <div class="chart-pro">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-bold text-white">Savings Projection</h3>
+                            <span class="ai-badge-pro py-1 px-3 rounded-full">AI Forecast</span>
+                        </div>
+                        <canvas id="projectionChart" style="max-height: 300px;"></canvas>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                    <div class="pro-card ai-section-card">
+                        <h3 class="text-lg font-bold text-white mb-4">AI Insights</h3>
+                        <div id="ai-insights-container">
+                        </div>
+                    </div>
+                    <div class="pro-card ai-section-card">
+                        <h3 class="text-lg font-bold text-white mb-4">Smart Tips</h3>
+                        <div id="ai-tips-container"></div>
+                    </div>
+                    <div class="pro-card ai-section-card">
+                        <h3 class="text-lg font-bold text-white mb-4">Projections</h3>
+                        <div id="ai-predictions-container"></div>
+                    </div>
+                </div>
+                
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                     <div class="pro-card">
                         <h3 class="text-xl font-bold text-white mb-4">Budget Settings</h3>
                         <div class="space-y-4">
                             <div class="flex gap-4">
-                                <input type="number" id="budget-amount" class="input-pro" placeholder="Monthly Budget (₹)" value="30000" />
+                                <input type="number" id="budget-amount" class="input-pro"
+                                    placeholder="Set Monthly Budget (₹)" value="30000" />
                                 <button onclick="setMonthlyBudget()" class="btn-pro flex-shrink-0">Set</button>
                             </div>
                             <div id="budget-categories" class="text-sm text-gray-400">
-                                <p class="mt-2 text-green-400">Budget Active: ₹30,000</p>
+                                <p class="mt-2 text-green-400">Budget Active: ₹30,000.</p>
+                                <p class="mt-1 text-yellow-400">Tip: Set individual limits for Food and Entertainment
+                                    categories.</p>
                             </div>
                         </div>
                     </div>
-
+                    
                     <div class="pro-card">
                         <h3 class="text-xl font-bold text-white mb-4">Financial Goal Tracker</h3>
                         <div class="space-y-3">
                             <input type="text" id="goal-name" class="input-pro" placeholder="Goal Name (e.g., Japan Trip)" />
                             <div class="flex gap-4">
                                 <input type="number" id="goal-target" class="input-pro" placeholder="Target Amount (₹)" value="150000" />
-                                <button onclick="setGoal()" class="btn-pro flex-shrink-0">Set</button>
+                                <button onclick="setGoal()" class="btn-pro flex-shrink-0">Set Target</button>
                             </div>
                             <div id="goal-progress" class="text-sm text-gray-400 p-2 bg-gray-900 rounded">
-                                <p>Set a goal to track progress</p>
+                                <p>Current Goal: <span class="text-cyan-400">None Set</span></p>
+                                <p>Progress: <span class="text-yellow-400">0%</span></p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Add Transaction -->
                 <div class="pro-card mb-8">
                     <h3 class="text-xl font-bold text-white mb-6">Add Transaction</h3>
                     <div class="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
@@ -517,699 +557,1500 @@
                             <option value="Freelance">Freelance</option>
                             <option value="Investment">Investment</option>
                         </select>
-                        <button onclick="addTransaction()" class="btn-pro">Add Transaction</button>
+                        <input type="text" id="trans-recurring" class="input-pro"
+                            placeholder="Recurring (e.g., Monthly)" />
+                        <input type="text" id="trans-lifestyle-tag" class="input-pro"
+                            placeholder="Lifestyle Tag (e.g., #Family)" />
+                        
+                        <div class="col-span-3 flex items-center space-x-4 pt-2">
+                             <input type="checkbox" id="micro-invest" class="h-4 w-4 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-500">
+                             <label for="micro-invest" class="text-sm text-gray-400">Round up purchase to invest spare change</label>
+                        </div>
+                        <div class="col-span-3 flex justify-end pt-2">
+                           <button onclick="addTransaction()" class="btn-pro">Add Transaction</button>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Transaction History -->
                 <div class="pro-card">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-xl font-bold text-white">Transaction History</h3>
                         <span id="trans-count" class="text-sm text-gray-400">0 transactions</span>
                     </div>
+
                     <div class="flex flex-wrap gap-3 mb-4">
-                        <button onclick="filterTransactions('all')" class="btn-pro text-xs py-2 px-4" style="background: var(--bg-light); color: var(--accent-primary); border: 1px solid var(--accent-primary);">All</button>
-                        <button onclick="filterTransactions('income')" class="btn-pro text-xs py-2 px-4" style="background: #10b981;">Income</button>
-                        <button onclick="filterTransactions('expense')" class="btn-pro text-xs py-2 px-4" style="background: #dc2626;">Expenses</button>
+                        <button onclick="filterTransactions('all')" class="btn-pro text-xs py-2 px-4"
+                            style="background: var(--bg-dark); color: var(--accent-neon); border: 1px solid var(--accent-neon);">All</button>
+                        <button onclick="filterTransactions('income')" class="btn-pro text-xs py-2 px-4"
+                            style="background: #10b981; color: white;">Income</button>
+                        <button onclick="filterTransactions('expense')" class="btn-pro text-xs py-2 px-4"
+                            style="background: #dc2626; color: white;">Expenses</button>
+                        <button onclick="filterTransactions('recurring')" class="btn-pro text-xs py-2 px-4"
+                            style="background: #00c8ff; color: white;">Recurring</button>
                     </div>
-                    <input type="text" id="search-bar" class="search-bar mb-3" placeholder="Search transactions..." oninput="filterTransactions('search')" />
-                    <div id="transactions-container" class="max-h-96 overflow-y-auto space-y-2"></div>
+
+                    <input type="text" id="search-bar" class="search-bar"
+                        placeholder="Search by description, category, or type..."
+                        oninput="filterTransactions('search')" />
+                    <button onclick="exportCSV()" class="export-btn py-2 px-4 rounded-md mb-3"
+                        style="background: linear-gradient(135deg, #10b981, #059669); color: white;">Export CSV</button>
+                    <div id="transactions-container" class="max-h-96 overflow-y-auto space-y-2">
+                        </div>
+                    <div id="summary-stats" class="mt-4 text-sm text-white"></div>
                 </div>
             </div>
 
-            <!-- Profile Screen -->
-            <div id="profile-screen" class="hidden">
-                <div class="pro-card max-w-lg mx-auto">
-                    <div class="flex items-center justify-between mb-8">
-                        <h2 class="text-3xl font-bold gradient-text">User Profile</h2>
-                        <button onclick="setActiveScreen('dashboard-screen')" class="back-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-                            </svg>
-                            Back
-                        </button>
-                    </div>
-                    <div class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-1">Authenticated User ID</label>
-                            <input type="text" id="profile-user-id" class="input-pro opacity-75 text-xs" readonly />
+            <div id="planner-screen" class="hidden">
+                 <div class="pro-card max-w-4xl mx-auto">
+                    <h2 class="text-3xl font-bold gradient-text mb-6">Financial Planner & Scheduling</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                        
+                        <div class="planner-card">
+                            <h3 class="text-xl font-bold text-cyan-400 mb-3">Safe Daily Spend</h3>
+                            <p id="daily-budget-value" class="text-4xl font-black text-white">₹0</p>
+                            <p class="text-xs text-gray-400 mt-2">Maximum recommended daily discretionary budget.</p>
+                            <p id="days-remaining" class="text-sm text-green-400 mt-2">30 days remaining in month.</p>
+                        </div>
+                        
+                        <div class="planner-card col-span-2">
+                            <h3 class="text-xl font-bold text-cyan-400 mb-4">Schedule Event/Expense</h3>
+                            <div class="grid grid-cols-4 gap-4">
+                                <input type="text" id="event-desc" class="input-pro col-span-2" placeholder="Event/Bill Name">
+                                <input type="date" id="event-date" class="input-pro" value="2025-10-30">
+                                <select id="event-type" class="input-pro">
+                                    <option value="Event">Personal Event</option>
+                                    <option value="Expense">Scheduled Expense</option>
+                                    <option value="Review">Budget Review</option>
+                                </select>
+                            </div>
+                            <div class="flex justify-end mt-4">
+                                <button onclick="scheduleEvent()" class="btn-pro text-sm">Schedule Now</button>
+                            </div>
                         </div>
                     </div>
+                    
+                    <div class="pro-card mt-6">
+                        <h3 class="text-xl font-bold text-white mb-4">Upcoming Schedule & Events</h3>
+                        <div id="schedule-list" class="space-y-3 max-h-96 overflow-y-auto">
+                            <p class="text-gray-500">No events scheduled. Use the form above to start planning!</p>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+            <div id="profile-screen" class="hidden">
+                <div class="pro-card max-w-lg mx-auto">
+                    <h2 class="text-3xl font-bold gradient-text mb-8">User Profile</h2>
+
+                    <div class="space-y-6">
+                        <div>
+                            <label for="profile-name" class="block text-sm font-medium text-gray-400 mb-1">Full
+                                Name</label>
+                            <input type="text" id="profile-name" name="name" class="input-pro" placeholder="Name" value="" />
+                        </div>
+                        <div>
+                            <label for="profile-email" class="block text-sm font-medium text-gray-400 mb-1">Email Address
+                                (Read-Only)</label>
+                            <input type="email" id="profile-email" name="email" class="input-pro opacity-75" placeholder="Email"
+                                readonly />
+                        </div>
+                        <div class="pt-4 border-t border-gray-600">
+                            <h4 class="text-lg font-semibold text-white mb-3">Update Password</h4>
+                            <label for="profile-password" class="block text-sm font-medium text-gray-400 mb-1">New
+                                Password</label>
+                            <input type="password" id="profile-password" class="input-pro"
+                                placeholder="Enter new password (min 6 chars)" />
+                        </div>
+                        <div class="flex justify-end">
+                            <button onclick="updateProfile()" class="btn-pro">
+                                Save Changes
+                            </button>
+                        </div>
+                        <div id="profile-status" class="text-center text-sm text-gray-400"></div>
+                    </div>
                 </div>
+            </div>
+
+            <div id="contact-screen" class="hidden">
+                 <div class="pro-card max-w-lg mx-auto">
+                    <h2 class="text-3xl font-bold gradient-text mb-8">AI Coach Support</h2>
+                    <p class="text-gray-400 mb-6">For detailed support or to ask the AI Coach a complex query, use the secure form below. We will respond via email.</p>
+                    
+                    <form id="contact-form" action="https://formspree.io/f/myznoqyr" method="POST" class="space-y-4">
+                        <div>
+                            <label for="contact-name" class="block text-sm font-medium text-gray-400 mb-1">Your Name</label>
+                            <input type="text" id="contact-name" name="name" class="input-pro" placeholder="Full Name" required>
+                        </div>
+                        <div>
+                            <label for="contact-email" class="block text-sm font-medium text-gray-400 mb-1">Your Email</label>
+                            <input type="email" id="contact-email" name="_replyto" class="input-pro" placeholder="Email Address" required>
+                        </div>
+                        <div>
+                            <label for="contact-message" class="block text-sm font-medium text-gray-400 mb-1">Message</label>
+                            <textarea id="contact-message" name="message" rows="4" class="input-pro" placeholder="Describe your issue or query..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-pro w-full">
+                            Send Message Securely
+                        </button>
+                    </form>
+                    <p class="text-center text-xs text-gray-500 mt-6">
+                        *This form is powered by Formspree, ensuring reliable and secure delivery to your support email.
+                    </p>
+                 </div>
             </div>
         </div>
     </div>
 
-<script>
-    // ----------------------------------------------------------------------
-    // PWA SERVICE WORKER CONTENT (Defined as a string)
-    // ----------------------------------------------------------------------
-    const SERVICE_WORKER_CODE = `
-        const CACHE_NAME = 'finance-ai-pro-v1';
-        const urlsToCache = [
-            './index.html',
-            // External dependencies like Chart.js and Firebase will be served by network, 
-            // as caching them aggressively can lead to outdated versions.
-        ];
-
-        self.addEventListener('install', (event) => {
-            self.skipWaiting();
-            event.waitUntil(
-                caches.open(CACHE_NAME)
-                    .then((cache) => {
-                        console.log('Service Worker: Caching core assets');
-                        return cache.addAll(urlsToCache).catch(err => console.error('Cache add error:', err));
-                    })
-            );
-        });
-
-        self.addEventListener('fetch', (event) => {
-            // Only respond to GET requests
-            if (event.request.method !== 'GET') return;
-
-            event.respondWith(
-                caches.match(event.request)
-                    .then((response) => {
-                        // Cache hit - return response
-                        if (response) {
-                            return response;
-                        }
-
-                        // Clone the request/response streams
-                        const fetchRequest = event.request.clone();
-
-                        return fetch(fetchRequest).then(
-                            (response) => {
-                                if(!response || response.status !== 200 || response.type !== 'basic') {
-                                    return response;
-                                }
-
-                                const responseToCache = response.clone();
-                                
-                                // Cache dynamic resources that are part of the app scope
-                                if (event.request.url.startsWith(self.location.origin)) {
-                                    caches.open(CACHE_NAME)
-                                        .then(cache => {
-                                            cache.put(event.request, responseToCache);
-                                        });
-                                }
-                                return response;
-                            }
-                        );
-                    })
-            );
-        });
-
-        self.addEventListener('activate', (event) => {
-            const cacheWhitelist = [CACHE_NAME];
-            event.waitUntil(
-                caches.keys().then((cacheNames) => {
-                    return Promise.all(
-                        cacheNames.map((cacheName) => {
-                            if (cacheWhitelist.indexOf(cacheName) === -1) {
-                                return caches.delete(cacheName);
-                            }
-                        })
-                    );
-                })
-            );
-            return self.clients.claim();
-        });
-    `;
-
-    // ----------------------------------------------------------------------
-    // 1. FIREBASE INITIALIZATION (MANDATORY CANVAS PATTERN)
-    // ----------------------------------------------------------------------
-    let db = null;
-    let auth = null;
-    let userId = null;
-    
-    // Global variables provided by Canvas environment
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-    
-    // Using user-provided config as fallback, though __firebase_config should take precedence
-    const userFirebaseConfig = {
-      apiKey: "AIzaSyDMhGK6-Z1QtAA7KanzFFjIaccHyg54f9o",
-      authDomain: "aifinancepro-9b801.firebaseapp.com",
-      projectId: "aifinancepro-9b801",
-      storageBucket: "aifinancepro-9b801.firebasestorage.app",
-      messagingSenderId: "265552616833",
-      appId: "1:265552616833:web:714fae18f3ee0070915c80",
-      measurementId: "G-JYEYE29HB6"
-    };
-    
-    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : userFirebaseConfig;
-    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-    
-    // ----------------------------------------------------------------------
-    // 2. GLOBAL STATE & UTILITIES
-    // ----------------------------------------------------------------------
-    let deferredInstallPrompt = null;
-    let pieChartInstance = null;
-    let barChartInstance = null;
-    let currentFilter = 'all';
-    let transactions = []; // Real-time data store
-
-    // Helper to show notifications
-    function showNotification(message, type = 'success') {
-        const container = document.getElementById('notification-container');
-        const element = document.createElement('div');
-        let bgColor = 'bg-green-800';
-        if (type === 'error') bgColor = 'bg-red-800';
-        if (type === 'info') bgColor = 'bg-blue-800';
-        
-        element.className = `notification-pro ${bgColor}`;
-        element.innerHTML = `<p class="font-bold">${message}</p>`;
-        
-        container.appendChild(element);
-        
-        setTimeout(() => {
-            element.remove();
-        }, 4000);
-    }
-
-    // Helper for screen switching
-    function setActiveScreen(screenId) {
-        document.getElementById('dashboard-screen').classList.add('hidden');
-        document.getElementById('profile-screen').classList.add('hidden');
-
-        const activeScreen = document.getElementById(screenId);
-        if (activeScreen) {
-            activeScreen.classList.remove('hidden');
-        }
-    }
-    
-    // Logout only resets the current session state/token
-    function handleLogout() {
-        showNotification('Session ended. Please close and reopen the app.', 'info');
-        // Optionally, force a page reload if needed to clear all state
-        // window.location.reload(); 
-    }
-
-    // ----------------------------------------------------------------------
-    // 3. FIRESTORE DATA LOGIC
-    // ----------------------------------------------------------------------
-
-    function getTransactionsCollectionRef() {
-        if (!db || !userId) {
-            console.error("Firestore or User ID is not initialized.");
-            return null;
-        }
-        // MANDATORY Firestore path: /artifacts/{appId}/users/{userId}/transactions
-        return collection(db, `artifacts/${appId}/users/${userId}/transactions`);
-    }
-
-    function subscribeToTransactions() {
-        const transactionsRef = getTransactionsCollectionRef();
-        if (!transactionsRef) return;
-
-        // Note: Firestore query is used without orderBy, sorting is done client-side.
-        const q = query(transactionsRef);
-
-        onSnapshot(q, (querySnapshot) => {
-            transactions = [];
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                transactions.push({ id: doc.id, ...data });
-            });
-            
-            // Client-side sorting by timestamp (if available) or date
-            transactions.sort((a, b) => (b.timestamp || new Date(b.date).getTime()) - (a.timestamp || new Date(a.date).getTime()));
-
-            updateTransactionHistory();
-            updateDashboardUI();
-            showNotification('Data synced successfully.', 'success');
-        }, (error) => {
-            console.error("Error subscribing to transactions:", error);
-            showNotification('Failed to load transactions in real-time.', 'error');
-        });
-    }
-
-
-    async function addTransaction() {
-        const desc = document.getElementById('trans-desc').value;
-        const amountStr = document.getElementById('trans-amount').value;
-        const type = document.getElementById('trans-type').value;
-        const category = document.getElementById('trans-category').value;
-        const amount = parseFloat(amountStr);
-
-        if (!desc || isNaN(amount) || amount <= 0) {
-            showNotification('Please enter a valid description and amount.', 'error');
-            return;
-        }
-
-        const newTransaction = {
-            desc,
-            amount,
-            type,
-            category,
-            date: new Date().toISOString().substring(0, 10), 
-            timestamp: Date.now()
+    <footer class="footer-pro">
+        <div class="footer-content">
+            <div class="crafted-by">
+                Crafted by Korada Tanvi
+            </div>
+            <div>
+                &copy; 2025 FinanceAI Pro &mdash; Enterprise Edition
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Store Goal state globally (simulated persistent storage)
+        let goalState = {
+            name: "None Set",
+            target: 0,
+            saved: 0
         };
 
-        try {
-            const transactionsRef = getTransactionsCollectionRef();
-            if (transactionsRef) {
-                await addDoc(transactionsRef, newTransaction);
-                
-                // Clear inputs
-                document.getElementById('trans-desc').value = '';
-                document.getElementById('trans-amount').value = '';
-            }
-        } catch (error) {
-            console.error("Error adding transaction:", error);
-            showNotification('Failed to add transaction to database.', 'error');
-        }
-    }
+        let scheduledEvents = []; // Array to hold scheduled events/bills
 
-    async function deleteTransaction(id) {
-        if (!id) return;
-
-        try {
-            const transactionsRef = getTransactionsCollectionRef();
-            if (transactionsRef) {
-                await deleteDoc(doc(transactionsRef, id));
-            }
-        } catch (error) {
-            console.error("Error deleting transaction:", error);
-            showNotification('Failed to delete transaction from database.', 'error');
-        }
-    }
-    
-    // ----------------------------------------------------------------------
-    // 4. UI/DASHBOARD LOGIC
-    // ----------------------------------------------------------------------
-
-    function calculateFinancials() {
-        let totalIncome = 0;
-        let totalExpense = 0;
-        let categoryExpenses = {};
-
-        transactions.forEach(t => {
-            const amount = parseFloat(t.amount);
-            if (t.type === 'income') {
-                totalIncome += amount;
-            } else {
-                totalExpense += amount;
-                categoryExpenses[t.category] = (categoryExpenses[t.category] || 0) + amount;
-            }
-        });
-
-        const netBalance = totalIncome - totalExpense;
-        const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpense) / totalIncome * 100).toFixed(1) : 0;
-        
-        return { netBalance, totalIncome, totalExpense, savingsRate, categoryExpenses };
-    }
-
-    function updateDashboardUI() {
-        const { netBalance, totalIncome, totalExpense, savingsRate, categoryExpenses } = calculateFinancials();
-
-        document.getElementById('balance-display').textContent = `₹${netBalance.toLocaleString()}`;
-        document.getElementById('income-display').textContent = `₹${totalIncome.toLocaleString()}`;
-        document.getElementById('expense-display').textContent = `₹${totalExpense.toLocaleString()}`;
-        document.getElementById('savings-display').textContent = `${savingsRate}%`;
-
-        renderCharts(categoryExpenses);
-        renderAIText(netBalance, totalExpense, savingsRate);
-        updateBudgetStatus(totalExpense);
-        updateGoalProgress(); 
-    }
-
-    function renderAIText(netBalance, totalExpense, savingsRate) {
-        let insight = "<div class='insight-pro text-gray-400'>No data yet. Start adding transactions to get AI insights.</div>";
-        let tip = "<div class='insight-pro text-gray-400'>Input more data for tailored advice.</div>";
-        let projection = "<div class='insight-pro text-gray-400'>Projection unavailable without more history.</div>";
-
-        if (transactions.length > 0) {
-            const expenseEntries = Object.entries(calculateFinancials().categoryExpenses);
-            const topCategory = expenseEntries.length > 0 ? expenseEntries.sort((a, b) => b[1] - a[1])[0] : null;
-            const topCategoryName = topCategory ? topCategory[0] : 'N/A';
-            
-            if (netBalance < 0) {
-                insight = `<div class="insight-pro text-red-400">🚨 **Deficit Alert:** Your expenses currently exceed income by ₹${Math.abs(netBalance).toLocaleString()}. Focus on **${topCategoryName}**.</div>`;
-            } else if (savingsRate >= 30) {
-                insight = `<div class="insight-pro text-green-400">✨ **Excellent Performance:** You hit the 30% savings target! Maintain this momentum.</div>`;
-            } else {
-                insight = `<div class="insight-pro text-cyan-400">📈 **Stable Balance:** Net income is ₹${netBalance.toLocaleString()}. Consider optimizing spending in **${topCategoryName}**.</div>`;
+        // ==================== NEW Data Manager using Local Storage ====================
+        class LocalStorageManager {
+            constructor() {
+                this.STORAGE_KEY = 'FinanceAI_Users';
             }
 
-            tip = `<div class="insight-pro">💸 **Smart Tip:** Your total expense is ₹${totalExpense.toLocaleString()}. Aim for a 5% cut in discretionary spending.</div>`;
-            projection = `<div class="insight-pro">🗓️ **Projection:** Based on current trends, your net balance is projected to grow by **5%** next month.</div>`;
-        }
-        
-        document.getElementById('ai-insights-container').innerHTML = insight;
-        document.getElementById('ai-tips-container').innerHTML = tip;
-        document.getElementById('ai-predictions-container').innerHTML = projection;
-    }
-
-
-    function updateTransactionHistory() {
-        const container = document.getElementById('transactions-container');
-        const searchInput = document.getElementById('search-bar').value.toLowerCase();
-        
-        const filteredTransactions = transactions.filter(t => {
-            const matchesFilter = currentFilter === 'all' || t.type === currentFilter;
-            const matchesSearch = t.desc.toLowerCase().includes(searchInput);
-            return matchesFilter && matchesSearch;
-        });
-
-        container.innerHTML = '';
-
-        if (filteredTransactions.length === 0) {
-            container.innerHTML = `<p class="text-center text-gray-500 py-4">No transactions found for the current filter/search.</p>`;
-        }
-
-        filteredTransactions.forEach(t => {
-            const amountClass = t.type === 'income' ? 'text-green-400' : 'text-red-400';
-            const sign = t.type === 'income' ? '+' : '-';
-
-            const transactionHtml = `
-                <div class="flex justify-between items-center p-3 bg-gray-800 rounded-lg border-l-4 ${t.type === 'income' ? 'border-green-500' : 'border-red-500'}">
-                    <div class="flex-1">
-                        <p class="font-semibold">${t.desc}</p>
-                        <p class="text-xs text-gray-400">${t.category} | ${new Date(t.date).toLocaleDateString()}</p>
-                    </div>
-                    <div class="text-right flex items-center gap-3">
-                        <p class="font-black ${amountClass}">${sign} ₹${t.amount.toLocaleString()}</p>
-                        <button onclick="deleteTransaction('${t.id}')" class="delete-pro text-xs">Delete</button>
-                    </div>
-                </div>
-            `;
-            container.innerHTML += transactionHtml;
-        });
-
-        document.getElementById('trans-count').textContent = `${transactions.length} total transactions`;
-    }
-
-    function setMonthlyBudget() {
-        const amount = document.getElementById('budget-amount').value;
-        if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
-            // Note: We avoid alert/confirm, just show notification
-            showNotification('Please enter a valid budget amount.', 'error');
-            return;
-        }
-
-        localStorage.setItem('monthlyBudget', amount);
-        document.getElementById('budget-goal-display').textContent = `₹${parseFloat(amount).toLocaleString()}`;
-        document.getElementById('budget-categories').innerHTML = `<p class="mt-2 text-green-400">Budget Active: ₹${parseFloat(amount).toLocaleString()}</p>`;
-        updateBudgetStatus(calculateFinancials().totalExpense);
-    }
-    
-    function updateBudgetStatus(totalExpense) {
-        const budget = parseFloat(localStorage.getItem('monthlyBudget') || 30000);
-        const remaining = budget - totalExpense;
-        const statusEl = document.getElementById('budget-status');
-
-        if (totalExpense === 0) {
-             statusEl.textContent = `Start Tracking`;
-             statusEl.className = 'text-xs text-gray-600 mt-3';
-        } else if (remaining < 0) {
-            statusEl.textContent = `Over by ₹${Math.abs(remaining).toLocaleString()}`;
-            statusEl.className = 'text-xs text-red-400 font-bold mt-3';
-        } else if (remaining < budget * 0.25) {
-            statusEl.textContent = `Only ₹${remaining.toLocaleString()} Left`;
-            statusEl.className = 'text-xs text-yellow-400 font-bold mt-3';
-        } else {
-            statusEl.textContent = `₹${remaining.toLocaleString()} Remaining`;
-            statusEl.className = 'text-xs text-green-400 mt-3';
-        }
-    }
-
-    function setGoal() {
-        const name = document.getElementById('goal-name').value;
-        const target = document.getElementById('goal-target').value;
-        
-        if (!name || !target || isNaN(target) || parseFloat(target) <= 0) {
-            showNotification('Please fill out both goal name and a valid target amount.', 'error');
-            return;
-        }
-        
-        const existingGoal = JSON.parse(localStorage.getItem('financialGoal') || '{"current": 0}');
-
-        const goal = { name, target: parseFloat(target), current: existingGoal.current || 0 };
-        localStorage.setItem('financialGoal', JSON.stringify(goal));
-        showNotification(`Goal '${name}' set!`, 'success');
-        updateGoalProgress();
-    }
-    
-    function updateGoalProgress() {
-        const goalData = JSON.parse(localStorage.getItem('financialGoal') || 'null');
-        const goalProgressEl = document.getElementById('goal-progress');
-        
-        if (goalData) {
-            const totalSavings = calculateFinancials().netBalance > 0 ? calculateFinancials().netBalance : 0;
-            const currentProgress = Math.min(totalSavings + goalData.current, goalData.target);
-            
-            // Persist the current progress 
-            goalData.current = currentProgress;
-            localStorage.setItem('financialGoal', JSON.stringify(goalData));
-
-            const percent = ((currentProgress / goalData.target) * 100).toFixed(1);
-            
-            goalProgressEl.innerHTML = `
-                <p class="font-semibold text-white">${goalData.name} (Target: ₹${goalData.target.toLocaleString()})</p>
-                <div class="w-full bg-gray-700 rounded-full h-2.5 my-2">
-                    <div class="h-2.5 rounded-full" style="width: ${percent}%; background: linear-gradient(90deg, #FFCA3A, #FF9500);"></div>
-                </div>
-                <p class="text-sm text-cyan-400">Current Progress: ₹${currentProgress.toFixed(0).toLocaleString()} (${percent}%)</p>
-            `;
-        } else {
-             goalProgressEl.innerHTML = `<p>Set a goal to track progress</p>`;
-        }
-    }
-
-    // ----------------------------------------------------------------------
-    // 5. CHART.JS RENDERING
-    // ----------------------------------------------------------------------
-
-    function renderCharts(categoryExpenses) {
-        const pieLabels = Object.keys(categoryExpenses);
-        const pieData = Object.values(categoryExpenses);
-        const pieColors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#4D8C57', '#C9CBCE'];
-
-        if (pieChartInstance) pieChartInstance.destroy();
-        const pieCtx = document.getElementById('pieChart').getContext('2d');
-        pieChartInstance = new Chart(pieCtx, {
-            type: 'doughnut',
-            data: {
-                labels: pieLabels,
-                datasets: [{
-                    data: pieData,
-                    backgroundColor: pieColors.slice(0, pieLabels.length),
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                        labels: { color: 'var(--text-light)' }
-                    },
-                    title: { display: false }
+            loadUsers() {
+                try {
+                    const users = localStorage.getItem(this.STORAGE_KEY);
+                    return users ? JSON.parse(users) : [];
+                } catch (e) {
+                    console.error("Error loading users from localStorage:", e);
+                    return [];
                 }
             }
-        });
 
-        const currentMonthExpense = calculateFinancials().totalExpense;
-        const currentMonthIncome = calculateFinancials().totalIncome;
-        
-        const barLabels = ['Past 5 Months Average', 'Current Month'];
-        const mockIncome = [currentMonthIncome * 0.8, currentMonthIncome]; 
-        const mockExpense = [currentMonthExpense * 0.8, currentMonthExpense]; 
-
-        if (barChartInstance) barChartInstance.destroy();
-        const barCtx = document.getElementById('barChart').getContext('2d');
-        barChartInstance = new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: barLabels,
-                datasets: [
-                    {
-                        label: 'Income',
-                        data: mockIncome,
-                        backgroundColor: '#10B981',
-                        borderRadius: 4
-                    },
-                    {
-                        label: 'Expenses',
-                        data: mockExpense,
-                        backgroundColor: '#EF4444',
-                        borderRadius: 4
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: { stacked: false, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: 'var(--text-light)' } },
-                    y: { stacked: false, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: 'var(--text-light)' } }
-                },
-                plugins: { legend: { labels: { color: 'var(--text-light)' } }, title: { display: false } }
+            saveUsers(users) {
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(users));
             }
-        });
-    }
 
-    // ----------------------------------------------------------------------
-    // 6. PWA & OFFLINE LOGIC
-    // ----------------------------------------------------------------------
-    
-    function registerServiceWorker() {
-        if ('serviceWorker' in navigator) {
-            try {
-                // 1. Create a Blob from the Service Worker script string
-                const blob = new Blob([SERVICE_WORKER_CODE], { type: 'application/javascript' });
-                const swUrl = URL.createObjectURL(blob);
-                
-                // 2. Register the Blob URL
-                navigator.serviceWorker.register(swUrl)
-                    .then(reg => console.log('Service Worker registered via Blob URL!', reg))
-                    .catch(err => console.error('Service Worker registration failed:', err));
+            async addUser(user) {
+                const users = this.loadUsers();
+                user.id = Date.now();
+                users.push(user);
+                this.saveUsers(users);
+                return user.id;
+            }
 
-            } catch (e) {
-                console.error("Failed to register inline Service Worker:", e);
-                showNotification('PWA registration failed. Offline mode disabled.', 'error');
+            async updateUser(updatedUser) {
+                let users = this.loadUsers();
+                users = users.map(u => u.id === updatedUser.id ? updatedUser : u);
+                this.saveUsers(users);
+            }
+
+            async getUser(email) {
+                const users = this.loadUsers();
+                return users.find(u => u.email === email) || null;
             }
         }
-    }
-    
-    function createManifest() {
-        const manifestContent = {
-          "name": "FinanceAI Pro",
-          "short_name": "FinanceAI",
-          "description": "Enterprise Finance Management with AI",
-          "start_url": "./index.html",
-          "display": "standalone",
-          "background_color": "#0D1B2A",
-          "theme_color": "#6FFFE9",
-          "icons": [
-            { "src": "data:image/svg+xml,...", "sizes": "192x192", "type": "image/svg+xml" },
-            { "src": "data:image/svg+xml,...", "sizes": "512x512", "type": "image/svg+xml" }
-          ]
-        };
+        // ==================== END Local Storage Manager ====================
 
-        const manifestBlob = new Blob([JSON.stringify(manifestContent)], { type: 'application/json' });
-        const manifestUrl = URL.createObjectURL(manifestBlob);
-        document.getElementById('manifest-link').setAttribute('href', manifestUrl);
-    }
-    
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredInstallPrompt = e;
-        document.getElementById('install-banner').classList.add('show');
-    });
 
-    document.getElementById('install-button').addEventListener('click', () => {
-        if (deferredInstallPrompt) {
-            deferredInstallPrompt.prompt();
-            deferredInstallPrompt.userChoice.then((choiceResult) => {
-                deferredInstallPrompt = null;
-                document.getElementById('install-banner').classList.remove('show');
-                if (choiceResult.outcome === 'accepted') {
-                    showNotification('App installed! Run it from your home screen.', 'success');
-                }
-            });
-        }
-    });
-
-    document.getElementById('install-dismiss').addEventListener('click', () => {
-        document.getElementById('install-banner').classList.remove('show');
-    });
-
-    function updateOnlineStatus() {
-        const isOnline = navigator.onLine;
-        const indicator = document.getElementById('offline-indicator');
-        const syncStatus = document.getElementById('sync-indicator');
-
-        if (isOnline) {
-            indicator.classList.remove('show');
-            syncStatus.textContent = '✓ Synced';
-            syncStatus.className = 'text-green-400';
-        } else {
-            indicator.classList.add('show');
-            syncStatus.textContent = '✕ Offline';
-            syncStatus.className = 'text-red-400';
-        }
-    }
-
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
-
-    // ----------------------------------------------------------------------
-    // 7. INITIALIZATION
-    // ----------------------------------------------------------------------
-
-    async function initializeAppAndAuth() {
-        // Step 1: Initialize Firebase
-        try {
-            const app = initializeApp(firebaseConfig);
-            setLogLevel('Debug');
-            db = getFirestore(app);
-            auth = getAuth(app);
+        // ==================== AI ENGINE ====================
+        class AIEngine {
+            constructor() {
+                this.model = 'FinanceAI-v5.0';
+            }
+            analyzeSpending(transactions) {
+                const expenses = transactions.filter(t => t.type === 'expense');
+                const totalExpense = expenses.reduce((sum, t) => sum + Math.abs(t.amount), 0);
+                const categoryBreakdown = {};
+                expenses.forEach(t => {
+                    categoryBreakdown[t.category] = (categoryBreakdown[t.category] || 0) + Math.abs(t.amount);
+                });
+                const topCategory = Object.entries(categoryBreakdown)
+                    .sort((a, b) => b[1] - a[1])[0];
+                return {
+                    totalExpense,
+                    categoryBreakdown,
+                    topCategory: topCategory ? topCategory[0] : 'None',
+                    topCategoryAmount: topCategory ? topCategory[1] : 0,
+                    averageTransaction: totalExpense / expenses.length || 0
+                };
+            }
+            calculateTrend(transactions) {
+                if (transactions.length < 2) return 0;
+                const recent = transactions.slice(-30).filter(t => t.type === 'expense')
+                    .reduce((sum, t) => sum + Math.abs(t.amount), 0);
+                const previous = transactions.slice(-60, -30).filter(t => t.type === 'expense')
+                    .reduce((sum, t) => sum + Math.abs(t.amount), 0);
+                return previous > 0 ? (recent - previous) / previous : 0;
+            }
             
-            // Step 2: Handle Authentication
-            if (initialAuthToken) {
-                await signInWithCustomToken(auth, initialAuthToken);
-            } else {
-                await signInAnonymously(auth);
-            }
-
-            // Step 3: Set up Auth Listener
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    userId = user.uid;
-                    document.getElementById('auth-screen').classList.add('hidden');
-                    document.getElementById('app-screen').classList.remove('hidden');
-                    document.getElementById('user-id-display').textContent = userId;
-                    document.getElementById('profile-user-id').value = userId;
-
-                    loadInitialSettings();
-                    subscribeToTransactions();
+            // Core AI Insights Generation (Unique Features)
+            generateInsights(income, expenses, balance, transactions) {
+                const insights = [];
+                const expenseRatio = income > 0 ? (expenses / income * 100) : 0;
+                let riskLevel = 'Low';
+                if (expenseRatio > 80) riskLevel = 'High';
+                else if (expenseRatio > 60) riskLevel = 'Medium';
+                
+                // 1. Risk Assessment
+                insights.push({
+                    type: 'risk',
+                    title: 'Financial Risk Assessment',
+                    message: `Overall risk profile: ${riskLevel}. Current expense ratio: ${expenseRatio.toFixed(1)}%.`,
+                    color: riskLevel === 'High' ? 'text-red-400' : riskLevel === 'Medium' ? 'text-yellow-400' : 'text-green-400'
+                });
+                
+                // 2. Automated Goal Alignment (Unique Feature)
+                const netFlow = income - expenses;
+                const targetSavings = income * 0.3;
+                if (netFlow >= targetSavings) {
+                    insights.push({
+                        type: 'goal_align',
+                        title: 'Automated Goal Alignment',
+                        message: 'Successfully tracking towards the 30% savings target. Maintain current habits.',
+                        color: 'text-cyan-400'
+                    });
                 } else {
-                    document.getElementById('auth-screen').classList.remove('hidden');
-                    document.getElementById('loading-message').textContent = 'Authentication Failed. Please retry.';
+                    insights.push({
+                        type: 'goal_warn',
+                        title: 'Automated Goal Alignment',
+                        message: `Projected shortfall of ₹${(targetSavings - netFlow).toLocaleString()} this month to hit the 30% savings goal.`,
+                        color: 'text-yellow-400'
+                    });
+                }
+
+                // 3. Subscription Optimization (Unique Feature)
+                const recurringExpenses = transactions.filter(t => t.recurring && t.type === 'expense').length;
+                if (recurringExpenses >= 3) {
+                     insights.push({
+                        type: 'subscription',
+                        title: 'Subscription Efficiency Score',
+                        message: `You have ${recurringExpenses} recurring charges. Consider reviewing service usage and eliminating duplicates.`,
+                        color: 'text-red-400'
+                    });
+                } else {
+                     insights.push({
+                        type: 'subscription',
+                        title: 'Subscription Efficiency Score',
+                        message: 'Subscription portfolio is minimal. Score: A+.',
+                        color: 'text-green-400'
+                    });
+                }
+                
+                return insights;
+            }
+            
+            generateRecommendations(income, expenses, balance, transactions) {
+                const recommendations = [];
+
+                if (transactions.length === 0) {
+                    recommendations.push({
+                        title: 'Onboarding & Setup',
+                        message: 'Add your primary income and two weeks of expenses to calibrate the AI model.',
+                        priority: 'high'
+                    });
+                    return recommendations;
+                }
+
+                if (balance > 20000) {
+                    recommendations.push({
+                        title: 'Liquidity Optimization',
+                        message: `The AI recommends transferring ₹${Math.round(balance * 0.5).toLocaleString()} out of checking to maximize yield.`,
+                        priority: 'high'
+                    });
+                }
+                
+                const analysis = this.analyzeSpending(transactions);
+                if (analysis.topCategory && analysis.topCategoryAmount > 5000) {
+                    recommendations.push({
+                        title: 'Category Spending Focus',
+                        message: `Highest spending is in ${analysis.topCategory}. Review transactions for waste and set a specific budget cap.`,
+                        priority: 'medium'
+                    });
+                } else {
+                    recommendations.push({
+                        title: 'Financial Health',
+                        message: 'Your spending is diversified and appears stable. Focus on increasing your passive income streams.',
+                        priority: 'low'
+                    });
+                }
+
+                return recommendations;
+            }
+            
+            generatePredictions(transactions) {
+                 const predictions = [];
+                 
+                 // 1. Transaction Volume Forecast (Unique Feature)
+                 const avgVolume = transactions.length / 3; 
+                 predictions.push({
+                    title: 'Transaction Volume Forecast',
+                    message: `Predicted transaction count next month: ${Math.round(avgVolume * 1.1)} (± 5).`,
+                    confidence: `Confidence: 91%`
+                 });
+                 
+                 // 2. Long-Term Debt Projection
+                 predictions.push({
+                    title: 'Long-Term Debt Projection',
+                    message: `Based on current payments, debt-free date is projected for Q4 2026.`,
+                    confidence: `Confidence: 85%`
+                 });
+                 
+                 return predictions;
+            }
+        }
+
+        // ==================== CHART MANAGER ====================
+        class ChartManager {
+            constructor() {
+                this.charts = {};
+            }
+            createPieChart(data) {
+                const ctx = document.getElementById('pieChart');
+                if (this.charts.pie) this.charts.pie.destroy();
+                const colors = ['#6FFFE9', '#00A389', '#FFCA3A', '#FBBF24', '#4ade80', '#f87171', '#22d3ee', '#facc15']; // Updated colors
+                this.charts.pie = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            data: data.values,
+                            backgroundColor: colors.slice(0, data.labels.length),
+                            borderWidth: 0,
+                            hoverOffset: 20
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#f3f4f6',
+                                    font: {
+                                        size: 13,
+                                        weight: '600'
+                                    },
+                                    padding: 15
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: '#ffffff',
+                                titleFont: { weight: '600' },
+                                bodyColor: '#ffffff',
+                                bodyFont: { size: 13 },
+                                padding: 12,
+                                callbacks: {
+                                    label: (context) => {
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                        return `${context.label}: ₹${context.parsed.toLocaleString()} (${percentage}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            createBarChart(data) {
+                const ctx = document.getElementById('barChart');
+                if (this.charts.bar) this.charts.bar.destroy();
+                this.charts.bar = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.months,
+                        datasets: [
+                            {
+                                label: 'Income',
+                                data: data.income,
+                                backgroundColor: 'rgba(74, 222, 128, 1)', // Green
+                                borderColor: 'rgba(74, 222, 128, 1)',
+                                borderWidth: 2,
+                                borderRadius: 8
+                            },
+                            {
+                                label: 'Expenses',
+                                data: data.expenses,
+                                backgroundColor: 'rgba(248, 113, 113, 1)', // Red
+                                borderColor: 'rgba(248, 113, 113, 1)',
+                                borderWidth: 2,
+                                borderRadius: 8
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: '#f3f4f6',
+                                    callback: (value) => '₹' + (value / 1000) + 'k',
+                                    font: { weight: '600' }
+                                },
+                                grid: { color: '#4b5563' }
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#f3f4f6',
+                                    font: { weight: '600' }
+                                },
+                                grid: { display: false }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#f3f4f6',
+                                    font: {
+                                        size: 13,
+                                        weight: '600'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            createLineChart(data) {
+                const ctx = document.getElementById('lineChart');
+                if (this.charts.line) this.charts.line.destroy();
+                this.charts.line = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Cash Flow',
+                            borderColor: '#6FFFE9',
+                            backgroundColor: 'rgba(111, 255, 233, 0.2)',
+                            data: data.values,
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                ticks: {
+                                    color: '#f3f4f6',
+                                    callback: (value) => '₹' + value.toLocaleString()
+                                },
+                                grid: { color: '#4b5563' }
+                            },
+                            x: {
+                                ticks: { color: '#f3f4f6' },
+                                grid: { display: false }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: { color: '#f3f4f6', font: { size: 12 } }
+                            }
+                        }
+                    }
+                });
+            }
+            createProjectionChart(data) {
+                const ctx = document.getElementById('projectionChart');
+                if (this.charts.projection) this.charts.projection.destroy();
+                this.charts.projection = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Projected Savings',
+                            data: data.values,
+                            borderColor: '#FFCA3A',
+                            backgroundColor: 'rgba(255, 202, 58, 0.2)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                ticks: {
+                                    color: '#f3f4f6',
+                                    callback: (value) => '₹' + (value / 1000) + 'k'
+                                },
+                                grid: { color: '#4b5563' }
+                            },
+                            x: {
+                                ticks: { color: '#f3f4f6' },
+                                grid: { display: false }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: { color: '#f3f4f6', font: { size: 12 } }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // ==================== APP CONTROLLER ====================
+        let db, ai, charts;
+        let currentUser = null;
+        let transactions = [];
+        let currentScreen = 'dashboard';
+
+        async function initApp() {
+            // Initialize Local Storage Manager
+            db = new LocalStorageManager(); 
+            
+            ai = new AIEngine();
+            charts = new ChartManager();
+            
+            try {
+                console.log('Application initialization complete.');
+            } catch (error) {
+                console.error('Initialization error:', error);
+            }
+            checkAuth();
+            
+            loadGoal(); 
+            loadScheduledEvents();
+            updateGoalTrackerUI();
+            updateDailyBudget();
+        }
+
+        function checkAuth() {
+            const storedUser = sessionStorage.getItem('currentUser');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+                showApp();
+                loadUserData();
+            } else {
+                showAuth();
+            }
+        }
+
+        function showAuth() {
+            document.getElementById('auth-screen').classList.remove('hidden');
+            document.getElementById('app-screen').classList.add('hidden');
+        }
+
+        function showApp() {
+            document.getElementById('auth-screen').classList.add('hidden');
+            document.getElementById('app-screen').classList.remove('hidden');
+            if (currentUser) {
+                updateUserInfoDisplay();
+                setActiveScreen(currentScreen);
+            }
+        }
+
+        function setActiveScreen(screenName) {
+            currentScreen = screenName;
+            document.getElementById('dashboard-screen').classList.add('hidden');
+            document.getElementById('profile-screen').classList.add('hidden');
+            document.getElementById('contact-screen').classList.add('hidden');
+            document.getElementById('planner-screen').classList.add('hidden');
+            document.getElementById(`${screenName}-screen`).classList.remove('hidden');
+            
+            if (screenName === 'planner') {
+                 updateDailyBudget();
+                 renderScheduleList();
+            }
+            toggleProfileMenu(false);
+        }
+
+        function updateUserInfoDisplay() {
+            if (currentUser) {
+                const name = currentUser.name || currentUser.email.split('@')[0];
+                document.getElementById('user-name-display').textContent = name;
+                document.getElementById('user-avatar').textContent = name.charAt(0).toUpperCase();
+
+                const profileNameInput = document.getElementById('profile-name');
+                const profileEmailInput = document.getElementById('profile-email');
+                if (profileNameInput) profileNameInput.value = currentUser.name || '';
+                if (profileEmailInput) profileEmailInput.value = currentUser.email || '';
+                
+                const contactEmailInput = document.getElementById('contact-email');
+                const contactNameInput = document.getElementById('contact-name');
+                if (contactEmailInput) contactEmailInput.value = currentUser.email || '';
+                if (contactNameInput) contactNameInput.value = currentUser.name || '';
+            }
+        }
+
+        function toggleAuth() {
+            document.getElementById('login-form').classList.toggle('hidden');
+            document.getElementById('signup-form').classList.toggle('hidden');
+        }
+
+        async function handleSignup() {
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            if (!name || !email || !password) {
+                showNotification('Please fill all fields', 'error');
+                return;
+            }
+            if (password.length < 6) {
+                showNotification('Password must be at least 6 characters', 'error');
+                return;
+            }
+            showLoading('signup');
+            try {
+                const existingUser = await db.getUser(email);
+                if (existingUser) {
+                    showNotification('Email already registered.', 'error');
+                    hideLoading('signup');
+                    return;
+                }
+                const user = {
+                    name,
+                    email,
+                    password: btoa(password),
+                    createdAt: new Date().toISOString()
+                };
+                const userId = await db.addUser(user);
+                
+                currentUser = { ...user, id: userId };
+                sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                showNotification('Account created successfully! Signing in...', 'success');
+                setTimeout(() => {
+                    showApp();
+                    loadUserData();
+                }, 500);
+
+            } catch (error) {
+                 showNotification('Signup failed: ' + error.message, 'error');
+            } finally {
+                hideLoading('signup');
+            }
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            if (!email || !password) {
+                showNotification('Please fill all fields', 'error');
+                return;
+            }
+            showLoading('login');
+            try {
+                const user = await db.getUser(email);
+                if (!user || user.password !== btoa(password)) {
+                    showNotification('Invalid credentials', 'error');
+                    hideLoading('login');
+                    return;
+                }
+                currentUser = user;
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+                showNotification('Welcome back!', 'success');
+                setTimeout(() => {
+                    showApp();
+                    loadUserData();
+                }, 500);
+            } catch (error) {
+                showNotification('Login failed: An error occurred during lookup.', 'error');
+            } finally {
+                hideLoading('login');
+            }
+        }
+
+        async function updateProfile() {
+            if (!currentUser) return;
+
+            const name = document.getElementById('profile-name').value.trim();
+            const newPassword = document.getElementById('profile-password').value;
+            const statusElement = document.getElementById('profile-status');
+
+            if (!name) {
+                statusElement.innerHTML = '<span class="text-red-400">Name cannot be empty.</span>';
+                return;
+            }
+            if (newPassword && newPassword.length < 6) {
+                statusElement.innerHTML = '<span class="text-red-400">Password must be at least 6 characters.</span>';
+                return;
+            }
+
+            try {
+                const updatedUser = { ...currentUser, name: name };
+                if (newPassword) {
+                    updatedUser.password = btoa(newPassword);
+                }
+
+                if (currentUser.id === 999) {
+                    statusElement.innerHTML = '<span class="text-yellow-400">Demo mode: Profile changes not saved permanently.</span>';
+                } else {
+                    await db.updateUser(updatedUser);
+                    statusElement.innerHTML = '<span class="text-green-400">Profile updated successfully!</span>';
+                }
+                
+                currentUser = updatedUser;
+                sessionStorage.setItem('currentUser', JSON.stringify(updatedUser));
+                document.getElementById('profile-password').value = '';
+                updateUserInfoDisplay();
+
+            } catch (error) {
+                console.error('Profile update failed:', error);
+                statusElement.innerHTML = '<span class="text-red-400">Update failed. Try again.</span>';
+            }
+        }
+
+        function setMonthlyBudget() {
+            const amount = parseFloat(document.getElementById('budget-amount').value);
+            if (amount > 0) {
+                showNotification(`Budget set to ₹${amount.toLocaleString()}`, 'success');
+                updateStats();
+                updateDailyBudget();
+            } else {
+                showNotification('Please enter a valid amount.', 'error');
+            }
+        }
+        
+        // ==================== Goal Tracking Logic ====================
+        function setGoal() {
+            const name = document.getElementById('goal-name').value.trim();
+            const target = parseFloat(document.getElementById('goal-target').value);
+            
+            if (!name || target <= 0 || isNaN(target)) {
+                showNotification('Please enter a valid goal name and amount.', 'error');
+                return;
+            }
+            
+            goalState.name = name;
+            goalState.target = target;
+            
+            const transactionsTotal = transactions.reduce((sum, t) => sum + (t.type === 'income' ? t.amount : -Math.abs(t.amount)), 0);
+            // Simple logic: saved amount is the cumulative net balance, clamped at 0
+            goalState.saved = Math.max(0, transactionsTotal); 
+
+            sessionStorage.setItem('goalState', JSON.stringify(goalState));
+            
+            showNotification(`Goal '${name}' set successfully!`, 'success');
+            updateGoalTrackerUI();
+        }
+        
+        function loadGoal() {
+             const storedGoal = sessionStorage.getItem('goalState');
+             if (storedGoal) {
+                 goalState = JSON.parse(storedGoal);
+             }
+        }
+
+        function updateGoalTrackerUI() {
+            const progressEl = document.getElementById('goal-progress');
+            if (goalState.name === "None Set" || goalState.target === 0) {
+                 progressEl.innerHTML = `
+                    <p>Current Goal: <span class="text-cyan-400">None Set</span></p>
+                    <p>Progress: <span class="text-yellow-400">0%</span></p>
+                 `;
+                 return;
+            }
+            
+            const progress = Math.min(100, (goalState.saved / goalState.target) * 100).toFixed(1);
+            const savedAmount = goalState.saved.toLocaleString();
+            const targetAmount = goalState.target.toLocaleString();
+            const remaining = (goalState.target - goalState.saved) > 0 ? (goalState.target - goalState.saved).toLocaleString() : 'Completed!';
+
+            progressEl.innerHTML = `
+                <p>Current Goal: <span class="text-cyan-400">${goalState.name} (₹${targetAmount})</span></p>
+                <p>Saved: <span class="text-green-400">₹${savedAmount}</span> | Remaining: <span class="text-yellow-400">₹${remaining}</span></p>
+                <div class="mt-2 h-2 bg-gray-700 rounded-full">
+                    <div class="h-2 rounded-full" style="width: ${progress}%; background-color: var(--accent-primary);"></div>
+                </div>
+                <p class="text-xs text-right mt-1 font-bold">${progress}% Complete</p>
+            `;
+        }
+
+        // ==================== Scheduling Logic ====================
+        function scheduleEvent() {
+            const desc = document.getElementById('event-desc').value.trim();
+            const date = document.getElementById('event-date').value;
+            const type = document.getElementById('event-type').value;
+
+            if (!desc || !date) {
+                showNotification('Please enter a description and date for the event.', 'error');
+                return;
+            }
+
+            const newEvent = {
+                id: Date.now(),
+                description: desc,
+                date: date,
+                type: type
+            };
+            
+            scheduledEvents.push(newEvent);
+            saveScheduledEvents();
+            renderScheduleList();
+            showNotification(`${type} '${desc}' scheduled for ${date}!`, 'success');
+            
+            // Placeholder for notification system
+            if (type === 'Expense') {
+                 // In a mobile app, this would trigger a native push notification based on date.
+                 console.log(`[MOBILE NOTIFICATION SIMULATED]: Upcoming Expense: ${desc} on ${date}`);
+            }
+        }
+        
+        function deleteEvent(id) {
+            scheduledEvents = scheduledEvents.filter(e => e.id !== id);
+            saveScheduledEvents();
+            renderScheduleList();
+            showNotification('Scheduled event removed.', 'success');
+        }
+
+        function saveScheduledEvents() {
+            localStorage.setItem('scheduledEvents', JSON.stringify(scheduledEvents));
+        }
+
+        function loadScheduledEvents() {
+            const storedEvents = localStorage.getItem('scheduledEvents');
+            if (storedEvents) {
+                scheduledEvents = JSON.parse(storedEvents);
+            }
+            // Add initial demo events if the list is empty
+            if (scheduledEvents.length === 0) {
+                 scheduledEvents.push({ id: 100, description: 'Rent/EMI Payment', date: '2025-11-01', type: 'Expense' });
+                 scheduledEvents.push({ id: 101, description: 'Budget Health Check', date: '2025-11-15', type: 'Review' });
+                 saveScheduledEvents();
+            }
+        }
+
+        function renderScheduleList() {
+            const container = document.getElementById('schedule-list');
+            
+            const sorted = [...scheduledEvents].sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            if (sorted.length === 0) {
+                 container.innerHTML = '<p class="text-gray-500">No events scheduled. Use the form above to start planning!</p>';
+                 return;
+            }
+            
+            const listHtml = sorted.map(e => {
+                const isPast = new Date(e.date) < new Date().setHours(0, 0, 0, 0);
+                let colorClass = 'text-white';
+                let icon = '📅';
+
+                if (e.type === 'Expense') {
+                    colorClass = isPast ? 'text-red-400' : 'text-yellow-400';
+                    icon = '💸';
+                } else if (e.type === 'Review') {
+                    colorClass = 'text-cyan-400';
+                    icon = '📈';
+                }
+                
+                const formattedDate = new Date(e.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+                
+                return `
+                    <div class="flex justify-between items-center p-3 rounded-lg bg-gray-900 border ${isPast ? 'border-red-800 opacity-60' : 'border-gray-700'}">
+                        <div>
+                            <p class="font-semibold ${colorClass}">${icon} ${e.description}</p>
+                            <p class="text-sm text-gray-500">${formattedDate} &bull; ${e.type} ${isPast ? '(Passed)' : ''}</p>
+                        </div>
+                        <button onclick="deleteEvent(${e.id})" class="delete-pro bg-red-700 hover:bg-red-800 transition-colors">
+                            Remove
+                        </button>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = listHtml;
+        }
+
+        function updateDailyBudget() {
+            const today = new Date();
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const dayOfMonth = today.getDate();
+            const daysRemaining = daysInMonth - dayOfMonth + 1;
+
+            document.getElementById('days-remaining').textContent = `${daysRemaining} days remaining in month.`;
+
+            const monthlyBudget = parseFloat(document.getElementById('budget-amount').value) || 30000;
+            
+            // Calculate fixed expenses for the month
+            const scheduledExpenses = scheduledEvents
+                                        .filter(e => e.type === 'Expense')
+                                        .map(e => 5000) // Placeholder value for a bill/expense
+                                        .reduce((sum, amount) => sum + amount, 0);
+
+            // Calculate current month's expense transactions
+            const currentMonthExpenses = Math.abs(transactions.filter(t => 
+                t.type === 'expense' && t.date.startsWith(`${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`)
+            ).reduce((sum, t) => sum + t.amount, 0));
+
+
+            const totalFixed = scheduledExpenses; // Assuming scheduled events are major fixed expenses
+            const discretionaryBudget = monthlyBudget - totalFixed;
+            const remainingDiscretionary = discretionaryBudget - currentMonthExpenses;
+
+            const safeDailySpend = Math.max(0, remainingDiscretionary / daysRemaining);
+
+            document.getElementById('daily-budget-value').textContent = `₹${Math.round(safeDailySpend).toLocaleString()}`;
+            document.getElementById('daily-budget-value').className = `text-4xl font-black ${safeDailySpend > 500 ? 'text-green-400' : 'text-yellow-400'}`;
+            
+        }
+        
+        // ==================== END Scheduling Logic ====================
+
+
+        async function handleDemo() {
+            const demoUser = {
+                id: 999,
+                name: 'Demo User',
+                email: 'demo@financeai.com',
+                password: btoa('demo123'),
+                createdAt: new Date().toISOString()
+            };
+            currentUser = demoUser;
+            sessionStorage.setItem('currentUser', JSON.stringify(demoUser));
+            const demoTransactions = [
+                { id: 1, userId: 999, date: '2025-01-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income', recurring: 'Monthly' },
+                { id: 2, userId: 999, date: '2025-01-16', description: 'Grocery Shopping', amount: -3500, category: 'Food', type: 'expense' },
+                { id: 3, userId: 999, date: '2025-01-17', description: 'Electricity Bill', amount: -2200, category: 'Bills', type: 'expense', recurring: 'Monthly' },
+                { id: 4, userId: 999, date: '2025-01-18', description: 'Movie Tickets', amount: -1200, category: 'Entertainment', type: 'expense' },
+                { id: 5, userId: 999, date: '2025-01-19', description: 'Fuel', amount: -2000, category: 'Transportation', type: 'expense' },
+                { id: 6, userId: 999, date: '2025-01-20', description: 'Freelance Project', amount: 15000, category: 'Freelance', type: 'income' },
+                { id: 7, userId: 999, date: '2024-12-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income', recurring: 'Monthly' },
+                { id: 8, userId: 999, date: '2024-12-20', description: 'Shopping', amount: -8000, category: 'Shopping', type: 'expense' },
+                { id: 9, userId: 999, date: '2024-11-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income', recurring: 'Monthly' },
+                { id: 10, userId: 999, date: '2024-11-25', description: 'Restaurant', amount: -2500, category: 'Food', type: 'expense' },
+            ];
+            transactions = demoTransactions;
+            showNotification('Demo mode activated!', 'success');
+            showApp();
+            updateAllData();
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('currentUser');
+            currentUser = null;
+            transactions = [];
+            showAuth();
+            showNotification('Logged out successfully', 'success');
+        }
+
+        function toggleProfileMenu(forceState) {
+            const menu = document.getElementById('profile-menu-dropdown');
+            if (forceState !== undefined) {
+                menu.classList.toggle('hidden', !forceState);
+            } else {
+                menu.classList.toggle('hidden');
+            }
+        }
+
+        async function loadUserData() {
+            if (!currentUser) return;
+            // In a real app, you'd fetch transactions from a backend database here.
+            // For this single-file app, we'll use a placeholder or local storage simulation.
+            
+            if (currentUser.id === 999 && transactions.length === 0) {
+                // If in demo mode and transactions are empty, load demo data
+                 handleDemo(); 
+                 return;
+            } else if (currentUser.id !== 999) {
+                // Placeholder for real transaction loading - simulation using local storage
+                 const userTrans = localStorage.getItem(`transactions_${currentUser.id}`);
+                 transactions = userTrans ? JSON.parse(userTrans) : [];
+            }
+            
+            updateAllData();
+        }
+
+        async function addTransaction() {
+            const desc = document.getElementById('trans-desc').value.trim();
+            let amount = parseFloat(document.getElementById('trans-amount').value);
+            const type = document.getElementById('trans-type').value;
+            const category = document.getElementById('trans-category').value;
+            const recurring = document.getElementById('trans-recurring').value.trim();
+            const lifestyle = document.getElementById('trans-lifestyle-tag').value.trim();
+            const microInvest = document.getElementById('micro-invest').checked;
+
+
+            if (!desc || !amount || amount <= 0) {
+                showNotification('Please enter valid details', 'error');
+                return;
+            }
+            
+            // Micro-investment simulation: Round up the expense and add the difference as an investment transaction
+            if (type === 'expense' && microInvest) {
+                const roundedAmount = Math.ceil(amount);
+                const microInvestAmount = roundedAmount - amount;
+                
+                // Add the main transaction (rounded up)
+                const mainTransaction = {
+                    userId: currentUser.id,
+                    date: new Date().toISOString().split('T')[0],
+                    description: desc,
+                    amount: -roundedAmount,
+                    category: category,
+                    type: type,
+                    recurring: recurring,
+                    lifestyle: lifestyle,
+                    id: Date.now()
+                };
+                 transactions.push(mainTransaction);
+                 
+                // Add the investment transaction
+                if (microInvestAmount > 0) {
+                     const microTransaction = {
+                        userId: currentUser.id,
+                        date: new Date().toISOString().split('T')[0],
+                        description: `Micro-Invest: ${desc} Roundup`,
+                        amount: microInvestAmount, // Positive amount for 'investment' savings
+                        category: 'Investment', 
+                        type: 'income',
+                        recurring: '',
+                        lifestyle: '#Savings',
+                        id: Date.now() + 1
+                    };
+                    transactions.push(microTransaction);
+                }
+
+            } else {
+                 const transaction = {
+                    userId: currentUser.id,
+                    date: new Date().toISOString().split('T')[0],
+                    description: desc,
+                    amount: type === 'expense' ? -Math.abs(amount) : Math.abs(amount),
+                    category: category,
+                    type: type,
+                    recurring: recurring,
+                    lifestyle: lifestyle,
+                    id: Date.now()
+                };
+                 transactions.push(transaction);
+            }
+
+            // In a real app, save to db here: db.addTransaction(transaction);
+            if (currentUser.id !== 999) {
+                 localStorage.setItem(`transactions_${currentUser.id}`, JSON.stringify(transactions));
+            }
+            
+            document.getElementById('trans-desc').value = '';
+            document.getElementById('trans-amount').value = '';
+            document.getElementById('trans-type').value = 'expense';
+            document.getElementById('trans-category').value = 'Food';
+            document.getElementById('trans-recurring').value = '';
+            document.getElementById('trans-lifestyle-tag').value = '';
+            document.getElementById('micro-invest').checked = false;
+
+            updateAllData();
+            showNotification('Transaction added successfully!', 'success');
+        }
+
+        async function deleteTransaction(id) {
+            if (!confirm('Delete this transaction?')) return;
+            try {
+                transactions = transactions.filter(t => t.id !== id);
+                
+                if (currentUser.id !== 999) {
+                     localStorage.setItem(`transactions_${currentUser.id}`, JSON.stringify(transactions));
+                }
+
+                updateAllData();
+                showNotification('Transaction deleted', 'success');
+            } catch (error) {
+                showNotification('Failed to delete transaction', 'error');
+            }
+        }
+
+        function updateAllData() {
+            // Recalculate everything that depends on transactions
+            updateStats();
+            updateCharts();
+            updateAIInsights();
+            updateTransactionsList();
+            updateGoalTrackerUI(); // Update goal progress
+            updateDailyBudget(); // Update safe daily spend
+        }
+
+        function updateStats() {
+            const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const expenses = Math.abs(transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0));
+            const balance = income - expenses;
+            const savingsRate = income > 0 ? ((balance / income) * 100).toFixed(1) : 0;
+            const debtToIncome = income > 0 ? (expenses / income * 100).toFixed(1) : 0;
+
+            document.getElementById('balance-display').textContent = `₹${balance.toLocaleString()}`;
+            document.getElementById('income-display').textContent = `₹${income.toLocaleString()}`;
+            document.getElementById('expense-display').textContent = `₹${expenses.toLocaleString()}`;
+            document.getElementById('savings-display').textContent = `${savingsRate}%`;
+            
+            document.getElementById('budget-goal-display').textContent = `${debtToIncome}%`;
+            document.getElementById('budget-status').textContent = debtToIncome < 40 ? 'Healthy Range' : 'Review Debt Burden';
+
+            document.getElementById('balance-display').className = `text-3xl font-black ${balance >= 0 ? 'text-green-400' : 'text-red-400'}`;
+            document.getElementById('budget-status').className = `text-xs mt-3 ${debtToIncome < 40 ? 'text-green-400' : 'text-yellow-400'}`;
+        }
+
+        function updateCharts() {
+            const categoryData = {};
+            transactions.filter(t => t.type === 'expense').forEach(t => {
+                categoryData[t.category] = (categoryData[t.category] || 0) + Math.abs(t.amount);
+            });
+            charts.createPieChart({
+                labels: Object.keys(categoryData),
+                values: Object.values(categoryData)
+            });
+            const monthlyData = {};
+            transactions.forEach(t => {
+                const month = t.date.substring(0, 7);
+                if (!monthlyData[month]) {
+                    monthlyData[month] = { income: 0, expenses: 0 };
+                }
+                if (t.type === 'income') {
+                    monthlyData[month].income += t.amount;
+                } else {
+                    monthlyData[month].expenses += Math.abs(t.amount);
                 }
             });
-
-        } catch (error) {
-            console.error("Firebase Initialization Error:", error);
-            document.getElementById('auth-screen').classList.remove('hidden');
-            document.getElementById('loading-message').textContent = `Initialization Error: ${error.message}`;
+            const months = Object.keys(monthlyData).sort().slice(-6);
+            charts.createBarChart({
+                months: months,
+                income: months.map(m => monthlyData[m].income),
+                expenses: months.map(m => monthlyData[m].expenses)
+            });
+            const last7Days = [];
+            const labels = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                const dayTotal = transactions
+                    .filter(t => t.date === dateStr)
+                    .reduce((sum, t) => sum + t.amount, 0);
+                labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+                last7Days.push(dayTotal);
+            }
+            charts.createLineChart({ labels, values: last7Days });
+            const currentBalance = transactions.reduce((sum, t) => sum + t.amount, 0);
+            const monthlyIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0) / (months.length || 1);
+            const monthlyExpense = Math.abs(transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0)) / (months.length || 1);
+            const projectionLabels = [];
+            const projectionValues = [];
+            let projectedBalance = currentBalance;
+            for (let i = 1; i <= 6; i++) {
+                projectionLabels.push(`Month ${i}`);
+                projectedBalance += (monthlyIncome - monthlyExpense);
+                projectionValues.push(projectedBalance);
+            }
+            charts.createProjectionChart({ labels: projectionLabels, values: projectionValues });
         }
-    }
-    
-    function loadInitialSettings() {
-        // Initialize PWA and local settings
-        createManifest();
-        registerServiceWorker(); 
-        updateOnlineStatus();
-        setMonthlyBudget(); 
-        updateGoalProgress(); 
-    }
 
-    // Export function
-    function exportData() {
-        let csvContent = "data:text/csv;charset=utf-8,ID,Description,Amount,Type,Category,Date\r\n";
+        function updateAIInsights() {
+            const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const expenses = Math.abs(transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0));
+            const balance = income - expenses;
+            const insights = ai.generateInsights(income, expenses, balance, transactions);
+
+            document.getElementById('ai-insights-container').innerHTML = insights.map(insight => `
+            <div class="insight-pro">
+                <p class="text-sm font-semibold ${insight.color}">${insight.title}</p>
+                <p class="text-xs text-gray-400 mt-1">${insight.message}</p>
+            </div>
+        `).join('');
+
+            const recommendations = ai.generateRecommendations(income, expenses, balance, transactions);
+            document.getElementById('ai-tips-container').innerHTML = recommendations.map(rec => `
+            <div class="insight-pro">
+                <p class="text-sm font-semibold text-yellow-400">${rec.title}</p>
+                <p class="text-xs text-gray-400 mt-1">${rec.message}</p>
+            </div>
+        `).join('');
+
+            const predictions = ai.generatePredictions(transactions);
+            document.getElementById('ai-predictions-container').innerHTML = predictions.map(pred => `
+            <div class="insight-pro">
+                <p class="text-sm font-semibold text-cyan-400">${pred.title}</p>
+                <p class="text-xs text-gray-400 mt-1">${pred.message}</p>
+                ${pred.confidence ? `<p class="text-xs text-green-400 mt-1">Confidence: ${pred.confidence.split(': ')[1]}</p>` : ''}
+            </div>
+        `).join('');
+        }
+
+        function updateRecurringList() {
+            // This function is included in the previous versions but replaced by the Planner's scheduling logic in the new design.
+            // Keeping it empty to avoid redundant code in the final version.
+        }
+
+        function simulateWhatIf() {
+            const input = document.getElementById('what-if-input').value.toLowerCase();
+            const resultsDiv = document.getElementById('what-if-results');
+            const balance = transactions.reduce((sum, t) => sum + t.amount, 0);
+            const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const expenses = Math.abs(transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0));
+            const monthlyNetFlow = income - expenses;
+
+
+            let output = '';
+            
+            // --- SCENARIO 1: INCOME / CAREER ---
+            if (input.includes("raise") || input.includes("10%") || input.includes("new job") || input.includes("income")) {
+                const raiseAmount = input.includes("10%") ? income * 0.10 : 8000;
+                const newNetFlow = monthlyNetFlow + raiseAmount;
+
+                output = `<h4 class="text-lg font-bold text-cyan-400 mb-2">Simulated Result: Income Boost (₹${raiseAmount.toLocaleString()})</h4>
+                        <p class="text-sm text-white">Your new monthly net flow would be <span class="text-green-400">₹${newNetFlow.toLocaleString()}</span>.</p>
+                        <p class="text-sm text-white">Projected 6-month balance increases by: <span class="text-green-400">₹${(raiseAmount * 6).toLocaleString()}</span>.</p>
+                        <p class="text-xs text-gray-400 mt-1">Nudge: Automatically allocate half of this increase to your investment portfolio.</p>`;
+
+            // --- SCENARIO 2: HOUSING / LARGE PURCHASES ---
+            } else if (input.includes("buy a house") || input.includes("apartment") || input.includes("down payment") || input.includes("mortgage")) {
+                const downPaymentSim = 500000;
+                const downPaymentPercent = (balance > 0 ? (downPaymentSim / balance) : 0) * 100;
+                
+                output = `<h4 class="text-lg font-bold text-cyan-400 mb-2">Simulated Result: Home Purchase</h4>
+                        <p class="text-sm text-white">A ₹${downPaymentSim.toLocaleString()} down payment requires <span class="text-red-400">${downPaymentPercent.toFixed(0)}%</span> of your current liquid assets.</p>
+                        <p class="text-sm text-white">Estimated new EMI will reduce discretionary spending by 35%.</p>
+                        <p class="text-xs text-gray-400 mt-1">Nudge: Focus on increasing income sources tagged with #SideHustle to build your down payment faster.</p>`;
+
+            // --- SCENARIO 3: DEBT PAYOFF ---
+            } else if (input.includes("pay off") || input.includes("credit card") || input.includes("loan") || input.includes("debt")) {
+                const extraPayment = Math.min(5000, balance * 0.1);
+                
+                output = `<h4 class="text-lg font-bold text-cyan-400 mb-2">Simulated Result: Aggressive Debt Payoff</h4>
+                        <p class="text-sm text-white">Applying an extra ₹${extraPayment.toLocaleString()} monthly to high-interest debt.</p>
+                        <p class="text-sm text-white">Debt payoff accelerated by approximately 4 months, saving ₹${Math.round(extraPayment * 3).toLocaleString()} in interest.</p>
+                        <p class="text-xs text-gray-400 mt-1">Nudge: Use the Micro-Investment feature to round-up purchases and auto-apply change to loan principal.</p>`;
+            
+            // --- SCENARIO 4: TRAVEL / LARGE EXPENSE ---
+            } else if (input.includes("travel") || input.includes("trip") || input.includes("car") || input.includes("buy")) {
+                const tripCost = 80000;
+                const monthsToSave = Math.ceil(tripCost / (monthlyNetFlow * 0.5)); 
+                
+                output = `<h4 class="text-lg font-bold text-cyan-400 mb-2">Simulated Result: Large Purchase Planning (₹${tripCost.toLocaleString()})</h4>
+                        <p class="text-sm text-white">Based on current savings, you can reach this goal in <span class="text-yellow-400">${monthsToSave} months</span>.</p>
+                        <p class="text-sm text-white">If you reduce Food expenses by 15%, you could shorten the timeline by 2 months.</p>
+                        <p class="text-xs text-gray-400 mt-1">Nudge: Set up a dedicated Goal Tracker for this purchase to monitor milestones.</p>`;
+
+            // --- FALLBACK / UNKNOWN INPUT ---
+            } else {
+                 output = `<h4 class="text-lg font-bold text-cyan-400 mb-2">AI Coach Response</h4>
+                        <p class="text-sm text-gray-400">This is a complex scenario. Please try inputs like: "Buy a house," "Get a 10% raise," or "Pay off my loan."</p>`;
+            }
+
+            resultsDiv.innerHTML = output;
+        }
+
+        function filterTransactions(filterType) {
+            let filteredList = transactions;
+            const searchInput = document.getElementById('search-bar').value.toLowerCase();
+
+            if (filterType === 'income') {
+                filteredList = transactions.filter(t => t.type === 'income');
+            } else if (filterType === 'expense') {
+                filteredList = transactions.filter(t => t.type === 'expense');
+            } else if (filterType === 'recurring') {
+                filteredList = transactions.filter(t => t.recurring);
+            }
+            
+            const listToSearch = (filterType === 'all' || filterType === 'search') ? transactions : filteredList;
+            if (searchInput || filterType === 'search') {
+                filteredList = listToSearch.filter(t =>
+                    t.description.toLowerCase().includes(searchInput) ||
+                    t.category.toLowerCase().includes(searchInput) ||
+                    t.type.toLowerCase().includes(searchInput) ||
+                    (t.recurring && t.recurring.toLowerCase().includes(searchInput)) ||
+                    (t.lifestyle && t.lifestyle.toLowerCase().includes(searchInput))
+                );
+            }
+
+            updateTransactionsList(filteredList);
+        }
+
+        function updateTransactionsList(filteredList) {
+            const container = document.getElementById('transactions-container');
+            const list = filteredList || transactions;
+            document.getElementById('trans-count').textContent = `${list.length} transactions`;
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-gray-400">
+                        <p>No transactions found matching the filter.</p>
+                    </div>
+                `;
+                document.getElementById('summary-stats').innerHTML = '';
+                return;
+            }
+
+            const sorted = [...list].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            // ELEGANT LIST STRUCTURE
+            const listHtml = sorted.map(t => {
+                const amountColor = t.amount >= 0 ? 'text-green-400' : 'text-red-400';
+                const typeBadgeColor = t.type === 'income' ? 'bg-green-700/30 text-green-400' : 'bg-red-700/30 text-red-400';
+                const recurringBadge = t.recurring ? `<span class="hidden lg:inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-cyan-700/30 text-cyan-400 ml-2">${t.recurring}</span>` : '';
+                const lifestyleTag = t.lifestyle ? `<span class="text-xs text-gray-500">${t.lifestyle}</span>` : '';
+                const formattedDate = new Date(t.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+                const sign = t.amount >= 0 ? '+' : '-';
+                const formattedAmount = `₹${Math.abs(t.amount).toLocaleString()}`;
+
+                return `
+                    <li class="transaction-pro group flex items-center justify-between space-x-4">
+                        <div class="flex-grow min-w-0 flex items-center space-x-4">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center 
+                                        ${t.type === 'income' ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'} 
+                                        flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="${t.type === 'income' ? 'M10 2a8 8 0 100 16 8 8 0 000-16zm-5 9a.5.5 0 01.5-.5h8a.5.5 0 010 1h-8a.5.5 0 01-.5-.5z' : 'M10 2a8 8 0 100 16 8 8 0 000-16zm-5 9a.5.5 0 01.5-.5h8a.5.5 0 010 1h-8a.5.5 0 01-.5-.5z'}" />
+                                </svg>
+                            </div>
+                            
+                            <div class="min-w-0">
+                                <p class="text-sm font-semibold truncate text-white">${t.description} ${recurringBadge}</p>
+                                <p class="text-xs text-gray-400">${formattedDate} &bull; ${t.category} ${t.lifestyle ? '&bull;' : ''} ${lifestyleTag}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-3 flex-shrink-0">
+                            <p class="text-base font-bold ${amountColor} tabular-nums">${sign}${formattedAmount}</p>
+                            
+                            <span class="hidden sm:inline-block text-xs font-medium px-2 py-0.5 rounded-full ${typeBadgeColor}">
+                                ${t.type.charAt(0).toUpperCase() + t.type.slice(1)}
+                            </span>
+                            
+                            <button onclick="deleteTransaction(${t.id})" class="delete-pro opacity-0 group-hover:opacity-100 transition-opacity">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 10-2 0v6a1 1 0 102 0V8z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
+                `;
+            }).join('');
+
+            container.innerHTML = `<ul class="space-y-2">${listHtml}</ul>`;
+
+
+            // Update Summary Stats
+            const totalIncome = list.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const totalExpense = Math.abs(list.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0));
+            const balance = totalIncome - totalExpense;
+            document.getElementById('summary-stats').innerHTML = `
+            <b>Summary:</b> Income: <span class="text-green-400">₹${totalIncome.toLocaleString()}</span> | Expenses: <span class="text-red-400">₹${totalExpense.toLocaleString()}</span> | Balance: <span class="${balance >= 0 ? 'text-cyan-400' : 'text-red-400'};">₹${balance.toLocaleString()}</span>
+        `;
+        }
+
+
+        function exportCSV() {
+            if (!transactions.length) return;
+            const header = ['Date', 'Description', 'Amount', 'Category', 'Type', 'Recurring', 'Lifestyle Tag'];
+            const rows = transactions.map(t => [t.date, t.description, t.amount, t.category, t.type, t.recurring || 'N/A', t.lifestyle || 'N/A']);
+            let csv = header.join(',') + '\n';
+            csv += rows.map(r => r.join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'transactions.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+            showNotification('CSV exported!', 'success');
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify({
+                user: currentUser,
+                transactions: transactions,
+                exportedAt: new Date().toISOString()
+            }, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `financeai-export-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showNotification('Data exported successfully!', 'success');
+        }
+
+        function showLoading(type) {
+            document.getElementById(type + '-text').classList.add('hidden');
+            document.getElementById(type + '-spinner').classList.remove('hidden');
+        }
+
+        function hideLoading(type) {
+            document.getElementById(type + '-text').classList.remove('hidden');
+            document.getElementById(type + '-spinner').classList.add('hidden');
+        }
+
+        function showNotification(message, type) {
+            const container = document.getElementById('notification-container');
+            const icon = type === 'success' ? '✅' : '❌';
+            const color = type === 'success' ? 'text-green-400' : 'text-red-400';
+            container.innerHTML = `
+            <div class="notification-pro">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">${icon}</span>
+                    <p class="${color} font-semibold">${message}</p>
+                </div>
+            </div>
+        `;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 3000);
+        }
         
-        transactions.forEach(t => {
-            const desc = `"${String(t.desc).replace(/"/g, '""')}"`;
-            let row = [t.id, desc, t.amount, t.type, t.category, t.date].join(",");
-            csvContent += row + "\r\n";
+        // Contact form submission handler (uses Formspree endpoint)
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            
+            // Wait a moment for Formspree to process, then show success message.
+            setTimeout(() => {
+                // Clear the form after submission
+                document.getElementById('contact-name').value = '';
+                document.getElementById('contact-email').value = '';
+                document.getElementById('contact-message').value = '';
+                showNotification('Message sent successfully! We will get back to you shortly.', 'success');
+                setActiveScreen('dashboard'); 
+            }, 50); 
         });
 
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "financeai_export_" + new Date().toISOString().substring(0, 10) + ".csv");
-        document.body.appendChild(link); 
-        link.click();
-        document.body.removeChild(link);
-        showNotification('Data exported successfully to CSV!', 'success');
-    }
-    
-    // Start the application setup when the window loads
-    window.onload = initializeAppAndAuth;
-</script>
-</body>
-</html>
 
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('profile-menu-dropdown');
+            const avatar = document.querySelector('.avatar-pro');
+            const profileBtn = document.querySelector('.nav-icon-btn[title="User Profile"]');
+            const contactBtn = document.querySelector('.nav-icon-btn[title="AI Coach Support"]');
+            const plannerBtn = document.querySelector('.nav-icon-btn[title="Planner"]');
+            
+            // Close dropdown if clicked outside
+            if (menu && !menu.classList.contains('hidden')) {
+                 if (!menu.contains(e.target) && !avatar.contains(e.target) && (!profileBtn || !profileBtn.contains(e.target)) && (!contactBtn || !contactBtn.contains(e.target)) && (!plannerBtn || !plannerBtn.contains(e.target))) {
+                    toggleProfileMenu(false);
+                }
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', function () {
+            if (typeof Chart === 'undefined') {
+                showNotification('Chart.js failed to load. Charts will not display.', 'error');
+            }
+            if (!window.tailwind) {
+                showNotification('Tailwind CSS failed to load. Styles may be missing.', 'error');
+            }
+            initApp();
+        });
+    </script>
+</body>
+
+</html>

@@ -768,14 +768,9 @@
             db = firebase.firestore();
             isFirebaseConfigured = true;
             console.log('✅ Firebase initialized successfully');
-            
-            // Test Firebase connection
-            auth.onAuthStateChanged((user) => {
-                console.log('Auth state changed:', user ? 'User logged in' : 'No user');
-            });
         } catch (error) {
             console.error('❌ Firebase initialization failed:', error);
-            showNotification('⚠️ Firebase connection failed: ' + error.message, 'error');
+            showNotification('⚠️ Firebase connection failed', 'error');
         }
 
         // Global State
@@ -844,15 +839,12 @@
         async function handleSignup() {
             if (!isFirebaseConfigured) {
                 showNotification('❌ Firebase not configured properly', 'error');
-                console.error('Firebase not initialized');
                 return;
             }
 
             const name = document.getElementById('signup-name').value.trim();
             const email = document.getElementById('signup-email').value.trim();
             const password = document.getElementById('signup-password').value;
-
-            console.log('Signup attempt:', { name, email });
 
             if (!name || !email || !password) {
                 showNotification('Please fill all fields', 'error');
@@ -867,30 +859,22 @@
             showLoading('signup');
 
             try {
-                console.log('Creating user account...');
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
-                console.log('User created:', user.uid);
 
-                // Update display name
                 await user.updateProfile({ displayName: name });
-                console.log('Display name updated');
 
-                // Save to Firestore
                 await db.collection('users').doc(user.uid).set({
                     name: name,
                     email: email,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
-                console.log('User document created');
 
-                // Create default settings
                 await db.collection('userSettings').doc(user.uid).set({
                     monthlyBudget: 30000,
                     goalState: { name: "None Set", target: 0, saved: 0 },
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
-                console.log('User settings created');
 
                 currentUser = {
                     uid: user.uid,
@@ -898,24 +882,16 @@
                     email: email
                 };
 
-                console.log('Current user set:', currentUser);
-
                 showNotification('✅ Account created successfully!', 'success');
                 
-                // Switch to app screen
-                console.log('Switching to app screen...');
                 document.getElementById('auth-screen').classList.add('hidden');
                 document.getElementById('app-screen').classList.remove('hidden');
                 
                 updateUserDisplay();
                 await loadUserData();
                 hideLoading('signup');
-                
-                console.log('Signup complete!');
             } catch (error) {
                 console.error('Signup error:', error);
-                hideLoading('signup');
-                
                 let message = 'Signup failed: ';
                 if (error.code === 'auth/email-already-in-use') {
                     message += 'Email already in use';
@@ -927,20 +903,18 @@
                     message += error.message;
                 }
                 showNotification(message, 'error');
+                hideLoading('signup');
             }
         }
 
         async function handleLogin() {
             if (!isFirebaseConfigured) {
                 showNotification('❌ Firebase not configured properly', 'error');
-                console.error('Firebase not initialized');
                 return;
             }
 
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value;
-
-            console.log('Login attempt for:', email);
 
             if (!email || !password) {
                 showNotification('Please fill all fields', 'error');
@@ -950,15 +924,11 @@
             showLoading('login');
 
             try {
-                console.log('Signing in with Firebase...');
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
                 const user = userCredential.user;
-                console.log('User signed in:', user.uid);
 
-                // Load user data from Firestore
                 const userDoc = await db.collection('users').doc(user.uid).get();
-                const userData = userDoc.exists ? userDoc.data() : null;
-                console.log('User data loaded:', userData);
+                const userData = userDoc.data();
 
                 currentUser = {
                     uid: user.uid,
@@ -966,30 +936,18 @@
                     email: user.email
                 };
 
-                console.log('Current user set:', currentUser);
-
                 showNotification('✅ Welcome back, ' + currentUser.name + '!', 'success');
                 
-                // Hide auth screen and show app screen
-                console.log('Switching to app screen...');
                 document.getElementById('auth-screen').classList.add('hidden');
                 document.getElementById('app-screen').classList.remove('hidden');
                 
                 updateUserDisplay();
                 await loadUserData();
                 hideLoading('login');
-                
-                console.log('Login complete!');
             } catch (error) {
                 console.error('Login error:', error);
-                hideLoading('login');
-                
                 let message = 'Login failed: ';
-                if (error.code === 'auth/user-not-found') {
-                    message += 'No account found with this email';
-                } else if (error.code === 'auth/wrong-password') {
-                    message += 'Incorrect password';
-                } else if (error.code === 'auth/invalid-credential') {
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
                     message += 'Invalid email or password';
                 } else if (error.code === 'auth/invalid-email') {
                     message += 'Invalid email address';
@@ -999,6 +957,7 @@
                     message += error.message;
                 }
                 showNotification(message, 'error');
+                hideLoading('login');
             }
         }
 
@@ -1045,16 +1004,10 @@
         // Firebase Auth State Observer
         if (auth) {
             auth.onAuthStateChanged(async (user) => {
-                console.log('=== Auth State Changed ===');
-                console.log('User:', user ? user.email : 'null');
-                console.log('Current User:', currentUser);
-                
                 if (user && !currentUser) {
-                    console.log('Auto-login detected, loading user data...');
                     try {
                         const userDoc = await db.collection('users').doc(user.uid).get();
-                        const userData = userDoc.exists ? userDoc.data() : null;
-                        console.log('User data from Firestore:', userData);
+                        const userData = userDoc.data();
 
                         currentUser = {
                             uid: user.uid,
@@ -1062,64 +1015,35 @@
                             email: user.email
                         };
 
-                        console.log('Setting current user:', currentUser);
-                        console.log('Hiding auth screen, showing app screen');
-
                         document.getElementById('auth-screen').classList.add('hidden');
                         document.getElementById('app-screen').classList.remove('hidden');
                         
                         updateUserDisplay();
                         await loadUserData();
-                        
-                        showNotification('Welcome back!', 'success');
                     } catch (error) {
-                        console.error('Error in auth state handler:', error);
-                        showNotification('Error loading user data', 'error');
+                        console.error('Error loading user:', error);
                     }
-                } else if (!user && currentUser) {
-                    console.log('User logged out');
-                    currentUser = null;
-                } else {
-                    console.log('No change in auth state');
                 }
             });
-        } else {
-            console.error('Auth object not initialized!');
-            showNotification('❌ Authentication not available', 'error');
         }
 
         function updateUserDisplay() {
             if (currentUser) {
-                console.log('Updating user display with:', currentUser);
                 document.getElementById('user-name-display').textContent = currentUser.name;
-                
-                const profileName = document.getElementById('profile-name');
-                const profileEmail = document.getElementById('profile-email');
-                
-                if (profileName) profileName.value = currentUser.name;
-                if (profileEmail) profileEmail.value = currentUser.email;
-                
-                console.log('User display updated');
-            } else {
-                console.log('No current user to display');
+                document.getElementById('profile-name').value = currentUser.name;
+                document.getElementById('profile-email').value = currentUser.email;
             }
         }
 
         // Data Loading
         async function loadUserData() {
-            if (!currentUser) {
-                console.log('No current user, cannot load data');
-                return;
-            }
-
-            console.log('Loading user data for:', currentUser.uid);
+            if (!currentUser) return;
 
             try {
                 document.getElementById('sync-indicator').textContent = '⏳ Loading...';
                 document.getElementById('sync-indicator').className = 'text-yellow-400';
 
                 // Load transactions
-                console.log('Loading transactions...');
                 const transSnapshot = await db.collection('transactions')
                     .where('userId', '==', currentUser.uid)
                     .get();
@@ -1129,34 +1053,24 @@
                     ...doc.data()
                 }));
 
-                console.log('Loaded transactions:', transactions.length);
-
                 // Sort by date
                 transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
 
                 // Load settings
-                console.log('Loading settings...');
                 const settingsDoc = await db.collection('userSettings').doc(currentUser.uid).get();
                 if (settingsDoc.exists) {
                     const settings = settingsDoc.data();
                     monthlyBudget = settings.monthlyBudget || 30000;
                     goalState = settings.goalState || { name: "None Set", target: 0, saved: 0 };
                     document.getElementById('budget-amount').value = monthlyBudget;
-                    console.log('Settings loaded:', { monthlyBudget, goalState });
-                } else {
-                    console.log('No settings found, using defaults');
                 }
 
-                console.log('Updating UI...');
                 updateAllData();
-                
                 document.getElementById('sync-indicator').textContent = '✓ Synced';
                 document.getElementById('sync-indicator').className = 'text-green-400';
-                
-                console.log('Data loaded successfully!');
             } catch (error) {
                 console.error('Error loading data:', error);
-                showNotification('Failed to load data: ' + error.message, 'error');
+                showNotification('Failed to load data from cloud', 'error');
                 document.getElementById('sync-indicator').textContent = '✗ Error';
                 document.getElementById('sync-indicator').className = 'text-red-400';
             }

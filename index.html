@@ -875,12 +875,12 @@
             setLogLevel 
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // ==================== MANDATORY GLOBAL VARIABLES ====================
+        // ==================== MANDATORY GLOBAL VARIABLES (Updated) ====================
         // The __app_id is used for namespacing data in Firestore.
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const appId = typeof __app_id !== 'undefined' && __app_id ? __app_id : 'financeai-pro-app';
 
-        // Use the provided config, prioritizing the environment variable.
-        const providedConfig = {
+        // Default Firebase configuration (used if environment variable is absent or malformed)
+        const defaultFirebaseConfig = {
              apiKey: "AIzaSyDMhGK6-Z1QtAA7KanzFFjIaccHyg54f9o",
              authDomain: "aifinancepro-9b801.firebaseapp.com",
              projectId: "aifinancepro-9b801",
@@ -892,12 +892,12 @@
         
         let firebaseConfig;
         try {
-            // Attempt to parse environment variable first
-            firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' && __firebase_config ? __firebase_config : JSON.stringify(providedConfig));
+            // Attempt to use environment config (__firebase_config) first, falling back to static default.
+            firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' && __firebase_config ? __firebase_config : JSON.stringify(defaultFirebaseConfig));
         } catch (e) {
-            // Fallback if parsing fails (e.g., malformed JSON)
-            console.warn('Firebase config parsing failed, using default:', e);
-            firebaseConfig = providedConfig;
+            // Fallback if environment config parsing fails, using the static default.
+            console.warn('Firebase config parsing failed, using default static configuration:', e);
+            firebaseConfig = defaultFirebaseConfig;
         }
         
         let auth, firestore, userId;
@@ -1916,9 +1916,6 @@
                 if (e.type === 'Expense') {
                     colorClass = isPast ? 'text-red-400' : 'text-yellow-400';
                     icon = '💸';
-                } else if (e.type === 'Review') {
-                    colorClass = 'text-cyan-400';
-                    icon = '📈';
                 }
 
                 const formattedDate = new Date(e.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });

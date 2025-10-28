@@ -372,6 +372,7 @@
                     <button onclick="toggleAuth()" class="btn-pro w-full"
                         style="background: linear-gradient(135deg, var(--accent-secondary), #ffc107); margin-top:8px;">Create
                         New Account</button>
+                    <p id="auth-error-message" class="text-center text-red-400 text-sm hidden">Authentication Failed.</p>
                 </div>
             </div>
             <div id="signup-form" class="hidden">
@@ -888,7 +889,16 @@
              appId: "1:265552616833:web:714fae18f3ee0070915c80",
              measurementId: "G-JYEYE29HB6"
         };
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' && __firebase_config ? __firebase_config : JSON.stringify(providedConfig));
+        
+        let firebaseConfig;
+        try {
+            // Attempt to parse environment variable first
+            firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' && __firebase_config ? __firebase_config : JSON.stringify(providedConfig));
+        } catch (e) {
+            // Fallback if parsing fails (e.g., malformed JSON)
+            console.warn('Firebase config parsing failed, using default:', e);
+            firebaseConfig = providedConfig;
+        }
         
         let auth, firestore, userId;
         let transactionsListener, eventsListener, settingsListener;
@@ -1132,25 +1142,36 @@
                 // Show loading status
                 document.getElementById('loading-status').classList.remove('hidden');
 
+                // 1. Initialize Firebase App (checking for config validity)
+                if (!firebaseConfig.apiKey) {
+                    throw new Error("Firebase config missing API Key.");
+                }
+
                 const app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 firestore = getFirestore(app);
                 setLogLevel('debug'); // Mandatory logging for debugging Firestore
                 
-                // 1. Setup Auth Listener (CRITICAL)
+                // 2. Setup Auth Listener (CRITICAL)
                 onAuthStateChanged(auth, async (user) => {
                     document.getElementById('loading-status').classList.add('hidden');
 
                     if (user) {
                         // Check if the user is the special demo user created by handleDemo
-                        if (user.isAnonymous && user.email === 'demo@financeai.com') {
-                             handleDemoLogin(user);
+                        const isDemoUser = (user.email === 'demo@financeai.com'); // Check is simpler since handleDemo calls anonymous sign-in
+
+                        if (isDemoUser) {
+                            userId = user.uid;
+                            handleDemoLogin(user);
                             return;
                         }
 
                         if (user.isAnonymous) {
-                            userId = user.uid; // Still use UID for firestore path consistency
-                            handleDemoLogin(user); // Treat all anonymous sessions as demo sessions
+                            // Generic Anonymous user (from startup). Present the login screen.
+                            userId = user.uid; 
+                            currentUser = { uid: user.uid, email: 'Anonymous', name: 'Guest', emailVerified: false };
+                            updateUserInfoDisplay();
+                            showAuth();
                             return;
                         }
                         
@@ -1182,26 +1203,33 @@
                     }
                 });
                 
-                // 2. Initial Sign-in Attempt (Mandatory Custom Token)
+                // 3. Initial Sign-in Attempt (Mandatory Custom Token/Anonymous Fallback)
                 const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
                 
                 if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken).catch(e => {
-                        console.error('Custom token sign-in failed, falling back to anonymous:', e);
-                        signInAnonymously(auth); 
-                    });
+                    try {
+                        document.getElementById('loading-status').textContent = 'Attempting Custom Token Sign-in...';
+                        await signInWithCustomToken(auth, initialAuthToken);
+                        console.log("Custom Token Sign-in successful.");
+                    } catch (e) {
+                        console.error('Custom token sign-in failed, attempting anonymous fallback:', e);
+                        document.getElementById('loading-status').textContent = 'Custom token failed. Attempting Anonymous Sign-in...';
+                        await signInAnonymously(auth); 
+                        console.log("Anonymous Sign-in successful after custom token failure.");
+                    }
                 } else {
+                    document.getElementById('loading-status').textContent = 'No custom token found. Attempting Anonymous Sign-in...';
                     // Sign in anonymously if no custom token
                     await signInAnonymously(auth);
+                    console.log("Anonymous Sign-in successful.");
                 }
                 
-                document.getElementById('loading-status').textContent = 'Loading dashboard...'; // Status update
-                console.log('Application initialization complete: Firebase connected.');
+                document.getElementById('loading-status').textContent = 'Loading authentication state...'; // Status update
 
             } catch (error) {
                 console.error('CRITICAL Firebase Initialization/Auth Error:', error);
-                showNotification('CRITICAL ERROR: Failed to initialize Firebase connection. Check console for API errors.', 'error');
-                document.getElementById('loading-status').textContent = 'Initialization Failed. Check Console for errors.';
+                showNotification('CRITICAL ERROR: Failed to initialize Firebase connection. See console for details.', 'error');
+                document.getElementById('loading-status').textContent = `Initialization Failed: ${error.message || 'Unknown Error'}. Check Console.`;
             }
         }
 
@@ -1241,6 +1269,15 @@
             const transactionsCol = collection(firestore, getCollectionPath('transactions'));
             transactionsListener = onSnapshot(transactionsCol, (snapshot) => {
                 transactions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                // --- NEW USER ONBOARDING FIX ---
+                if (transactions.length === 0 && !snapshot.metadata.fromCache) {
+                    console.log("New user detected (0 transactions). Initializing with demo data to Firestore.");
+                    initializeNewUser(transactionsCol);
+                    return; // Initialization will trigger the listener again
+                }
+                // --- END FIX ---
+
                 updateAllData(); // Full UI refresh
                 console.log(`Firestore: ${transactions.length} transactions loaded.`);
             }, (error) => {
@@ -1252,6 +1289,15 @@
             const eventsCol = collection(firestore, getCollectionPath('scheduled_events'));
             eventsListener = onSnapshot(eventsCol, (snapshot) => {
                 scheduledEvents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                // --- NEW USER ONBOARDING FIX ---
+                if (scheduledEvents.length === 0 && !snapshot.metadata.fromCache) {
+                    console.log("New user detected (0 events). Initializing with demo events.");
+                    initializeNewUserEvents(eventsCol);
+                    // No return needed, initialization will trigger the listener again
+                }
+                // --- END FIX ---
+                
                 renderScheduleList();
                 updateDailyBudget();
                 console.log(`Firestore: ${scheduledEvents.length} events loaded.`);
@@ -1276,12 +1322,48 @@
             });
         }
         
+        // Helper function to initialize new authenticated users with starter data
+        async function initializeNewUser(transactionsCol) {
+            const starterTransactions = [
+                { date: '2025-01-15', description: 'Monthly Salary', amount: 60000, category: 'Salary', type: 'income', recurring: 'Monthly' },
+                { date: '2025-01-16', description: 'Grocery Shopping', amount: -3500, category: 'Food', type: 'expense' },
+                { date: '2025-01-17', description: 'Electricity Bill', amount: -2200, category: 'Bills', type: 'expense', recurring: 'Monthly' },
+                { date: '2025-01-18', description: 'Movie Tickets', amount: -1200, category: 'Entertainment', type: 'expense' },
+                { date: '2025-01-19', description: 'Fuel', amount: -2000, category: 'Transportation', type: 'expense' },
+            ];
+
+            try {
+                for (const t of starterTransactions) {
+                    await addDoc(transactionsCol, t);
+                }
+                showNotification("Welcome! Starter data loaded to your account.", "success");
+            } catch (error) {
+                console.error("Failed to initialize starter transactions:", error);
+            }
+        }
+        
+        async function initializeNewUserEvents(eventsCol) {
+            const starterEvents = [
+                { description: 'Rent/EMI Payment', date: '2025-11-01', type: 'Expense' },
+                { description: 'Budget Health Check', date: '2025-11-15', type: 'Review' },
+            ];
+
+            try {
+                for (const e of starterEvents) {
+                    await addDoc(eventsCol, e);
+                }
+            } catch (error) {
+                console.error("Failed to initialize starter events:", error);
+            }
+        }
+        
         // Simulates a demo user sign-in that loads local placeholder data
         function handleDemoLogin(user) {
              // Forcing the currentUser object to display appropriate demo information
+             
              currentUser = {
                  uid: user.uid,
-                 email: user.email || 'demo@financeai.com',
+                 email: 'demo@financeai.com',
                  name: 'Demo User',
                  emailVerified: false, 
              };
@@ -1316,12 +1398,16 @@
         function toggleAuth() {
             document.getElementById('login-form').classList.toggle('hidden');
             document.getElementById('signup-form').classList.toggle('hidden');
+            document.getElementById('auth-error-message').classList.add('hidden');
         }
 
         async function handleSignup() {
             const name = document.getElementById('signup-name').value.trim();
             const email = document.getElementById('signup-email').value.trim();
             const password = document.getElementById('signup-password').value;
+            const errorElement = document.getElementById('auth-error-message');
+            errorElement.classList.add('hidden');
+
             if (!name || !email || !password || password.length < 6) {
                 showNotification('Invalid input. Name, Email, and Password (min 6 chars) required.', 'error');
                 return;
@@ -1342,10 +1428,21 @@
                 await sendEmailVerification(user);
 
                 showNotification('Account created. Please check your email for the verification link! Signing you in...', 'success');
-                // onAuthStateChanged will handle the rest.
+                // onAuthStateChanged will handle the rest, including loading data via loadDataListeners().
             } catch (error) {
                 console.error("Signup failed:", error);
-                showNotification('Signup failed: ' + error.message, 'error');
+                
+                // Map the Firebase error code to a user-friendly message
+                let errorMessage = error.message;
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'This email is already registered. Try logging in or use a different email.';
+                } else if (error.code === 'auth/operation-not-allowed') {
+                    errorMessage = 'Email/Password sign-up is disabled in the project settings. Please enable it in Firebase Console.';
+                }
+                
+                errorElement.textContent = `Signup failed: ${errorMessage}`;
+                errorElement.classList.remove('hidden');
+                showNotification('Signup failed. See error message below.', 'error');
             } finally {
                 hideLoading('signup');
             }
@@ -1354,6 +1451,9 @@
         async function handleLogin() {
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value;
+            const errorElement = document.getElementById('auth-error-message');
+            errorElement.classList.add('hidden');
+
             if (!email || !password) {
                 showNotification('Please fill all fields', 'error');
                 return;
@@ -1365,17 +1465,29 @@
                 showNotification('Welcome back!', 'success');
             } catch (error) {
                 console.error("Login failed:", error);
-                showNotification('Login failed: Invalid credentials or account not found.', 'error');
+                
+                // Map the Firebase error code to a user-friendly message
+                let errorMessage = error.message;
+                if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                    errorMessage = 'Invalid email or password.';
+                } else if (error.code === 'auth/operation-not-allowed') {
+                    errorMessage = 'Email/Password sign-in is disabled in the project settings. Please enable it in Firebase Console.';
+                }
+                
+                errorElement.textContent = `Login failed: ${errorMessage}`;
+                errorElement.classList.remove('hidden');
+                showNotification('Login failed. See error message below.', 'error');
             } finally {
                 hideLoading('login');
             }
         }
         
         async function handleDemo() {
-            // Sign in anonymously to get a userId and load placeholder data
+            // Sign in anonymously to get a new UID, then proceed with local demo data logic.
+            // We use signInAnonymously to ensure the current session gets a unique UID for data manipulation within the demo.
             try {
-                await signInAnonymously(auth); 
-                // handleDemoLogin (called by onAuthStateChanged) will then load local data
+                const userCredential = await signInAnonymously(auth); 
+                handleDemoLogin(userCredential.user); 
             } catch(error) {
                  console.error('Anonymous sign-in for demo failed:', error);
                  showNotification('Failed to access demo mode.', 'error');

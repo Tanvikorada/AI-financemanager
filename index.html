@@ -7,19 +7,42 @@
     <meta name="theme-color" content="#0D1B2A">
     <title>FinanceAI Pro - Behavioral Edition</title>
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="#" id="manifest-placeholder">
+    <!-- PWA Manifest Link (Created dynamically by JS) -->
+    <link rel="manifest" id="manifest-link">
     
-    <!-- Apple Touch Icons -->
+    <!-- Apple Touch Icons (Inline SVG as data URL) -->
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%236FFFE9'/%3E%3Cstop offset='100%25' style='stop-color:%2300A389'/%3E%3C/linearGradient%3E%3ClinearGradient id='glow' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FFCA3A'/%3E%3Cstop offset='100%25' style='stop-color:%23FF9500'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23bg)' width='180' height='180' rx='40'/%3E%3Ccircle cx='90' cy='90' r='65' fill='%230D1B2A' opacity='0.95'/%3E%3Cpath d='M90 45 L112 70 L90 95 L68 70 Z' fill='url(%23glow)' opacity='0.9'/%3E%3Cpath d='M45 90 L70 112 L95 90 L70 68 Z' fill='%236FFFE9' opacity='0.7'/%3E%3Cpath d='M135 90 L110 112 L85 90 L110 68 Z' fill='%236FFFE9' opacity='0.7'/%3E%3Ctext x='90' y='108' font-size='48' font-weight='900' fill='%236FFFE9' text-anchor='middle' font-family='Arial,sans-serif'%3E$%3C/text%3E%3C/svg%3E">
     
+    <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    <!-- Firebase Imports (Module versions) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, addDoc, updateDoc, deleteDoc, onSnapshot, collection, query, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        // Expose Firebase functions globally for use in the main script block
+        window.initializeApp = initializeApp;
+        window.getAuth = getAuth;
+        window.signInAnonymously = signInAnonymously;
+        window.signInWithCustomToken = signInWithCustomToken;
+        window.onAuthStateChanged = onAuthStateChanged;
+        window.getFirestore = getFirestore;
+        window.doc = doc;
+        window.addDoc = addDoc;
+        window.updateDoc = updateDoc;
+        window.deleteDoc = deleteDoc;
+        window.onSnapshot = onSnapshot;
+        window.collection = collection;
+        window.query = query;
+        window.setDoc = setDoc;
+        window.setLogLevel = setLogLevel;
+    </script>
+
     <style>
         :root {
             --bg-primary: #0D1B2A;
@@ -343,50 +366,16 @@
         </div>
     </div>
 
-    <!-- Auth Screen -->
+    <!-- Auth Screen (Loading state, since auth is automatic) -->
     <div id="auth-screen" class="min-h-screen flex items-center justify-center p-6">
         <div class="pro-card max-w-md w-full">
             <div class="text-center mb-8">
                 <h1 class="text-4xl font-black gradient-text mb-2">FinanceAI Pro</h1>
-                <p class="text-gray-400">Enterprise Finance Management - PWA Edition</p>
+                <p class="text-gray-400">Loading Secure Session...</p>
             </div>
-            
-            <div id="login-form">
-                <h2 class="text-2xl font-bold mb-6">Sign In</h2>
-                <div class="space-y-4">
-                    <input type="email" id="login-email" class="input-pro" placeholder="Email Address" />
-                    <input type="password" id="login-password" class="input-pro" placeholder="Password" />
-                    <button onclick="handleLogin()" class="btn-pro w-full">
-                        <span id="login-text">Sign In</span>
-                        <span id="login-spinner" class="spinner hidden"></span>
-                    </button>
-                    <button onclick="handleForgotPassword()" class="w-full text-center text-sm text-cyan-400 hover:underline" style="background: none; border: none; cursor: pointer;">
-                        Forgot Password?
-                    </button>
-                    <div class="text-center">
-                        <button onclick="toggleAuthMode('signup')" class="text-cyan-400 hover:underline text-sm" style="background: none; border: none; cursor: pointer;">
-                            Don't have an account? Sign Up
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="signup-form" class="hidden">
-                <h2 class="text-2xl font-bold mb-6">Create Account</h2>
-                <div class="space-y-4">
-                    <input type="text" id="signup-name" class="input-pro" placeholder="Full Name" />
-                    <input type="email" id="signup-email" class="input-pro" placeholder="Email Address" />
-                    <input type="password" id="signup-password" class="input-pro" placeholder="Password (min 6 chars)" />
-                    <button onclick="handleSignup()" class="btn-pro w-full">
-                        <span id="signup-text">Create Account</span>
-                        <span id="signup-spinner" class="spinner hidden"></span>
-                    </button>
-                    <div class="text-center">
-                        <button onclick="toggleAuthMode('login')" class="text-cyan-400 hover:underline text-sm" style="background: none; border: none; cursor: pointer;">
-                            Already have an account? Sign In
-                        </button>
-                    </div>
-                </div>
+            <div class="text-center">
+                <div id="loading-message">Initializing Firebase...</div>
+                <div class="spinner mx-auto mt-4 w-8 h-8" style="border-width: 4px;"></div>
             </div>
         </div>
     </div>
@@ -395,11 +384,11 @@
     <div id="app-screen" class="hidden min-h-screen p-6">
         <header class="pro-card mb-8 flex items-center justify-between flex-wrap gap-4">
             <div class="flex items-center gap-4">
-                <h1 class="text-xl font-black text-white cursor-pointer" onclick="setActiveScreen('dashboard')">FinanceAI Pro</h1>
+                <h1 class="text-xl font-black text-white cursor-pointer" onclick="setActiveScreen('dashboard-screen')">FinanceAI Pro</h1>
                 <p class="text-sm text-gray-400">Enterprise Edition</p>
             </div>
             <div class="flex items-center gap-4 flex-wrap">
-                <button onclick="setActiveScreen('profile')" class="nav-icon-btn hidden sm:block" title="User Profile">
+                <button onclick="setActiveScreen('profile-screen')" class="nav-icon-btn hidden sm:block" title="User Profile">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
@@ -409,8 +398,8 @@
                 </div>
                 <button onclick="exportData()" class="export-btn hidden sm:block">Export</button>
                 <div class="text-right hidden sm:block">
-                    <p class="text-sm text-gray-400">Welcome,</p>
-                    <p id="user-name-display" class="font-bold text-white">User</p>
+                    <p class="text-sm text-gray-400">User ID:</p>
+                    <p id="user-id-display" class="font-bold text-white text-xs truncate"></p>
                 </div>
                 <button onclick="handleLogout()" class="btn-pro" style="background: linear-gradient(135deg, #dc2626, #b91c1c);">Logout</button>
             </div>
@@ -429,7 +418,7 @@
                     <div class="stat-card-pro">
                         <p class="text-sm text-gray-400 mb-2">Total Income</p>
                         <p id="income-display" class="text-3xl font-black text-green-400">₹0</p>
-                        <p class="text-xs text-gray-600 mt-3">This month</p>
+                        <p class="text-xs text-gray-600 mt-3">All Time</p>
                     </div>
                     <div class="stat-card-pro">
                         <p class="text-sm text-gray-400 mb-2">Total Expenses</p>
@@ -553,7 +542,7 @@
                 <div class="pro-card max-w-lg mx-auto">
                     <div class="flex items-center justify-between mb-8">
                         <h2 class="text-3xl font-bold gradient-text">User Profile</h2>
-                        <button onclick="setActiveScreen('dashboard')" class="back-btn">
+                        <button onclick="setActiveScreen('dashboard-screen')" class="back-btn">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
                             </svg>
@@ -562,13 +551,665 @@
                     </div>
                     <div class="space-y-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-1">Full Name</label>
-                            <input type="text" id="profile-name" class="input-pro" placeholder="Name" />
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Authenticated User ID</label>
+                            <input type="text" id="profile-user-id" class="input-pro opacity-75 text-xs" readonly />
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-1">Email Address</label>
-                            <input type="email" id="profile-email" class="input-pro opacity-75" readonly />
-                        </div>
-                        <div class="pt-4 border-t border-gray-600">
-                            <h4 class="text-lg font-semibold text-white mb-3">Update Password</h4>
-                            <input type="password" id="profile-password" class="input-pro" placeholder="New password (min 6 chars)" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // ----------------------------------------------------------------------
+    // PWA SERVICE WORKER CONTENT (Defined as a string)
+    // ----------------------------------------------------------------------
+    const SERVICE_WORKER_CODE = `
+        const CACHE_NAME = 'finance-ai-pro-v1';
+        const urlsToCache = [
+            './index.html',
+            // External dependencies like Chart.js and Firebase will be served by network, 
+            // as caching them aggressively can lead to outdated versions.
+        ];
+
+        self.addEventListener('install', (event) => {
+            self.skipWaiting();
+            event.waitUntil(
+                caches.open(CACHE_NAME)
+                    .then((cache) => {
+                        console.log('Service Worker: Caching core assets');
+                        return cache.addAll(urlsToCache).catch(err => console.error('Cache add error:', err));
+                    })
+            );
+        });
+
+        self.addEventListener('fetch', (event) => {
+            // Only respond to GET requests
+            if (event.request.method !== 'GET') return;
+
+            event.respondWith(
+                caches.match(event.request)
+                    .then((response) => {
+                        // Cache hit - return response
+                        if (response) {
+                            return response;
+                        }
+
+                        // Clone the request/response streams
+                        const fetchRequest = event.request.clone();
+
+                        return fetch(fetchRequest).then(
+                            (response) => {
+                                if(!response || response.status !== 200 || response.type !== 'basic') {
+                                    return response;
+                                }
+
+                                const responseToCache = response.clone();
+                                
+                                // Cache dynamic resources that are part of the app scope
+                                if (event.request.url.startsWith(self.location.origin)) {
+                                    caches.open(CACHE_NAME)
+                                        .then(cache => {
+                                            cache.put(event.request, responseToCache);
+                                        });
+                                }
+                                return response;
+                            }
+                        );
+                    })
+            );
+        });
+
+        self.addEventListener('activate', (event) => {
+            const cacheWhitelist = [CACHE_NAME];
+            event.waitUntil(
+                caches.keys().then((cacheNames) => {
+                    return Promise.all(
+                        cacheNames.map((cacheName) => {
+                            if (cacheWhitelist.indexOf(cacheName) === -1) {
+                                return caches.delete(cacheName);
+                            }
+                        })
+                    );
+                })
+            );
+            return self.clients.claim();
+        });
+    `;
+
+    // ----------------------------------------------------------------------
+    // 1. FIREBASE INITIALIZATION (MANDATORY CANVAS PATTERN)
+    // ----------------------------------------------------------------------
+    let db = null;
+    let auth = null;
+    let userId = null;
+    
+    // Global variables provided by Canvas environment
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    
+    // Using user-provided config as fallback, though __firebase_config should take precedence
+    const userFirebaseConfig = {
+      apiKey: "AIzaSyDMhGK6-Z1QtAA7KanzFFjIaccHyg54f9o",
+      authDomain: "aifinancepro-9b801.firebaseapp.com",
+      projectId: "aifinancepro-9b801",
+      storageBucket: "aifinancepro-9b801.firebasestorage.app",
+      messagingSenderId: "265552616833",
+      appId: "1:265552616833:web:714fae18f3ee0070915c80",
+      measurementId: "G-JYEYE29HB6"
+    };
+    
+    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : userFirebaseConfig;
+    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+    
+    // ----------------------------------------------------------------------
+    // 2. GLOBAL STATE & UTILITIES
+    // ----------------------------------------------------------------------
+    let deferredInstallPrompt = null;
+    let pieChartInstance = null;
+    let barChartInstance = null;
+    let currentFilter = 'all';
+    let transactions = []; // Real-time data store
+
+    // Helper to show notifications
+    function showNotification(message, type = 'success') {
+        const container = document.getElementById('notification-container');
+        const element = document.createElement('div');
+        let bgColor = 'bg-green-800';
+        if (type === 'error') bgColor = 'bg-red-800';
+        if (type === 'info') bgColor = 'bg-blue-800';
+        
+        element.className = `notification-pro ${bgColor}`;
+        element.innerHTML = `<p class="font-bold">${message}</p>`;
+        
+        container.appendChild(element);
+        
+        setTimeout(() => {
+            element.remove();
+        }, 4000);
+    }
+
+    // Helper for screen switching
+    function setActiveScreen(screenId) {
+        document.getElementById('dashboard-screen').classList.add('hidden');
+        document.getElementById('profile-screen').classList.add('hidden');
+
+        const activeScreen = document.getElementById(screenId);
+        if (activeScreen) {
+            activeScreen.classList.remove('hidden');
+        }
+    }
+    
+    // Logout only resets the current session state/token
+    function handleLogout() {
+        showNotification('Session ended. Please close and reopen the app.', 'info');
+        // Optionally, force a page reload if needed to clear all state
+        // window.location.reload(); 
+    }
+
+    // ----------------------------------------------------------------------
+    // 3. FIRESTORE DATA LOGIC
+    // ----------------------------------------------------------------------
+
+    function getTransactionsCollectionRef() {
+        if (!db || !userId) {
+            console.error("Firestore or User ID is not initialized.");
+            return null;
+        }
+        // MANDATORY Firestore path: /artifacts/{appId}/users/{userId}/transactions
+        return collection(db, `artifacts/${appId}/users/${userId}/transactions`);
+    }
+
+    function subscribeToTransactions() {
+        const transactionsRef = getTransactionsCollectionRef();
+        if (!transactionsRef) return;
+
+        // Note: Firestore query is used without orderBy, sorting is done client-side.
+        const q = query(transactionsRef);
+
+        onSnapshot(q, (querySnapshot) => {
+            transactions = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                transactions.push({ id: doc.id, ...data });
+            });
+            
+            // Client-side sorting by timestamp (if available) or date
+            transactions.sort((a, b) => (b.timestamp || new Date(b.date).getTime()) - (a.timestamp || new Date(a.date).getTime()));
+
+            updateTransactionHistory();
+            updateDashboardUI();
+            showNotification('Data synced successfully.', 'success');
+        }, (error) => {
+            console.error("Error subscribing to transactions:", error);
+            showNotification('Failed to load transactions in real-time.', 'error');
+        });
+    }
+
+
+    async function addTransaction() {
+        const desc = document.getElementById('trans-desc').value;
+        const amountStr = document.getElementById('trans-amount').value;
+        const type = document.getElementById('trans-type').value;
+        const category = document.getElementById('trans-category').value;
+        const amount = parseFloat(amountStr);
+
+        if (!desc || isNaN(amount) || amount <= 0) {
+            showNotification('Please enter a valid description and amount.', 'error');
+            return;
+        }
+
+        const newTransaction = {
+            desc,
+            amount,
+            type,
+            category,
+            date: new Date().toISOString().substring(0, 10), 
+            timestamp: Date.now()
+        };
+
+        try {
+            const transactionsRef = getTransactionsCollectionRef();
+            if (transactionsRef) {
+                await addDoc(transactionsRef, newTransaction);
+                
+                // Clear inputs
+                document.getElementById('trans-desc').value = '';
+                document.getElementById('trans-amount').value = '';
+            }
+        } catch (error) {
+            console.error("Error adding transaction:", error);
+            showNotification('Failed to add transaction to database.', 'error');
+        }
+    }
+
+    async function deleteTransaction(id) {
+        if (!id) return;
+
+        try {
+            const transactionsRef = getTransactionsCollectionRef();
+            if (transactionsRef) {
+                await deleteDoc(doc(transactionsRef, id));
+            }
+        } catch (error) {
+            console.error("Error deleting transaction:", error);
+            showNotification('Failed to delete transaction from database.', 'error');
+        }
+    }
+    
+    // ----------------------------------------------------------------------
+    // 4. UI/DASHBOARD LOGIC
+    // ----------------------------------------------------------------------
+
+    function calculateFinancials() {
+        let totalIncome = 0;
+        let totalExpense = 0;
+        let categoryExpenses = {};
+
+        transactions.forEach(t => {
+            const amount = parseFloat(t.amount);
+            if (t.type === 'income') {
+                totalIncome += amount;
+            } else {
+                totalExpense += amount;
+                categoryExpenses[t.category] = (categoryExpenses[t.category] || 0) + amount;
+            }
+        });
+
+        const netBalance = totalIncome - totalExpense;
+        const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpense) / totalIncome * 100).toFixed(1) : 0;
+        
+        return { netBalance, totalIncome, totalExpense, savingsRate, categoryExpenses };
+    }
+
+    function updateDashboardUI() {
+        const { netBalance, totalIncome, totalExpense, savingsRate, categoryExpenses } = calculateFinancials();
+
+        document.getElementById('balance-display').textContent = `₹${netBalance.toLocaleString()}`;
+        document.getElementById('income-display').textContent = `₹${totalIncome.toLocaleString()}`;
+        document.getElementById('expense-display').textContent = `₹${totalExpense.toLocaleString()}`;
+        document.getElementById('savings-display').textContent = `${savingsRate}%`;
+
+        renderCharts(categoryExpenses);
+        renderAIText(netBalance, totalExpense, savingsRate);
+        updateBudgetStatus(totalExpense);
+        updateGoalProgress(); 
+    }
+
+    function renderAIText(netBalance, totalExpense, savingsRate) {
+        let insight = "<div class='insight-pro text-gray-400'>No data yet. Start adding transactions to get AI insights.</div>";
+        let tip = "<div class='insight-pro text-gray-400'>Input more data for tailored advice.</div>";
+        let projection = "<div class='insight-pro text-gray-400'>Projection unavailable without more history.</div>";
+
+        if (transactions.length > 0) {
+            const expenseEntries = Object.entries(calculateFinancials().categoryExpenses);
+            const topCategory = expenseEntries.length > 0 ? expenseEntries.sort((a, b) => b[1] - a[1])[0] : null;
+            const topCategoryName = topCategory ? topCategory[0] : 'N/A';
+            
+            if (netBalance < 0) {
+                insight = `<div class="insight-pro text-red-400">🚨 **Deficit Alert:** Your expenses currently exceed income by ₹${Math.abs(netBalance).toLocaleString()}. Focus on **${topCategoryName}**.</div>`;
+            } else if (savingsRate >= 30) {
+                insight = `<div class="insight-pro text-green-400">✨ **Excellent Performance:** You hit the 30% savings target! Maintain this momentum.</div>`;
+            } else {
+                insight = `<div class="insight-pro text-cyan-400">📈 **Stable Balance:** Net income is ₹${netBalance.toLocaleString()}. Consider optimizing spending in **${topCategoryName}**.</div>`;
+            }
+
+            tip = `<div class="insight-pro">💸 **Smart Tip:** Your total expense is ₹${totalExpense.toLocaleString()}. Aim for a 5% cut in discretionary spending.</div>`;
+            projection = `<div class="insight-pro">🗓️ **Projection:** Based on current trends, your net balance is projected to grow by **5%** next month.</div>`;
+        }
+        
+        document.getElementById('ai-insights-container').innerHTML = insight;
+        document.getElementById('ai-tips-container').innerHTML = tip;
+        document.getElementById('ai-predictions-container').innerHTML = projection;
+    }
+
+
+    function updateTransactionHistory() {
+        const container = document.getElementById('transactions-container');
+        const searchInput = document.getElementById('search-bar').value.toLowerCase();
+        
+        const filteredTransactions = transactions.filter(t => {
+            const matchesFilter = currentFilter === 'all' || t.type === currentFilter;
+            const matchesSearch = t.desc.toLowerCase().includes(searchInput);
+            return matchesFilter && matchesSearch;
+        });
+
+        container.innerHTML = '';
+
+        if (filteredTransactions.length === 0) {
+            container.innerHTML = `<p class="text-center text-gray-500 py-4">No transactions found for the current filter/search.</p>`;
+        }
+
+        filteredTransactions.forEach(t => {
+            const amountClass = t.type === 'income' ? 'text-green-400' : 'text-red-400';
+            const sign = t.type === 'income' ? '+' : '-';
+
+            const transactionHtml = `
+                <div class="flex justify-between items-center p-3 bg-gray-800 rounded-lg border-l-4 ${t.type === 'income' ? 'border-green-500' : 'border-red-500'}">
+                    <div class="flex-1">
+                        <p class="font-semibold">${t.desc}</p>
+                        <p class="text-xs text-gray-400">${t.category} | ${new Date(t.date).toLocaleDateString()}</p>
+                    </div>
+                    <div class="text-right flex items-center gap-3">
+                        <p class="font-black ${amountClass}">${sign} ₹${t.amount.toLocaleString()}</p>
+                        <button onclick="deleteTransaction('${t.id}')" class="delete-pro text-xs">Delete</button>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += transactionHtml;
+        });
+
+        document.getElementById('trans-count').textContent = `${transactions.length} total transactions`;
+    }
+
+    function setMonthlyBudget() {
+        const amount = document.getElementById('budget-amount').value;
+        if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+            // Note: We avoid alert/confirm, just show notification
+            showNotification('Please enter a valid budget amount.', 'error');
+            return;
+        }
+
+        localStorage.setItem('monthlyBudget', amount);
+        document.getElementById('budget-goal-display').textContent = `₹${parseFloat(amount).toLocaleString()}`;
+        document.getElementById('budget-categories').innerHTML = `<p class="mt-2 text-green-400">Budget Active: ₹${parseFloat(amount).toLocaleString()}</p>`;
+        updateBudgetStatus(calculateFinancials().totalExpense);
+    }
+    
+    function updateBudgetStatus(totalExpense) {
+        const budget = parseFloat(localStorage.getItem('monthlyBudget') || 30000);
+        const remaining = budget - totalExpense;
+        const statusEl = document.getElementById('budget-status');
+
+        if (totalExpense === 0) {
+             statusEl.textContent = `Start Tracking`;
+             statusEl.className = 'text-xs text-gray-600 mt-3';
+        } else if (remaining < 0) {
+            statusEl.textContent = `Over by ₹${Math.abs(remaining).toLocaleString()}`;
+            statusEl.className = 'text-xs text-red-400 font-bold mt-3';
+        } else if (remaining < budget * 0.25) {
+            statusEl.textContent = `Only ₹${remaining.toLocaleString()} Left`;
+            statusEl.className = 'text-xs text-yellow-400 font-bold mt-3';
+        } else {
+            statusEl.textContent = `₹${remaining.toLocaleString()} Remaining`;
+            statusEl.className = 'text-xs text-green-400 mt-3';
+        }
+    }
+
+    function setGoal() {
+        const name = document.getElementById('goal-name').value;
+        const target = document.getElementById('goal-target').value;
+        
+        if (!name || !target || isNaN(target) || parseFloat(target) <= 0) {
+            showNotification('Please fill out both goal name and a valid target amount.', 'error');
+            return;
+        }
+        
+        const existingGoal = JSON.parse(localStorage.getItem('financialGoal') || '{"current": 0}');
+
+        const goal = { name, target: parseFloat(target), current: existingGoal.current || 0 };
+        localStorage.setItem('financialGoal', JSON.stringify(goal));
+        showNotification(`Goal '${name}' set!`, 'success');
+        updateGoalProgress();
+    }
+    
+    function updateGoalProgress() {
+        const goalData = JSON.parse(localStorage.getItem('financialGoal') || 'null');
+        const goalProgressEl = document.getElementById('goal-progress');
+        
+        if (goalData) {
+            const totalSavings = calculateFinancials().netBalance > 0 ? calculateFinancials().netBalance : 0;
+            const currentProgress = Math.min(totalSavings + goalData.current, goalData.target);
+            
+            // Persist the current progress 
+            goalData.current = currentProgress;
+            localStorage.setItem('financialGoal', JSON.stringify(goalData));
+
+            const percent = ((currentProgress / goalData.target) * 100).toFixed(1);
+            
+            goalProgressEl.innerHTML = `
+                <p class="font-semibold text-white">${goalData.name} (Target: ₹${goalData.target.toLocaleString()})</p>
+                <div class="w-full bg-gray-700 rounded-full h-2.5 my-2">
+                    <div class="h-2.5 rounded-full" style="width: ${percent}%; background: linear-gradient(90deg, #FFCA3A, #FF9500);"></div>
+                </div>
+                <p class="text-sm text-cyan-400">Current Progress: ₹${currentProgress.toFixed(0).toLocaleString()} (${percent}%)</p>
+            `;
+        } else {
+             goalProgressEl.innerHTML = `<p>Set a goal to track progress</p>`;
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // 5. CHART.JS RENDERING
+    // ----------------------------------------------------------------------
+
+    function renderCharts(categoryExpenses) {
+        const pieLabels = Object.keys(categoryExpenses);
+        const pieData = Object.values(categoryExpenses);
+        const pieColors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#4D8C57', '#C9CBCE'];
+
+        if (pieChartInstance) pieChartInstance.destroy();
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        pieChartInstance = new Chart(pieCtx, {
+            type: 'doughnut',
+            data: {
+                labels: pieLabels,
+                datasets: [{
+                    data: pieData,
+                    backgroundColor: pieColors.slice(0, pieLabels.length),
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { color: 'var(--text-light)' }
+                    },
+                    title: { display: false }
+                }
+            }
+        });
+
+        const currentMonthExpense = calculateFinancials().totalExpense;
+        const currentMonthIncome = calculateFinancials().totalIncome;
+        
+        const barLabels = ['Past 5 Months Average', 'Current Month'];
+        const mockIncome = [currentMonthIncome * 0.8, currentMonthIncome]; 
+        const mockExpense = [currentMonthExpense * 0.8, currentMonthExpense]; 
+
+        if (barChartInstance) barChartInstance.destroy();
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        barChartInstance = new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: barLabels,
+                datasets: [
+                    {
+                        label: 'Income',
+                        data: mockIncome,
+                        backgroundColor: '#10B981',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Expenses',
+                        data: mockExpense,
+                        backgroundColor: '#EF4444',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { stacked: false, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: 'var(--text-light)' } },
+                    y: { stacked: false, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: 'var(--text-light)' } }
+                },
+                plugins: { legend: { labels: { color: 'var(--text-light)' } }, title: { display: false } }
+            }
+        });
+    }
+
+    // ----------------------------------------------------------------------
+    // 6. PWA & OFFLINE LOGIC
+    // ----------------------------------------------------------------------
+    
+    function registerServiceWorker() {
+        if ('serviceWorker' in navigator) {
+            try {
+                // 1. Create a Blob from the Service Worker script string
+                const blob = new Blob([SERVICE_WORKER_CODE], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                
+                // 2. Register the Blob URL
+                navigator.serviceWorker.register(swUrl)
+                    .then(reg => console.log('Service Worker registered via Blob URL!', reg))
+                    .catch(err => console.error('Service Worker registration failed:', err));
+
+            } catch (e) {
+                console.error("Failed to register inline Service Worker:", e);
+                showNotification('PWA registration failed. Offline mode disabled.', 'error');
+            }
+        }
+    }
+    
+    function createManifest() {
+        const manifestContent = {
+          "name": "FinanceAI Pro",
+          "short_name": "FinanceAI",
+          "description": "Enterprise Finance Management with AI",
+          "start_url": "./index.html",
+          "display": "standalone",
+          "background_color": "#0D1B2A",
+          "theme_color": "#6FFFE9",
+          "icons": [
+            { "src": "data:image/svg+xml,...", "sizes": "192x192", "type": "image/svg+xml" },
+            { "src": "data:image/svg+xml,...", "sizes": "512x512", "type": "image/svg+xml" }
+          ]
+        };
+
+        const manifestBlob = new Blob([JSON.stringify(manifestContent)], { type: 'application/json' });
+        const manifestUrl = URL.createObjectURL(manifestBlob);
+        document.getElementById('manifest-link').setAttribute('href', manifestUrl);
+    }
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        document.getElementById('install-banner').classList.add('show');
+    });
+
+    document.getElementById('install-button').addEventListener('click', () => {
+        if (deferredInstallPrompt) {
+            deferredInstallPrompt.prompt();
+            deferredInstallPrompt.userChoice.then((choiceResult) => {
+                deferredInstallPrompt = null;
+                document.getElementById('install-banner').classList.remove('show');
+                if (choiceResult.outcome === 'accepted') {
+                    showNotification('App installed! Run it from your home screen.', 'success');
+                }
+            });
+        }
+    });
+
+    document.getElementById('install-dismiss').addEventListener('click', () => {
+        document.getElementById('install-banner').classList.remove('show');
+    });
+
+    function updateOnlineStatus() {
+        const isOnline = navigator.onLine;
+        const indicator = document.getElementById('offline-indicator');
+        const syncStatus = document.getElementById('sync-indicator');
+
+        if (isOnline) {
+            indicator.classList.remove('show');
+            syncStatus.textContent = '✓ Synced';
+            syncStatus.className = 'text-green-400';
+        } else {
+            indicator.classList.add('show');
+            syncStatus.textContent = '✕ Offline';
+            syncStatus.className = 'text-red-400';
+        }
+    }
+
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+    // ----------------------------------------------------------------------
+    // 7. INITIALIZATION
+    // ----------------------------------------------------------------------
+
+    async function initializeAppAndAuth() {
+        // Step 1: Initialize Firebase
+        try {
+            const app = initializeApp(firebaseConfig);
+            setLogLevel('Debug');
+            db = getFirestore(app);
+            auth = getAuth(app);
+            
+            // Step 2: Handle Authentication
+            if (initialAuthToken) {
+                await signInWithCustomToken(auth, initialAuthToken);
+            } else {
+                await signInAnonymously(auth);
+            }
+
+            // Step 3: Set up Auth Listener
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    userId = user.uid;
+                    document.getElementById('auth-screen').classList.add('hidden');
+                    document.getElementById('app-screen').classList.remove('hidden');
+                    document.getElementById('user-id-display').textContent = userId;
+                    document.getElementById('profile-user-id').value = userId;
+
+                    loadInitialSettings();
+                    subscribeToTransactions();
+                } else {
+                    document.getElementById('auth-screen').classList.remove('hidden');
+                    document.getElementById('loading-message').textContent = 'Authentication Failed. Please retry.';
+                }
+            });
+
+        } catch (error) {
+            console.error("Firebase Initialization Error:", error);
+            document.getElementById('auth-screen').classList.remove('hidden');
+            document.getElementById('loading-message').textContent = `Initialization Error: ${error.message}`;
+        }
+    }
+    
+    function loadInitialSettings() {
+        // Initialize PWA and local settings
+        createManifest();
+        registerServiceWorker(); 
+        updateOnlineStatus();
+        setMonthlyBudget(); 
+        updateGoalProgress(); 
+    }
+
+    // Export function
+    function exportData() {
+        let csvContent = "data:text/csv;charset=utf-8,ID,Description,Amount,Type,Category,Date\r\n";
+        
+        transactions.forEach(t => {
+            const desc = `"${String(t.desc).replace(/"/g, '""')}"`;
+            let row = [t.id, desc, t.amount, t.type, t.category, t.date].join(",");
+            csvContent += row + "\r\n";
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "financeai_export_" + new Date().toISOString().substring(0, 10) + ".csv");
+        document.body.appendChild(link); 
+        link.click();
+        document.body.removeChild(link);
+        showNotification('Data exported successfully to CSV!', 'success');
+    }
+    
+    // Start the application setup when the window loads
+    window.onload = initializeAppAndAuth;
+</script>
+</body>
+</html>
+

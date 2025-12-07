@@ -6,7 +6,7 @@
     <title>SmartSpend Pro</title>
     
     <!-- PWA Manifest & Icons -->
-    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiU21hcnRTcGVuZCBQcm8iLCJzaG9ydF9uYW1lIjoiU21hcnRTcGVuZCIs"start_url":".","display":"standalone","background_color":"#0f172a","theme_color":"#0f172a","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/3135/3135715.png","sizes":"512x512","type":"image/png"}]}">
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiU21hcnRTcGVuZCBQcm8iLCJzaG9ydF9uYW1lIjoiU21hcnRTcGVuZCIs"start_url":".","display":"standalone","background_color":"#0f172a","theme_color":"#0f172a","icons":[{"src":"https://img.icons8.com/fluency/512/wallet.png","sizes":"512x512","type":"image/png"}]}">
     
     <!-- Mobile Web App Capable -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -15,8 +15,8 @@
     <meta name="theme-color" content="#0f172a">
 
     <!-- Icons for Home Screen -->
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/512/wallet.png">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/fluency/512/wallet.png">
     
     <!-- Fonts & Libraries -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
@@ -119,7 +119,8 @@
         .action-bar { display: flex; align-items: center; gap: 15px; width: 100%; justify-content: flex-end; }
         .new-add-btn { 
             background: var(--gradient-btn); border: none; padding: 10px 20px; border-radius: 25px; 
-            color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; 
+            color: white; font-weight: 600; cursor: pointer; display: flex; 
+            align-items: center; gap: 8px; 
             box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); transition: 0.2s; white-space: nowrap;
         }
         .new-add-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
@@ -216,9 +217,19 @@
             .mobile-logo { display: block; display: flex; align-items: center; gap: 8px; font-size: 20px; width: 100%; margin-bottom: 10px; justify-content: center; }
             
             /* Revised Mobile Header Action Bar */
-            .action-bar { gap: 5px; justify-content: flex-end; width: auto; flex: 1; }
+            .action-bar { 
+                gap: 5px; 
+                justify-content: flex-end; 
+                width: auto; 
+                flex: 1;
+            }
             
-            .new-add-btn { padding: 8px 12px; font-size: 13px; }
+            .new-add-btn { 
+                padding: 8px 12px; /* Smaller padding for mobile */
+                font-size: 13px; 
+                width: auto; /* Allow shrink */
+            }
+            .new-add-btn i { font-size: 12px; } /* Smaller icon */
             
             .notif-bell { margin-right: 0; width: 35px; height: 35px; background: rgba(255,255,255,0.05); }
 
@@ -234,6 +245,7 @@
             .notif-menu { width: 92%; right: 4%; top: 120px; }
             .mobile-menu-dropdown { top: 120px; }
             
+            /* Mobile Top Actions - Now Clean */
             #mobile-top-actions { display: flex !important; align-items: center; gap: 8px; }
             #mobile-top-actions i { font-size: 18px; padding: 5px; }
 
@@ -247,6 +259,8 @@
 
         #mobile-top-actions { display: none; }
         #mobile-menu-btn { display: none; width:35px; height:35px; border-radius:50%; background:rgba(255,255,255,0.05); align-items:center; justify-content:center; cursor:pointer; }
+
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -349,9 +363,9 @@
                     <i class="fa-solid fa-plus"></i> Add
                 </button>
                 
-                <!-- Mobile Only Icons -->
-                <div id="mobile-top-icons">
-                     <i class="fa-regular fa-circle-question" onclick="openModal('modal-contact')"></i>
+                <!-- Mobile Actions (New Mobile Only Icons) -->
+                <div id="mobile-top-actions">
+                     <i class="fa-regular fa-circle-question" onclick="openModal('modal-contact')" style="color: var(--text-muted); cursor: pointer;"></i>
                 </div>
 
                 <!-- Notification Bell -->
@@ -360,7 +374,7 @@
                     <div id="notif-badge" class="notif-badge"></div>
                 </div>
 
-                <!-- Mobile Menu Toggle -->
+                <!-- Mobile Menu Toggle (Restored) -->
                 <div id="mobile-menu-btn" onclick="toggleMobileMenu()">
                      <i class="fa-solid fa-bars" style="color:var(--text-muted);"></i>
                 </div>
@@ -385,7 +399,7 @@
              <!-- Mobile Menu Dropdown -->
              <div id="mobile-menu-dropdown" class="mobile-menu-dropdown">
                  <div class="menu-item" onclick="toggleAI()"><i class="fa-solid fa-robot"></i> AI Advisor</div>
-                 <div class="menu-item" onclick="openModal('modal-contact')"><i class="fa-regular fa-circle-question"></i> Support</div>
+                 <!-- Removed Duplicate Support Here (Moved to header) -->
                  <div class="menu-item" onclick="installPWA()"><i class="fa-solid fa-download"></i> Install App</div>
                  <div class="menu-item" onclick="handleLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</div>
              </div>
@@ -441,7 +455,7 @@
                         <i class="fa-solid fa-search" style="position:absolute; left:10px; top:12px; color:#64748b; font-size:12px;"></i>
                         <input type="text" id="global-search" placeholder="Search..." onkeyup="handleSearch()" class="form-input" style="padding-left:30px; margin-bottom:0; width: 120px;">
                     </div>
-                    <!-- Import Button -->
+                    <!-- Added Import Button -->
                     <button class="btn-secondary" style="padding: 10px; margin:0;" onclick="document.getElementById('import-file').click()" title="Import CSV">
                         <i class="fa-solid fa-file-import"></i>
                     </button>
@@ -599,10 +613,15 @@
                             </button>
                         </div>
                         <div>
-                            <button type="button" class="btn-secondary" style="width:100%; font-size:12px;" onclick="document.getElementById('t-desc').value = prompt('Paste Bank SMS here:') || ''; magicPaste();">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i> Magic Paste
+                             <button type="button" class="btn-secondary" style="width:100%; font-size:12px;" onclick="startVoiceInputModal()">
+                                <i class="fa-solid fa-microphone"></i> Voice Entry
                             </button>
                         </div>
+                     </div>
+                     <div style="margin-top:10px;">
+                         <button type="button" class="btn-secondary" style="width:100%; font-size:12px;" onclick="document.getElementById('t-desc').value = prompt('Paste Bank SMS here:') || ''; magicPaste();">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Paste Bank SMS
+                        </button>
                      </div>
                 </div>
                 <button class="btn-primary" style="width:100%; justify-content:center;">Save</button>
@@ -1037,10 +1056,34 @@
              }
         }
 
-        // Voice Input
+        // Voice Input (Modal)
+        window.startVoiceInputModal = () => {
+             if (!('webkitSpeechRecognition' in window)) {
+                alert("Voice input not supported.");
+                return;
+            }
+            const recognition = new webkitSpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.start();
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                // Auto Fill logic
+                 const amountMatch = transcript.match(/(\d+(\.\d{1,2})?)/);
+                 if(amountMatch) {
+                    document.getElementById('t-amount').value = amountMatch[0];
+                    const cleanDesc = transcript.replace(amountMatch[0], '').trim();
+                    document.getElementById('t-desc').value = cleanDesc;
+                 } else {
+                     document.getElementById('t-desc').value = transcript;
+                 }
+                 alert("Voice Captured: " + transcript);
+            };
+        };
+
+        // Voice Input (AI Chat)
         window.startVoiceInput = () => {
             if (!('webkitSpeechRecognition' in window)) {
-                alert("Voice input not supported in this browser.");
+                alert("Voice input not supported.");
                 return;
             }
             const recognition = new webkitSpeechRecognition();

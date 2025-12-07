@@ -5,20 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SmartSpend Pro</title>
     
-    <!-- PWA Manifest & Icons -->
-    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiU21hcnRTcGVuZCBQcm8iLCJzaG9ydF9uYW1lIjoiU21hcnRTcGVuZCIs"start_url":".","display":"standalone","background_color":"#0f172a","theme_color":"#0f172a","icons":[{"src":"https://img.icons8.com/fluency/512/wallet.png","sizes":"512x512","type":"image/png"}]}">
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiU21hcnRTcGVuZCBQcm8iLCJzaG9ydF9uYW1lIjoiU21hcnRTcGVuZCIs"start_url":".","display":"standalone","background_color":"#0f172a","theme_color":"#0f172a","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/3135/3135715.png","sizes":"512x512","type":"image/png"}]}">
     
-    <!-- Mobile Web App Capable -->
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0f172a">
-
-    <!-- Icons for Home Screen -->
-    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/512/wallet.png">
-    <link rel="apple-touch-icon" href="https://img.icons8.com/fluency/512/wallet.png">
     
-    <!-- Fonts & Libraries -->
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -129,16 +123,9 @@
         .user-profile-header:hover { background: var(--bg-hover); }
         .user-avatar-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); flex-shrink: 0; }
         
-        /* Mobile Menu Dropdown */
-        .mobile-menu-dropdown {
-            position: absolute; top: 65px; right: 10px; width: 220px;
-            background: var(--bg-card); border: 1px solid var(--bg-hover);
-            border-radius: 12px; padding: 10px; display: none; z-index: 500;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: fadeIn 0.2s ease;
-        }
-        .menu-item { padding: 12px; display: flex; align-items: center; gap: 10px; color: var(--text-main); font-size: 14px; border-radius: 8px; cursor: pointer; }
-        .menu-item:hover { background: var(--bg-hover); }
-        .menu-item i { width: 20px; color: var(--text-muted); }
+        /* Mobile Menu Icons */
+        .mobile-icon-btn { display: none; color: var(--text-muted); font-size: 20px; cursor: pointer; padding: 5px; }
+        .mobile-icon-btn:hover { color: var(--primary); }
 
         /* --- Components --- */
         .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 25px; }
@@ -218,20 +205,21 @@
             
             /* Revised Mobile Header Action Bar */
             .action-bar { 
-                gap: 5px; 
+                gap: 8px; 
                 justify-content: flex-end; 
                 width: auto; 
                 flex: 1;
             }
             
             .new-add-btn { 
-                padding: 8px 12px; /* Smaller padding for mobile */
-                font-size: 13px; 
-                width: auto; /* Allow shrink */
+                padding: 8px 12px; 
+                font-size: 14px; 
+                width: auto; 
             }
-            .new-add-btn i { font-size: 12px; } /* Smaller icon */
+            .new-add-btn span { display: none; } /* Hide "Add" text on mobile */
+            .new-add-btn i { font-size: 16px; margin: 0; }
             
-            .notif-bell { margin-right: 0; width: 35px; height: 35px; background: rgba(255,255,255,0.05); }
+            .notif-bell { margin-right: 0; width: 38px; height: 38px; background: rgba(255,255,255,0.05); }
 
             .grid-3 { grid-template-columns: 1fr; gap: 15px; }
             .grid-2 { grid-template-columns: 1fr; gap: 15px; }
@@ -239,15 +227,13 @@
             /* Fix Profile Alignment on Mobile */
             .user-profile-header { padding: 0; padding-left: 5px; }
             .user-profile-header div { display: none !important; } /* Hide name on mobile */
-            .user-avatar-img { width: 35px; height: 35px; border-width: 2px; }
+            .user-avatar-img { width: 38px; height: 38px; border-width: 2px; }
             
             .ai-modal { width: 92%; right: 4%; bottom: 85px; border-radius: 20px; }
             .notif-menu { width: 92%; right: 4%; top: 120px; }
-            .mobile-menu-dropdown { top: 120px; }
             
-            /* Mobile Top Actions - Now Clean */
-            #mobile-top-actions { display: flex !important; align-items: center; gap: 8px; }
-            #mobile-top-actions i { font-size: 18px; padding: 5px; }
+            /* Mobile Icons Visible in Header */
+            .mobile-icon-btn { display: block; }
 
             /* Mobile Transactions Header Fix */
             .trans-header-container { flex-direction: column; align-items: flex-start; gap: 10px; }
@@ -256,9 +242,6 @@
             .trans-search-wrapper input { width: 100% !important; }
             #filter-cat { width: 100% !important; grid-column: 1 / 3; }
         }
-
-        #mobile-top-actions { display: none; }
-        #mobile-menu-btn { display: none; width:35px; height:35px; border-radius:50%; background:rgba(255,255,255,0.05); align-items:center; justify-content:center; cursor:pointer; }
 
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
@@ -360,23 +343,18 @@
             <!-- Action Bar -->
             <div class="action-bar">
                 <button class="new-add-btn" onclick="openModal('modal-trans')">
-                    <i class="fa-solid fa-plus"></i> Add
+                    <i class="fa-solid fa-plus"></i> <span class="desktop-only">Add</span>
                 </button>
                 
-                <!-- Mobile Actions (New Mobile Only Icons) -->
-                <div id="mobile-top-actions">
-                     <i class="fa-regular fa-circle-question" onclick="openModal('modal-contact')" style="color: var(--text-muted); cursor: pointer;"></i>
-                </div>
+                <!-- Mobile Actions (Direct Icons) -->
+                <i class="fa-solid fa-robot mobile-icon-btn" onclick="toggleAI()"></i>
+                <i class="fa-regular fa-circle-question mobile-icon-btn" onclick="openModal('modal-contact')"></i>
+                <i class="fa-solid fa-arrow-right-from-bracket mobile-icon-btn" onclick="handleLogout()"></i>
 
                 <!-- Notification Bell -->
                 <div class="notif-bell" onclick="toggleNotifMenu()">
                     <i class="fa-regular fa-bell" style="color: #94a3b8;"></i>
                     <div id="notif-badge" class="notif-badge"></div>
-                </div>
-
-                <!-- Mobile Menu Toggle (Restored) -->
-                <div id="mobile-menu-btn" onclick="toggleMobileMenu()">
-                     <i class="fa-solid fa-bars" style="color:var(--text-muted);"></i>
                 </div>
 
                 <div class="user-profile-header" onclick="switchView('profile')">
@@ -395,14 +373,6 @@
                     <div style="color:var(--text-muted); font-size:12px;">No upcoming bills in next 3 days.</div>
                 </div>
             </div>
-
-             <!-- Mobile Menu Dropdown -->
-             <div id="mobile-menu-dropdown" class="mobile-menu-dropdown">
-                 <div class="menu-item" onclick="toggleAI()"><i class="fa-solid fa-robot"></i> AI Advisor</div>
-                 <!-- Removed Duplicate Support Here (Moved to header) -->
-                 <div class="menu-item" onclick="installPWA()"><i class="fa-solid fa-download"></i> Install App</div>
-                 <div class="menu-item" onclick="handleLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</div>
-             </div>
         </div>
 
         <!-- VIEW: DASHBOARD -->
@@ -455,7 +425,7 @@
                         <i class="fa-solid fa-search" style="position:absolute; left:10px; top:12px; color:#64748b; font-size:12px;"></i>
                         <input type="text" id="global-search" placeholder="Search..." onkeyup="handleSearch()" class="form-input" style="padding-left:30px; margin-bottom:0; width: 120px;">
                     </div>
-                    <!-- Added Import Button -->
+                    <!-- Import Button -->
                     <button class="btn-secondary" style="padding: 10px; margin:0;" onclick="document.getElementById('import-file').click()" title="Import CSV">
                         <i class="fa-solid fa-file-import"></i>
                     </button>
@@ -602,7 +572,8 @@
                     <select id="t-type" class="form-select"><option value="expense">Expense</option><option value="income">Income</option></select>
                 </div>
                 <select id="t-cat" class="form-select"><option value="Food">Food</option><option value="Utilities">Utilities</option><option value="Shopping">Shopping</option><option value="Salary">Salary</option><option value="Transport">Transport</option><option value="Housing">Housing</option><option value="Other">Other</option></select>
-                <!-- Improved Scanner with Magic Paste -->
+                
+                <!-- Automation Tools -->
                 <div style="margin-bottom: 15px; border-top: 1px solid #334155; padding-top: 15px;">
                      <label style="font-size:12px; color:#94a3b8; display:block; margin-bottom:5px;">Automation Tools</label>
                      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
@@ -1360,25 +1331,38 @@
                 
                 if (amountMatch) {
                     const amt = parseFloat(amountMatch[0]);
+                    let type = 'expense'; // Default
+                    if (lower.includes('income') || lower.includes('salary') || lower.includes('received')) {
+                        type = 'income';
+                    }
+
                     // Simple logic to find the category word
                     const words = text.toLowerCase().split(' ');
                     const ignore = ['add', 'spent', 'on', 'for', 'in', 'is', 'paid', 'to', 'a', 'an', 'the', amountMatch[0]];
                     let cat = 'Other';
                     
-                    for(let w of words) {
-                        // Strip punctuation
-                        w = w.replace(/[^a-z]/g, '');
-                        if(!ignore.includes(w) && w.length > 2) {
-                            cat = w.charAt(0).toUpperCase() + w.slice(1);
-                            break;
+                    // Smart Mapping
+                    if(lower.includes('taxi') || lower.includes('uber') || lower.includes('bus') || lower.includes('fuel')) cat = 'Transport';
+                    else if(lower.includes('rent') || lower.includes('bill')) cat = 'Housing';
+                    else if(lower.includes('lunch') || lower.includes('dinner') || lower.includes('grocery')) cat = 'Food';
+                    else if(lower.includes('salary')) cat = 'Salary';
+                    else {
+                        for(let w of words) {
+                            // Strip punctuation
+                            w = w.replace(/[^a-z]/g, '');
+                            if(!ignore.includes(w) && w.length > 2) {
+                                cat = w.charAt(0).toUpperCase() + w.slice(1);
+                                break;
+                            }
                         }
                     }
 
                     addDoc(collection(db, 'users', currentUser.uid, 'transactions'), {
-                        desc: 'AI Added Expense', amount: amt, type: 'expense', category: cat,
+                        desc: 'AI Added ' + (type === 'income' ? 'Income' : 'Expense'), 
+                        amount: amt, type: type, category: cat,
                         date: new Date().toISOString().split('T')[0], createdAt: Date.now()
                     });
-                    reply = `Added expense: ${userProfile.currency}${amt} for ${cat}.`;
+                    reply = `Added ${type}: ${userProfile.currency}${amt} for ${cat}.`;
                 }
                 else if(lower.includes('health')) {
                     reply = generateSmartTips(true); 

@@ -91,9 +91,9 @@
         
         /* Mobile Menu Dropdown */
         .mobile-menu-dropdown {
-            position: absolute; top: 60px; right: 10px; width: 200px;
+            position: absolute; top: 65px; right: 10px; width: 220px;
             background: var(--bg-card); border: 1px solid var(--bg-hover);
-            border-radius: 12px; padding: 10px; display: none; z-index: 200;
+            border-radius: 12px; padding: 10px; display: none; z-index: 500;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .menu-item { padding: 12px; display: flex; align-items: center; gap: 10px; color: var(--text-main); font-size: 14px; border-radius: 8px; cursor: pointer; }
@@ -210,11 +210,10 @@
             
             .ai-modal { width: 92%; right: 4%; bottom: 85px; border-radius: 20px; }
             .notif-menu { width: 92%; right: 4%; top: 120px; }
-            .mobile-menu-dropdown { top: 120px; }
             
-            /* Hide individual mobile top actions to save space, use menu instead */
-            #mobile-top-actions { display: none !important; } 
-            #mobile-menu-btn { display: flex !important; }
+            /* Top Icons */
+            #mobile-top-icons { display: flex !important; align-items: center; gap: 10px; }
+            #mobile-top-icons i { font-size: 18px; padding: 5px; color: var(--text-muted); cursor: pointer; }
 
             /* Mobile Transactions Header Fix */
             .trans-header-container { flex-direction: column; align-items: flex-start; gap: 10px; }
@@ -224,7 +223,7 @@
             #filter-cat { width: 100% !important; grid-column: 1 / 3; }
         }
 
-        #mobile-top-actions { display: none; }
+        #mobile-top-icons { display: none; }
         #mobile-menu-btn { display: none; width:35px; height:35px; border-radius:50%; background:rgba(255,255,255,0.05); align-items:center; justify-content:center; cursor:pointer; }
 
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -330,6 +329,11 @@
                     <i class="fa-solid fa-plus"></i> Add
                 </button>
                 
+                <!-- Mobile Only Icons -->
+                <div id="mobile-top-icons">
+                     <i class="fa-regular fa-circle-question" onclick="openModal('modal-contact')"></i>
+                </div>
+
                 <!-- Notification Bell -->
                 <div class="notif-bell" onclick="toggleNotifMenu()">
                     <i class="fa-regular fa-bell" style="color: #94a3b8;"></i>
@@ -528,7 +532,7 @@
             <i class="fa-solid fa-xmark" style="cursor: pointer; padding: 5px;" onclick="toggleAI()"></i>
         </div>
         <div id="chat-history" class="ai-chat-area">
-            <div class="msg msg-ai">Hello! I'm analyzing your spending patterns to give you behavioral insights. Ask me for a tip! <br><br><i>Try: "Spent 500 on Food"</i></div>
+            <div class="msg msg-ai">Hello! I'm analyzing your spending patterns to give you behavioral insights. Ask me for a tip! <br><br><i>Try: "50 food" or "Taxi 200"</i></div>
         </div>
         <div class="ai-input" style="padding: 15px; border-top: 1px solid var(--bg-hover); display: flex; background: var(--bg-card); gap: 10px; align-items:center;">
             <input type="text" id="user-input" placeholder="Ask advisor or add expense..." onkeypress="handleChatEnter(event)" style="flex: 1; background: var(--bg-dark); border: 1px solid var(--bg-hover); padding: 10px 15px; border-radius: 20px; color: white; outline: none;">
@@ -549,11 +553,21 @@
                     <select id="t-type" class="form-select"><option value="expense">Expense</option><option value="income">Income</option></select>
                 </div>
                 <select id="t-cat" class="form-select"><option value="Food">Food</option><option value="Utilities">Utilities</option><option value="Shopping">Shopping</option><option value="Salary">Salary</option><option value="Transport">Transport</option><option value="Housing">Housing</option><option value="Other">Other</option></select>
-                <div style="margin-bottom: 15px;">
-                     <label style="font-size:12px; color:#94a3b8; display:block; margin-bottom:5px;">Scan Receipt (Simulated)</label>
-                     <div style="display:flex; gap:10px;">
-                        <input type="file" id="scan-input" accept="image/*" capture="environment" onchange="simulateScan(this)" style="display:none;">
-                        <button type="button" class="btn-secondary" style="width:100%;" onclick="document.getElementById('scan-input').click()"><i class="fa-solid fa-camera"></i> Take Photo / Upload</button>
+                <!-- Improved Scanner with Magic Paste -->
+                <div style="margin-bottom: 15px; border-top: 1px solid #334155; padding-top: 15px;">
+                     <label style="font-size:12px; color:#94a3b8; display:block; margin-bottom:5px;">Automation Tools</label>
+                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                        <div>
+                            <input type="file" id="scan-input" accept="image/*" capture="environment" onchange="simulateScan(this)" style="display:none;">
+                            <button type="button" class="btn-secondary" style="width:100%; font-size:12px;" onclick="document.getElementById('scan-input').click()">
+                                <i class="fa-solid fa-camera"></i> Scan Receipt
+                            </button>
+                        </div>
+                        <div>
+                            <button type="button" class="btn-secondary" style="width:100%; font-size:12px;" onclick="document.getElementById('t-desc').value = prompt('Paste Bank SMS here:') || ''; magicPaste();">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Magic Paste
+                            </button>
+                        </div>
                      </div>
                 </div>
                 <button class="btn-primary" style="width:100%; justify-content:center;">Save</button>
@@ -951,7 +965,7 @@
                 // Add loading simulation
                 const btn = input.parentElement.parentElement.querySelector('button');
                 const origText = btn.innerText;
-                btn.innerText = "Processing Receipt...";
+                btn.innerText = "Processing...";
                 btn.disabled = true;
                 
                 setTimeout(() => {
@@ -963,6 +977,19 @@
                 }, 1500);
             }
         };
+
+        // Simulated Magic Paste
+        window.magicPaste = () => {
+            // Logic handled inline in onclick for simplicity, but could be expanded here
+            // Parsing handled in sendChat or similar logic
+             const text = document.getElementById('t-desc').value;
+             // Reuse the simple parser logic
+             const amountMatch = text.match(/(\d+(\.\d{1,2})?)/);
+             if(amountMatch) {
+                 document.getElementById('t-amount').value = amountMatch[0];
+                 alert("Magic Paste: Amount extracted!");
+             }
+        }
 
         // Voice Input
         window.startVoiceInput = () => {

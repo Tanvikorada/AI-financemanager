@@ -48,9 +48,14 @@
         .text-green { color: var(--accent-green); }
         .text-red { color: var(--accent-red); }
 
-        /* --- Animations --- */
+        /* --- Animations & Effects --- */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes scan { 0% { top: 0; } 50% { top: 100%; opacity: 1; } 51% { opacity: 0; } 100% { top: 0; opacity: 0; } }
+        @keyframes scanLine { 
+            0% { top: 0; opacity: 0; } 
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; } 
+        }
         
         .card { 
             background-color: var(--bg-card); border-radius: 16px; padding: 24px; position: relative; 
@@ -92,6 +97,9 @@
         }
         #install-prompt-login.show { bottom: 0; }
 
+        /* --- Diagnostics Bar --- */
+        #db-status-bar { display: none; background: #ef4444; color: white; text-align: center; padding: 15px; font-size: 14px; width: 100%; position: absolute; top: 0; left: 0; z-index: 2000; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
         /* --- Layout --- */
         .sidebar { width: 80px; background-color: #0b1120; display: flex; flex-direction: column; align-items: center; padding-top: 25px; border-right: 1px solid var(--bg-hover); z-index: 100; transition: all 0.3s ease; }
         .logo-area { font-size: 28px; background: var(--gradient-btn); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 40px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 12px; background-color: rgba(99, 102, 241, 0.1); }
@@ -107,7 +115,8 @@
         .action-bar { display: flex; align-items: center; gap: 15px; width: 100%; justify-content: flex-end; }
         .new-add-btn { 
             background: var(--gradient-btn); border: none; padding: 10px 20px; border-radius: 25px; 
-            color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; 
+            color: white; font-weight: 600; cursor: pointer; display: flex; 
+            align-items: center; gap: 8px; 
             box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); transition: 0.2s; white-space: nowrap;
         }
         .new-add-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
@@ -149,9 +158,13 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             cursor: pointer; position: relative; overflow: hidden; transition: 0.2s;
         }
-        .scan-area:hover { border-color: var(--primary); }
-        .scan-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: #10b981; box-shadow: 0 0 15px #10b981; animation: scan 1.5s infinite; display: none; }
-        .scan-preview-img { width: 100%; height: 100%; object-fit: cover; display: none; position: absolute; top: 0; left: 0; }
+        .scan-area:hover { border-color: var(--primary); background: rgba(99,102,241,0.05); }
+        .scan-overlay { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 2px; 
+            background: #10b981; box-shadow: 0 0 15px #10b981; 
+            animation: scanLine 1.5s infinite; display: none; z-index: 10;
+        }
+        .scan-preview-img { width: 100%; height: 100%; object-fit: cover; display: none; position: absolute; top: 0; left: 0; z-index: 5; opacity: 0.6; }
 
         /* --- AI Chat --- */
         .ai-modal { position: fixed; bottom: 100px; right: 30px; width: 350px; background: var(--bg-card); border-radius: 20px; border: 1px solid var(--bg-hover); box-shadow: 0 20px 50px rgba(0,0,0,0.5); z-index: 400; display: flex; flex-direction: column; overflow: hidden; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -163,6 +176,13 @@
         /* --- Footer & Signature --- */
         .signature { text-align: center; margin-top: 30px; font-family: 'Poppins', sans-serif; font-size: 11px; color: var(--text-muted); font-weight: 400; padding-bottom: 20px; }
         .signature span { font-family: 'Great Vibes', cursive; font-size: 24px; color: var(--primary); margin-left: 4px; font-weight: 400; letter-spacing: 0.5px; }
+
+        .desktop-extras { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: auto; margin-bottom: 20px; }
+
+        /* Transaction Header Container */
+        .trans-header-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .trans-controls { display: flex; gap: 10px; align-items: center; }
+        .trans-search-wrapper { position:relative; }
 
         /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 768px) {
@@ -180,7 +200,7 @@
             .logo-area { display: none; }
             .nav-item { margin-bottom: 0; height: auto; width: auto; border-radius: 12px; padding: 8px; min-width: 45px; display: flex; align-items: center; justify-content: center; }
             .nav-item.active { box-shadow: none; background: rgba(99, 102, 241, 0.15); color: var(--primary); }
-            .nav-item i { font-size: 22px; }
+            .nav-item i { font-size: 20px; }
             .desktop-extras { display: none !important; }
             
             /* Main Content */
@@ -199,6 +219,7 @@
             
             /* Modals */
             .ai-modal { width: 92%; right: 4%; bottom: 85px; border-radius: 20px; }
+            .notif-menu { width: 92%; right: 4%; top: 120px; }
             
             /* Show Mobile Icons */
             #mobile-top-actions { display: flex !important; align-items: center; gap: 12px; margin-right: 5px; }
@@ -213,6 +234,8 @@
         }
 
         #mobile-top-actions { display: none; }
+
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -295,6 +318,7 @@
             <div class="nav-item" onclick="toggleAI()" title="AI Advisor"><i class="fa-solid fa-robot"></i></div>
             <div class="nav-item" onclick="openModal('modal-contact')" title="Support"><i class="fa-regular fa-circle-question"></i></div>
             <div class="nav-item" onclick="handleLogout()" title="Logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+            <div id="status-indicator" style="display:none;" title="Connected"></div>
         </div>
     </nav>
 
@@ -319,6 +343,19 @@
                     <i class="fa-solid fa-robot" onclick="toggleAI()"></i>
                     <i class="fa-regular fa-circle-question" onclick="openModal('modal-contact')"></i>
                     <i class="fa-solid fa-arrow-right-from-bracket" onclick="handleLogout()"></i>
+                </div>
+
+                <!-- Notification Bell -->
+                <div class="notif-bell" onclick="toggleNotifMenu()">
+                    <i class="fa-regular fa-bell" style="color: #94a3b8;"></i>
+                    <div id="notif-badge" class="notif-badge"></div>
+                </div>
+                <!-- Notif Dropdown -->
+                <div id="notif-menu" class="notif-menu">
+                    <h4 style="margin-bottom:10px;">Upcoming Bills</h4>
+                    <div id="notif-list" style="max-height:200px; overflow-y:auto; display:flex; flex-direction:column; gap:10px;">
+                        <div style="color:var(--text-muted); font-size:12px;">No upcoming bills in next 3 days.</div>
+                    </div>
                 </div>
 
                 <div class="user-profile-header" onclick="switchView('profile')">
@@ -365,7 +402,11 @@
             </div>
             
             <h3 style="margin-bottom: 15px;">Recent Transactions</h3>
-            <div id="recent-trans-container"></div>
+            <div id="recent-trans-container">
+                <div style="text-align:center; padding:20px; color:#64748b;">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i> Loading...
+                </div>
+            </div>
         </div>
 
         <!-- VIEW: TRANSACTIONS -->
@@ -377,10 +418,16 @@
                         <i class="fa-solid fa-search" style="position:absolute; left:10px; top:12px; color:#64748b; font-size:12px;"></i>
                         <input type="text" id="global-search" placeholder="Search..." onkeyup="handleSearch()" class="form-input" style="padding-left:30px; margin-bottom:0; width: 120px;">
                     </div>
+                    <!-- Added Import Button -->
+                    <button class="btn-secondary" style="padding: 10px; margin:0;" onclick="document.getElementById('import-file').click()" title="Import CSV">
+                        <i class="fa-solid fa-file-import"></i>
+                    </button>
                     <!-- Sample CSV Download -->
                      <button class="btn-secondary" style="padding: 10px; margin:0; color:var(--primary); font-size:12px;" onclick="downloadSampleCSV()" title="Download Sample CSV">
                         <i class="fa-solid fa-download"></i> Sample
                     </button>
+                    <input type="file" id="import-file" hidden onchange="handleImport(this)" accept=".csv">
+                    
                     <!-- Export Options Dropdown -->
                     <div style="position:relative; display:inline-block;">
                         <button class="btn-primary" style="padding: 10px;" onclick="document.getElementById('export-menu').classList.toggle('hidden')">
@@ -963,12 +1010,14 @@
                 document.getElementById('scan-overlay').style.display = 'block';
                 
                 const randomAmount = Math.floor(Math.random() * 2000) + 100;
+                // Add loading simulation
                 const btn = input.parentElement.parentElement.querySelector('button') || document.querySelector('#modal-trans .btn-primary');
                 
                 const origText = btn ? btn.innerText : 'Save';
                 if(btn) { btn.innerText = "Processing..."; btn.disabled = true; }
                 
                 setTimeout(() => {
+                    // Try to guess from filename if possible, else random
                     const fname = input.files[0].name;
                     const nameMatch = fname.match(/([a-zA-Z\s]+)/);
                     const amtMatch = fname.match(/(\d+)/);
@@ -1012,6 +1061,7 @@
             recognition.start();
             recognition.onresult = (event) => {
                 const transcript = event.results[0][0].transcript;
+                // Auto Fill logic
                  const amountMatch = transcript.match(/(\d+(\.\d{1,2})?)/);
                  if(amountMatch) {
                     document.getElementById('t-amount').value = amountMatch[0];
@@ -1020,6 +1070,7 @@
                  } else {
                      document.getElementById('t-desc').value = transcript;
                  }
+                 alert("Voice Captured: " + transcript);
             };
         };
 

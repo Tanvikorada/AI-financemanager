@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SmartSpend Pro</title>
     
     <!-- PWA Manifest -->
@@ -13,7 +13,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -31,11 +31,11 @@
             --text-muted: #94a3b8;
             --gradient-btn: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
             --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --safe-area-bottom: env(safe-area-inset-bottom);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        /* Fixed: Prevent horizontal scroll on body */
         body { background-color: var(--bg-dark); color: var(--text-main); height: 100vh; width: 100vw; display: flex; overflow: hidden; overflow-x: hidden; }
         
         .hidden { display: none !important; }
@@ -44,9 +44,21 @@
         
         /* --- Login Screen --- */
         #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .login-box { background: var(--bg-card); padding: 40px; border-radius: 20px; width: 100%; max-width: 400px; text-align: center; border: 1px solid var(--bg-hover); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
+        .login-box { background: var(--bg-card); padding: 40px; border-radius: 20px; width: 100%; max-width: 400px; text-align: center; border: 1px solid var(--bg-hover); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); position: relative; z-index: 2; }
         .error-msg { background: rgba(239, 68, 68, 0.2); color: #ef4444; padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; word-break: break-word; text-align: left; }
         .success-msg { background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; }
+
+        /* Install Prompt Banner (Login Screen) */
+        #install-prompt-login {
+            position: fixed; bottom: -100px; left: 0; width: 100%;
+            background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(10px);
+            padding: 20px; border-top: 1px solid var(--primary);
+            display: flex; justify-content: space-between; align-items: center;
+            transition: bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1001;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+        }
+        #install-prompt-login.show { bottom: 0; }
 
         /* --- Diagnostics Bar --- */
         #db-status-bar { display: none; background: #ef4444; color: white; text-align: center; padding: 15px; font-size: 14px; width: 100%; position: absolute; top: 0; left: 0; z-index: 2000; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
@@ -59,28 +71,17 @@
         .nav-item:hover { color: white; background: var(--bg-hover); }
         .nav-item.active { color: white; background: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); }
 
-        /* Fixed: Ensure main content doesn't overflow horizontally */
         .main-content { flex: 1; padding: 25px; overflow-y: auto; scroll-behavior: smooth; position: relative; margin-top: 0; max-width: 100%; overflow-x: hidden; }
         
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; width: 100%; }
-        .mobile-logo { display: none; font-size: 24px; font-weight: 700; background: var(--gradient-btn); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
+        .mobile-logo { display: none; font-size: 24px; font-weight: 800; background: var(--gradient-btn); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; letter-spacing: -0.5px; }
         
-        /* Revised Header Action Bar */
         .action-bar { display: flex; align-items: center; gap: 15px; width: 100%; justify-content: flex-end; }
         .new-add-btn { 
-            background: var(--gradient-btn); 
-            border: none; 
-            padding: 10px 20px; 
-            border-radius: 25px; 
-            color: white; 
-            font-weight: 600; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-            transition: 0.2s;
-            white-space: nowrap;
+            background: var(--gradient-btn); border: none; padding: 10px 20px; border-radius: 25px; 
+            color: white; font-weight: 600; cursor: pointer; display: flex; 
+            align-items: center; gap: 8px; 
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); transition: 0.2s; white-space: nowrap;
         }
         .new-add-btn:hover { transform: translateY(-2px); }
 
@@ -98,12 +99,10 @@
         .stat-icon { position: absolute; top: 24px; right: 24px; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); font-size: 20px; }
         
         .btn-primary { background: var(--gradient-btn); border: none; padding: 12px 24px; border-radius: 10px; color: white; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4); }
+        .btn-primary:active { transform: scale(0.98); }
         
         .btn-secondary { background: white; border: none; padding: 12px 24px; border-radius: 10px; color: #333; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; margin-top: 10px; }
-        .btn-secondary:hover { background: #f1f5f9; }
-
-        .btn-danger { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+        .btn-secondary:active { background: #e2e8f0; }
 
         /* --- Profile --- */
         .profile-header-card { display: flex; align-items: center; gap: 30px; margin-bottom: 25px; }
@@ -118,72 +117,87 @@
         .modal-card { background: var(--bg-card); padding: 32px; border-radius: 24px; width: 90%; max-width: 450px; border: 1px solid var(--bg-hover); position: relative; animation: slideUp 0.3s ease-out; }
         .form-input, .form-select, .form-textarea { width: 100%; background: #0f172a; border: 1px solid var(--bg-hover); padding: 14px; border-radius: 10px; color: white; outline: none; margin-bottom: 15px; font-size: 14px; display: block; color-scheme: dark; }
         
-        /* Notifications */
-        .notif-bell { position: relative; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; background: var(--bg-card); display: flex; justify-content: center; align-items: center; transition: 0.2s; margin-right: 15px; flex-shrink: 0; }
-        .notif-bell:hover { background: var(--bg-hover); }
+        /* Notifications & AI */
+        .notif-bell { position: relative; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; background: var(--bg-card); display: flex; justify-content: center; align-items: center; transition: 0.2s; margin-right: 10px; flex-shrink: 0; }
         .notif-badge { position: absolute; top: 5px; right: 5px; width: 10px; height: 10px; background: var(--accent-red); border-radius: 50%; border: 2px solid var(--bg-card); display: none; }
         .notif-menu { position: absolute; top: 60px; right: 20px; width: 300px; background: var(--bg-card); border: 1px solid var(--bg-hover); border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 200; padding: 15px; display: none; }
         
-        /* AI Chat */
         .ai-modal { position: fixed; bottom: 100px; right: 30px; width: 350px; background: var(--bg-card); border-radius: 20px; border: 1px solid var(--bg-hover); box-shadow: 0 20px 50px rgba(0,0,0,0.5); z-index: 400; display: flex; flex-direction: column; overflow: hidden; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         .ai-chat-area { height: 300px; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
         .msg { padding: 10px 15px; border-radius: 12px; font-size: 13px; line-height: 1.5; max-width: 85%; }
         .msg-ai { background: #334155; align-self: flex-start; border-bottom-left-radius: 2px; }
         .msg-user { background: var(--primary); align-self: flex-end; border-bottom-right-radius: 2px; }
         
-        /* Desktop Bottom Menu Extras */
+        /* Signature */
+        .signature { text-align: center; margin-top: 30px; font-family: 'Poppins', sans-serif; font-size: 11px; color: var(--text-muted); font-weight: 400; padding-bottom: 20px; }
+        .signature span { font-family: 'Great Vibes', cursive; font-size: 20px; color: var(--primary); margin-left: 4px; font-weight: 400; letter-spacing: 0.5px; }
+
         .desktop-extras { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: auto; margin-bottom: 20px; }
+
+        /* Transaction Header Container */
+        .trans-header-container {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+        }
+        .trans-controls {
+            display: flex; gap: 10px; align-items: center;
+        }
+        .trans-search-wrapper { position:relative; }
 
         /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 768px) {
             body { flex-direction: column; }
             
+            /* Modern Bottom Navigation Bar */
             .sidebar { 
-                width: 100%; height: 70px; bottom: 0; top: auto; 
-                flex-direction: row; justify-content: space-around; 
-                padding: 0; border-right: none; border-top: 1px solid var(--bg-hover);
-                background: #0b1120; z-index: 1000; position: fixed;
+                width: 100%; height: 75px; bottom: 0; top: auto; 
+                flex-direction: row; justify-content: space-evenly; 
+                padding: 10px 0; border-right: none; border-top: 1px solid rgba(255,255,255,0.05);
+                background: rgba(11, 17, 32, 0.95); backdrop-filter: blur(10px);
+                z-index: 1000; position: fixed; padding-bottom: var(--safe-area-bottom);
+                box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
             }
             
             .logo-area { display: none; }
-            .nav-item { margin-bottom: 0; height: 100%; width: 100%; border-radius: 0; }
-            .nav-item.active { box-shadow: inset 0 3px 0 0 var(--primary); background: transparent; color: var(--primary); }
+            .nav-item { margin-bottom: 0; height: auto; width: auto; border-radius: 12px; padding: 10px; }
+            .nav-item.active { box-shadow: none; background: rgba(99, 102, 241, 0.15); color: var(--primary); }
+            .nav-item i { font-size: 22px; }
             
             .desktop-extras { display: none !important; }
             
-            .main-content { padding: 15px; padding-bottom: 90px; overflow-x: hidden; } 
+            /* Main Content Adjustments */
+            .main-content { padding: 15px; padding-bottom: 100px; overflow-x: hidden; width: 100%; }
             
-            .header { gap: 5px; flex-wrap: nowrap; }
-            .mobile-logo { display: block; display: flex; align-items: center; gap: 8px; font-size: 20px; }
+            /* Mobile Header Layout */
+            .header { gap: 10px; padding-top: 5px; }
+            .mobile-logo { display: block; display: flex; align-items: center; gap: 8px; }
+            .action-bar { gap: 10px; }
             
-            /* Revised Mobile Header Layout */
-            .action-bar { 
-                gap: 8px; 
-                justify-content: flex-end; 
-                width: auto; /* Let it shrink */
-                flex: 1;
-            }
-            
-            .new-add-btn { 
-                padding: 8px 12px; 
-                font-size: 13px; 
-            }
-            
-            .notif-bell { margin-right: 0; width: 35px; height: 35px; }
+            .new-add-btn { padding: 8px 16px; font-size: 14px; }
+            .notif-bell { margin-right: 0; width: 38px; height: 38px; background: rgba(255,255,255,0.05); }
 
-            .grid-3 { grid-template-columns: 1fr; }
-            .grid-2 { grid-template-columns: 1fr; }
+            /* Grid Stacking */
+            .grid-3 { grid-template-columns: 1fr; gap: 15px; }
+            .grid-2 { grid-template-columns: 1fr; gap: 15px; }
             
-            /* Fix Profile Alignment on Mobile */
-            .user-profile-header { padding: 0; gap: 0; }
-            .user-profile-header div { display: none !important; } /* Hide name */
-            .user-avatar-img { width: 35px; height: 35px; border-width: 1px; }
+            /* Profile Header changes */
+            .user-profile-header { padding: 0; }
+            .user-profile-header div { display: none !important; } /* Hide name on mobile */
+            .user-avatar-img { width: 38px; height: 38px; border-width: 2px; }
             
-            .ai-modal { width: 90%; right: 5%; bottom: 80px; }
-            .notif-menu { width: 90%; right: 5%; top: 60px; }
+            /* AI Modal Mobile Position */
+            .ai-modal { width: 92%; right: 4%; bottom: 90px; border-radius: 20px; }
+            .notif-menu { width: 92%; right: 4%; top: 70px; }
             
-            #mobile-top-actions { display: flex !important; align-items: center; gap: 10px; }
-            #mobile-top-actions i { font-size: 18px; }
+            #mobile-top-actions { display: flex !important; align-items: center; gap: 12px; }
+            #mobile-top-actions i { font-size: 20px; padding: 5px; }
+
+            /* Mobile Transactions Header Fix */
+            .trans-header-container { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .trans-controls { width: 100%; display: grid; grid-template-columns: 1fr auto auto; gap: 8px; }
+            .trans-search-wrapper { grid-column: 1 / -1; width: 100%; }
+            .trans-search-wrapper input { width: 100% !important; }
+            #filter-cat { width: 100% !important; grid-column: 1 / 3; }
+            /* Excel Button gets grid column 3 automatically */
         }
 
         #mobile-top-actions { display: none; }
@@ -204,11 +218,25 @@
         <button onclick="document.getElementById('db-status-bar').style.display='none'" style="margin-top:10px; background:white; color:#ef4444; border:none; padding:5px 15px; border-radius:4px; cursor:pointer; font-weight:600;">Dismiss</button>
     </div>
 
+    <!-- INSTALL PROMPT (MOBILE LOGIN) -->
+    <div id="install-prompt-login">
+        <div style="display:flex; align-items:center; gap:15px;">
+            <div style="width:40px; height:40px; background:var(--primary); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; color:white;">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+            <div>
+                <div style="font-weight:600; font-size:14px;">Install SmartSpend App</div>
+                <div style="font-size:12px; color:var(--text-muted);">Faster access & better experience</div>
+            </div>
+        </div>
+        <button onclick="installPWA()" style="background:white; color:var(--bg-dark); border:none; padding:8px 15px; border-radius:20px; font-weight:600; font-size:12px;">Install</button>
+    </div>
+
     <!-- REAL LOGIN SCREEN -->
     <div id="login-screen">
         <div class="login-box">
-            <div class="logo-area" style="margin-bottom: 20px; font-size: 32px;">
-                <i class="fa-solid fa-wave-square"></i>
+            <div class="logo-area" style="margin-bottom: 20px; font-size: 32px; background:none; width:auto; height:auto; display:block;">
+                <i class="fa-solid fa-wallet" style="color:var(--primary);"></i>
             </div>
             <h2 id="login-title" style="margin-bottom: 10px;">Personal Expense</h2>
             <p style="color: var(--text-muted); margin-bottom: 30px;">Login to manage your finances</p>
@@ -218,26 +246,19 @@
 
             <form onsubmit="handleLogin(event)">
                 <input type="hidden" id="is-signup" value="false">
-                
-                <!-- Name Field (Hidden by default) -->
                 <div id="signup-name-group" class="hidden">
                     <input type="text" id="signup-name" class="form-input" placeholder="Full Name">
                 </div>
-
                 <input type="email" id="login-email" class="form-input" placeholder="Email Address" required>
                 <input type="password" id="login-pass" class="form-input" placeholder="Password (min 6 chars)" required>
-                
                 <button type="submit" id="login-btn" class="btn-primary" style="width: 100%; justify-content: center;">Sign In</button>
-                
                 <div style="margin: 15px 0; display: flex; align-items: center; gap: 10px; color: #64748b; font-size: 12px;">
                     <div style="flex: 1; height: 1px; background: #334155;"></div> OR <div style="flex: 1; height: 1px; background: #334155;"></div>
                 </div>
-
                 <button type="button" onclick="handleGoogleLogin()" class="btn-secondary" style="width: 100%; justify-content: center;">
                     <i class="fa-brands fa-google"></i> Sign in with Google
                 </button>
             </form>
-            
             <p id="toggle-text" style="margin-top: 20px; font-size: 13px; color: var(--text-muted);">
                 Need an account? <span onclick="toggleSignUp()" style="color:var(--primary); cursor:pointer;">Sign Up</span>
             </p>
@@ -252,13 +273,12 @@
         </div>
         
         <div class="nav-item active" onclick="switchView('dashboard', this)" title="Dashboard"><i class="fa-solid fa-border-all"></i></div>
-        <div class="nav-item" onclick="switchView('analysis', this)" title="Analysis"><i class="fa-solid fa-chart-pie"></i></div>
+        <div class="nav-item" onclick="switchView('budgets', this)" title="Budgets"><i class="fa-solid fa-chart-pie"></i></div>
+        <div class="nav-item" onclick="switchView('schedule', this)" title="Schedule"><i class="fa-solid fa-calendar-days"></i></div>
         <div class="nav-item" onclick="switchView('transactions', this)" title="Transactions"><i class="fa-solid fa-list-ul"></i></div>
         <div class="nav-item" onclick="switchView('goals', this)" title="Goals"><i class="fa-solid fa-bullseye"></i></div>
-        <div class="nav-item" onclick="switchView('budgets', this)" title="Budgets"><i class="fa-solid fa-sack-dollar"></i></div>
-        <div class="nav-item" onclick="switchView('schedule', this)" title="Schedule"><i class="fa-solid fa-calendar-days"></i></div>
         
-        <!-- Desktop Extra Items (Hidden on Mobile) -->
+        <!-- Desktop Extra Items -->
         <div class="desktop-extras">
             <div class="nav-item" id="install-btn" style="display:none;" onclick="installPWA()" title="Install App"><i class="fa-solid fa-download"></i></div>
             <div class="nav-item" onclick="toggleAI()" title="AI Advisor"><i class="fa-solid fa-robot"></i></div>
@@ -278,13 +298,13 @@
                 <i class="fa-solid fa-wallet" style="color: var(--primary);"></i> SmartSpend
             </div>
 
-            <!-- Redesigned Action Bar -->
+            <!-- Action Bar -->
             <div class="action-bar">
                 <button class="new-add-btn" onclick="openModal('modal-trans')">
                     <i class="fa-solid fa-plus"></i> Add
                 </button>
                 
-                <!-- Mobile Actions (Install/Logout) -->
+                <!-- Mobile Actions -->
                 <div id="mobile-top-actions">
                     <i class="fa-solid fa-download" id="mobile-install-btn" style="display: none;" onclick="installPWA()"></i>
                     <i class="fa-solid fa-robot" onclick="toggleAI()"></i>
@@ -357,10 +377,10 @@
 
         <!-- VIEW: TRANSACTIONS -->
         <div id="view-transactions" class="view-section hidden">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div class="trans-header-container">
                 <h2>All Transactions</h2>
-                <div style="display:flex; gap:10px; align-items: center;">
-                     <div style="position:relative;">
+                <div class="trans-controls">
+                     <div class="trans-search-wrapper">
                         <i class="fa-solid fa-search" style="position:absolute; left:10px; top:12px; color:#64748b; font-size:12px;"></i>
                         <input type="text" id="global-search" placeholder="Search..." onkeyup="handleSearch()" class="form-input" style="padding-left:30px; margin-bottom:0; width: 120px;">
                     </div>
@@ -455,6 +475,8 @@
                     </div>
                 </form>
             </div>
+            
+            <div class="signature">Crafted by <span>Korada Tanvi</span></div>
         </div>
     </main>
 
@@ -676,8 +698,17 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            document.getElementById('install-btn').style.display = 'flex';
-            document.getElementById('mobile-install-btn').style.display = 'block';
+            // Check if mobile or desktop and show respective button
+            if (window.innerWidth <= 768) {
+                // For mobile, we show the prompt on login screen if not installed
+                const loginScreen = document.getElementById('login-screen');
+                if(!loginScreen.classList.contains('hidden')) {
+                     document.getElementById('install-prompt-login').classList.add('show');
+                }
+                document.getElementById('mobile-install-btn').style.display = 'block';
+            } else {
+                document.getElementById('install-btn').style.display = 'flex';
+            }
         });
 
         window.installPWA = async () => {
@@ -688,6 +719,7 @@
                     deferredPrompt = null;
                     document.getElementById('install-btn').style.display = 'none';
                     document.getElementById('mobile-install-btn').style.display = 'none';
+                    document.getElementById('install-prompt-login').classList.remove('show');
                 }
             } else {
                 alert("App is likely already installed or not supported in this browser environment.");
@@ -753,6 +785,7 @@
                     loginScreen.classList.add('hidden');
                     sidebar.classList.remove('hidden');
                     mainApp.classList.remove('hidden');
+                    document.getElementById('install-prompt-login').classList.remove('show');
                     initDataListeners(user.uid, user.email);
                 } else {
                     if(unsubProfile) unsubProfile();
@@ -764,6 +797,11 @@
                     loginScreen.classList.remove('hidden');
                     sidebar.classList.add('hidden');
                     mainApp.classList.add('hidden');
+                    
+                    // Show install prompt again if applicable
+                    if(deferredPrompt && window.innerWidth <= 768) {
+                        document.getElementById('install-prompt-login').classList.add('show');
+                    }
                 }
             };
 
@@ -775,8 +813,7 @@
         });
 
         function initDataListeners(userId, userEmail) {
-            document.getElementById('status-indicator').style.background = '#10b981'; 
-            
+            // 1. Profile Listener
             unsubProfile = onSnapshot(doc(db, 'users', userId, 'settings', 'profile'), async (docSnap) => {
                 if (docSnap.exists()) {
                     userProfile = docSnap.data();
@@ -788,6 +825,7 @@
                 }
             }, (error) => { showDbError(error.message); });
 
+            // 2. Transactions Listener
             const qTrans = query(collection(db, 'users', userId, 'transactions'));
             unsubTrans = onSnapshot(qTrans, (snapshot) => {
                 transactions = [];
@@ -798,6 +836,7 @@
                 renderBudgets(); 
             }, (error) => { showDbError(error.message); });
 
+            // 3. Goals Listener
             const qGoals = query(collection(db, 'users', userId, 'goals'));
             unsubGoals = onSnapshot(qGoals, (snapshot) => {
                 goals = [];
@@ -805,6 +844,7 @@
                 renderGoals();
             }, (error) => { showDbError(error.message); });
 
+            // 4. Budgets Listener
             const qBudgets = query(collection(db, 'users', userId, 'budgets'));
             unsubBudgets = onSnapshot(qBudgets, (snapshot) => {
                 budgets = [];
@@ -812,6 +852,7 @@
                 renderBudgets();
             });
 
+            // 5. Schedule Listener
             const qSchedule = query(collection(db, 'users', userId, 'schedule'));
             unsubSchedule = onSnapshot(qSchedule, (snapshot) => {
                 scheduledBills = [];

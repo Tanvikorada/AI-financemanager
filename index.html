@@ -316,9 +316,10 @@
                 
                 <!-- Mobile Actions -->
                 <div id="mobile-top-actions">
-                    <i class="fa-solid fa-download" id="mobile-install-btn" style="display: none;" onclick="installPWA()"></i>
-                    <i class="fa-solid fa-robot" onclick="toggleAI()"></i>
-                    <i class="fa-solid fa-arrow-right-from-bracket" onclick="handleLogout()"></i>
+                    <i class="fa-solid fa-download" id="mobile-install-btn" style="display: none; cursor:pointer; color:var(--text-muted);" onclick="installPWA()"></i>
+                    <i class="fa-regular fa-circle-question" onclick="openModal('modal-contact')" style="color: var(--text-muted); cursor: pointer;"></i>
+                    <i class="fa-solid fa-robot" onclick="toggleAI()" style="color: var(--text-muted); cursor: pointer;"></i>
+                    <i class="fa-solid fa-arrow-right-from-bracket" onclick="handleLogout()" style="color: var(--text-muted); cursor: pointer;"></i>
                 </div>
 
                 <!-- Notification Bell -->
@@ -1184,6 +1185,16 @@
             finally { btn.innerText = "Save"; }
         };
 
+        window.deleteTransaction = async (id) => {
+            if(confirm("Are you sure you want to delete this transaction?")) {
+                try {
+                    await deleteDoc(doc(db, 'users', currentUser.uid, 'transactions', id));
+                } catch (error) {
+                    alert("Error removing transaction: " + error.message);
+                }
+            }
+        };
+
         window.addGoal = async (e) => {
             e.preventDefault();
             if (!currentUser) return;
@@ -1289,7 +1300,10 @@
                         <div class="trans-icon ${color}"><i class="fa-solid ${catIcon}"></i></div>
                         <div><div style="font-weight: 600; font-size: 15px;">${t.desc}</div><div style="font-size: 12px; color: var(--text-muted);">${t.category} • ${t.date}</div></div>
                     </div>
-                    <div class="${color}" style="font-weight: 700; font-size: 16px;">${isInc ? '+' : '-'}${cur}${t.amount.toLocaleString()}</div>
+                    <div style="text-align:right;">
+                        <div class="${color}" style="font-weight: 700; font-size: 16px;">${isInc ? '+' : '-'}${cur}${t.amount.toLocaleString()}</div>
+                        <i class="fa-regular fa-trash-can" style="color:#64748b; font-size:14px; margin-top:5px; cursor:pointer;" onclick="deleteTransaction('${t.id}')"></i>
+                    </div>
                 </div>`;
             });
             if(filtered.length === 0) html = '<div style="text-align:center; color:#64748b; padding:20px;">No transactions found.</div>';
